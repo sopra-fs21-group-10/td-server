@@ -1,5 +1,5 @@
 name: Deploy Project
-# dummy comment for testing SonarQube
+# dummy comment 2 for testing SonarQube
 on: 
   push:
     branches: 

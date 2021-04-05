@@ -68,7 +68,7 @@ public class UserService {
     public User UserIn(User user) {
         User found = userRepository.findByUsername(user.getUsername());//can be null if not found
         if(found ==null){// name does not exist
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Not a valid username"));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Not a valid username"));
         }
         if(! user.getPassword().equals(found.getPassword())){// wrong password
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format("wrong password"));
@@ -87,6 +87,7 @@ public class UserService {
      * Changes userStatus of user to offline
      *
      * @param user
+     * @throws ResponseStatusException
      */
     public void UserLogout(User user) {
         if(user !=null){// token has corresponding user
@@ -96,6 +97,9 @@ public class UserService {
             userRepository.flush();
 
             log.debug("User now offline: ", user);
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found/invalid token");
         }
     }
 
@@ -175,7 +179,7 @@ public class UserService {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
         if (userByUsername != null) {//found an user with username
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username provided is not unique. Therefore, the user could not be created!");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the user could not be created!");
         }
     }
 }

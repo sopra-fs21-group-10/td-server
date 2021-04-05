@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostInDTO;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -19,12 +20,17 @@ public interface DTOMapper {
 
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
-    @Mapping(source = "name", target = "name")
+    @Mapping(source = "password", target = "password")
     @Mapping(source = "username", target = "username")
+    User convertUserPostInDTOtoEntity(UserPostInDTO userPostDTO);//warning is irrelevant
+
+    @Mapping(source = "token", target = "token")
     User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
 
+    @Mapping(source = "token", target = "token")
+    UserPostDTO convertEntitytoUserPostDTO(User user);
+
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "name", target = "name")
     @Mapping(source = "username", target = "username")
     @Mapping(source = "status", target = "status")
     UserGetDTO convertEntityToUserGetDTO(User user);

@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +46,7 @@ public class UserService {
 
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
-        newUser.setStatus(UserStatus.OFFLINE);
+        newUser.setStatus(UserStatus.ONLINE);
 
         checkIfUserExists(newUser);
 
@@ -52,6 +59,111 @@ public class UserService {
     }
 
     /**
+     * Checks if userinput is valid, and performs changes if valid
+     *
+     * @param user
+     * @return found
+     * @throws ResponseStatusException
+     */
+    public User UserIn(User user) {
+        User found = userRepository.findByUsername(user.getUsername());//can be null if not found
+        if(found ==null){// name does not exist
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Not a valid username"));
+        }
+        if(! user.getPassword().equals(found.getPassword())){// wrong password
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format("wrong password"));
+        }
+        found.setStatus(UserStatus.ONLINE);
+
+        user = userRepository.save(found);
+        userRepository.flush();
+
+        log.debug("User now online: ", user);
+
+        return found;
+    }
+
+    /**
+     * Changes userStatus of user to offline
+     *
+     * @param user
+     */
+    public void UserLogout(User user) {
+        if(user !=null){// token has corresponding user
+            user.setStatus(UserStatus.OFFLINE);
+
+            user = userRepository.save(user);
+            userRepository.flush();
+
+            log.debug("User now offline: ", user);
+        }
+    }
+
+    /**
+     * Changes User information, if the input provided is valid and not null
+     *
+     * @param found
+     * @param username
+     * @param password
+     * @param location
+     * @param token
+     * @throws ResponseStatusException
+     */
+    public void EditProfile(User found,String username, String password,String location, String token){
+        if(found ==null){// id does not exist,   should never happen but...
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("user with userId was not found"));
+        }
+        if(! found.getToken().equals(token)){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format("Not your Profile"));
+
+        }
+        //check if new name already exists
+        User UserWithName = userRepository.findByUsername(username);
+        if(! (UserWithName==null)&&!(found.equals(UserWithName))){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Username taken/invalid"));
+        }
+        if(!(username==null)){
+            found.setPassword(username);
+
+            found = userRepository.save(found);
+            userRepository.flush();
+
+            log.debug("User changed Username: ", found);
+        }
+        if(!(password==null)){
+            found.setUsername(password);
+
+            found = userRepository.save(found);
+            userRepository.flush();
+
+            log.debug("User changed password: ", found);
+        }
+        if(!(location==null)){// this will change,  we need to check if valid location
+            found.setLocation(location);
+
+            found = userRepository.save(found);
+            userRepository.flush();
+
+            log.debug("User changed location: ", found);
+        }
+    }
+
+//    /**
+//     * Changes Username of User
+//     *
+//     * @param User
+//     * @param NewName
+//     */
+//    public void ChangeUsername(User User, String NewName) {
+//        User.setUsername(NewName);
+//
+//        User = userRepository.save(User);
+//        userRepository.flush();
+//
+//        log.debug("User changed Username: ", User);
+//    }
+
+    /**
      * This is a helper method that will check the uniqueness criteria of the username and the name
      * defined in the User entity. The method will do nothing if the input is unique and throw an error otherwise.
      *
@@ -61,17 +173,11 @@ public class UserService {
      */
     private void checkIfUserExists(User userToBeCreated) {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
-        User userByName = userRepository.findByName(userToBeCreated.getName());
 
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
-        if (userByUsername != null && userByName != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username and the name", "are"));
-        }
-        else if (userByUsername != null) {
+        if (userByUsername != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
         }
-        else if (userByName != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
-        }
+
     }
 }

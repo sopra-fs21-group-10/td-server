@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
+import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
@@ -39,7 +40,9 @@ public class UserController {
 
         // convert each user to the API representation
         for (User user : users) {
-            userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+            if(user.getStatus()== UserStatus.ONLINE){
+                userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+            }
         }
         return userGetDTOs;
     }

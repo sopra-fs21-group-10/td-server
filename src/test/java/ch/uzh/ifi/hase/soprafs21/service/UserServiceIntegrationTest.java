@@ -51,7 +51,7 @@ public class UserServiceIntegrationTest {
         assertEquals(testUser.getPassword(), createdUser.getPassword());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
-        assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
+        assertEquals(UserStatus.ONLINE, createdUser.getStatus());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class UserServiceIntegrationTest {
         assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();
-        testUser.setPassword("testName");
+        testUser.setPassword("testPassword");
         testUser.setUsername("testUsername");
         User createdUser = userService.createUser(testUser);
 
@@ -67,7 +67,7 @@ public class UserServiceIntegrationTest {
         User testUser2 = new User();
 
         // change the name but forget about the username
-        testUser2.setPassword("testName2");
+        testUser2.setPassword("testPassword2");
         testUser2.setUsername("testUsername");
 
         // check that an error is thrown

@@ -126,8 +126,8 @@ public class UserService {
 
         }
         //check if new name already exists
-        User UserWithName = userRepository.findByUsername(username);
-        if((UserWithName!=null)&&!(found.equals(UserWithName))){
+        User userWithName = userRepository.findByUsername(username);
+        if((userWithName!=null)&&!(found.equals(userWithName))){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Username taken/invalid");
         }
 

@@ -96,7 +96,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     @Test
-    public void editProfile_invalidLocation_throwsException() {
+     void editProfile_invalidLocation_throwsException() {
         // given
         assertNull(userRepository.findByUsername("testUsername"));
 

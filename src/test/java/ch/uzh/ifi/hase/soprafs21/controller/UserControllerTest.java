@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,6 +93,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         mockMvc.perform(postRequest)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.token", is(user.getToken())));
+    }
+
+    @Test
+    public void createUser_invalidInput_userCreated() throws Exception {
+        // username already exists
+        // thee test does not make much sense, as wi test if it sends what we mock
+        // the important test par should be in service(check if user exists)
+
+        // given
+        Exception thrownByService=new ResponseStatusException(HttpStatus.CONFLICT,
+                "The username provided is not unique. Therefore, the user could not be created!");
+
+        UserPostInDTO userPostDTO = new UserPostInDTO();
+        userPostDTO.setPassword("TestUser2");
+        userPostDTO.setUsername("testUsername");//same as other
+
+        given(userService.createUser(Mockito.any())).willThrow(thrownByService);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostDTO));
+
+        // then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isConflict())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
     }
 
     /**

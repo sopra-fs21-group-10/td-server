@@ -145,7 +145,7 @@ public class UserService {
         if(location!=null){// this will change,  we need to check if valid location
             try {
                 // test if location exists by making a request
-                URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+location+"&appid=d9c0704e11e748296bd7ce40527678a5");//last part is the key
+                URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+location+"&appid=key");//last part is the key
 
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

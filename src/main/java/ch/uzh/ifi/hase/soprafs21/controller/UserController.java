@@ -55,9 +55,9 @@ public class UserController {
         // convert API user to internal representation
         User userInput = DTOMapper.INSTANCE.convertUserPostInDTOtoEntity(userPostDTO);
 
-        User LoggedIn = userService.userIn(userInput);
+        User loggedIn = userService.userIn(userInput);
 
-        return DTOMapper.INSTANCE.convertEntitytoUserPostDTO(LoggedIn);
+        return DTOMapper.INSTANCE.convertEntitytoUserPostDTO(loggedIn);
     }
 
     @PatchMapping("/users")//patch allowed??

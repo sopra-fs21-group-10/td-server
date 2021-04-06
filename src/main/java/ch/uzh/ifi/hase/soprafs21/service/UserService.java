@@ -46,7 +46,7 @@ public class UserService {
      *
      * @param newUser the user with password/username we want to create
      * @return newUser
-     * @throws ResponseStatusException
+     * @throws ResponseStatusException HTTP
      */
     public User createUser(User newUser) {
         newUser.setToken(UUID.randomUUID().toString());
@@ -58,16 +58,16 @@ public class UserService {
         newUser = userRepository.save(newUser);
         userRepository.flush();
 
-        log.debug(String.format("User created: %b", newUser));
+        log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
 
     /**
      * Checks if userinput is valid, and performs changes if valid
      *
-     * @param user
+     * @param user user with name and password to log in
      * @return found
-     * @throws ResponseStatusException
+     * @throws ResponseStatusException HTTP
      */
     public User userIn(User user) {
         User found = userRepository.findByUsername(user.getUsername());//can be null if not found
@@ -82,7 +82,7 @@ public class UserService {
         user = userRepository.save(found);
         userRepository.flush();
 
-        log.debug(String.format("User now online:  %b", user));
+        log.debug("User now online: {}", user);
 
         return found;
     }
@@ -90,8 +90,8 @@ public class UserService {
     /**
      * Changes userStatus of user to offline
      *
-     * @param user
-     * @throws ResponseStatusException
+     * @param user token of user to log out
+     * @throws ResponseStatusException HTTP
      */
     public void userLogout(User user) {
         if(user !=null){// token has corresponding user
@@ -100,7 +100,7 @@ public class UserService {
             user = userRepository.save(user);
             userRepository.flush();
 
-            log.debug(String.format("User now offline:  %b", user));
+            log.debug("User now offline: {}", user);
         }
         else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found/invalid token");
@@ -110,12 +110,12 @@ public class UserService {
     /**
      * Changes User information, if the input provided is valid and not null, and token must match id
      *
-     * @param found
-     * @param username
-     * @param password
-     * @param location
-     * @param token
-     * @throws ResponseStatusException
+     * @param found the user with the given Username
+     * @param username provided username for change
+     * @param password provided for change
+     * @param location provided for change
+     * @param token token for authentication
+     * @throws ResponseStatusException HTTP
      */
     public void editProfile(User found, String token, String username, String password, String location){
         if(found ==null){// id does not exist,   should never happen but...
@@ -134,12 +134,12 @@ public class UserService {
         if(username!=null){
             found.setUsername(username);
 
-            log.debug(String.format("User changed Username: %b", found));
+            log.debug("User changed Username: {}", found);
         }
         if(password!=null){
             found.setPassword(password);
 
-            log.debug(String.format("User changed Password: %b", found));
+            log.debug("User changed Password: {}", found);
         }
 
         if(location!=null){// this will change,  we need to check if valid location
@@ -150,14 +150,13 @@ public class UserService {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-                WeatherDTO jweather = mapper.readValue(jsonUrl, WeatherDTO.class);
-
+                WeatherDTO weather = mapper.readValue(jsonUrl, WeatherDTO.class);
+                System.out.println("provided location:"+ weather.getName());
                 //change if location was found
                 found.setLocation(location);
 
-                log.debug(String.format("User changed location: %b", found));
+                log.debug("User changed location: {}", found);
             }catch (Exception e){
-                System.out.println(e);
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid location or to many requests");
             }
         }
@@ -170,8 +169,8 @@ public class UserService {
      * This is a helper method that will check the uniqueness criteria of the username and the name
      * defined in the User entity. The method will do nothing if the input is unique and throw an error otherwise.
      *
-     * @param userToBeCreated
-     * @throws org.springframework.web.server.ResponseStatusException
+     * @param userToBeCreated user with username to check if it is already in use
+     * @throws org.springframework.web.server.ResponseStatusException HTTP
      * @see User
      */
     private void checkIfUserExists(User userToBeCreated) {

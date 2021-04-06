@@ -47,7 +47,7 @@ public class UserControllerTest {
     private UserRepository userRepository;
 
     @Test
-    public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
+     void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
         // given
         User user = new User();
         user.setUsername("firstname@lastname");
@@ -69,7 +69,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUser_validInput_userCreated() throws Exception {
+     void createUser_validInput_userCreated() throws Exception {
         // given
         User user = new User();
         user.setId(1L);

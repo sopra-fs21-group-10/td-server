@@ -51,11 +51,11 @@ public class UserController {
     @PutMapping("/users/logins")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserPostDTO Login(@RequestBody UserPostInDTO userPostDTO) {
+    public UserPostDTO login(@RequestBody UserPostInDTO userPostDTO) {
         // convert API user to internal representation
         User userInput = DTOMapper.INSTANCE.convertUserPostInDTOtoEntity(userPostDTO);
 
-        User LoggedIn = userService.UserIn(userInput);
+        User LoggedIn = userService.userIn(userInput);
 
         return DTOMapper.INSTANCE.convertEntitytoUserPostDTO(LoggedIn);
     }
@@ -63,23 +63,23 @@ public class UserController {
     @PatchMapping("/users")//patch allowed??
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void Logout(@RequestBody UserPostDTO token) {
+    public void logout(@RequestBody UserPostDTO token) {
 
         User found = userRepository.findByToken(token.getToken());
 
-        userService.UserLogout(found);
+        userService.userLogout(found);
     }
 
     @PatchMapping("/users/{userid}/{token}")//patch allowed??
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void ChangeData(@PathVariable("userId") Long userId,@PathVariable("token") String token,@RequestBody UserUserIdTokenPatchDTO userUserIdTokenPatchDTO) {
+    public void changeData(@PathVariable("userId") Long userId,@PathVariable("token") String token,@RequestBody UserUserIdTokenPatchDTO userUserIdTokenPatchDTO) {
 
         User found = userRepository.getOne(userId);
 
         // did not want to convert input to user because some not nullable attributes are allowed to be null here
         // (maybe we only want to change location)
-        userService.EditProfile(found, token,
+        userService.editProfile(found, token,
                 userUserIdTokenPatchDTO.getUsername(),
                 userUserIdTokenPatchDTO.getPassword(),
                 userUserIdTokenPatchDTO.getLocation());

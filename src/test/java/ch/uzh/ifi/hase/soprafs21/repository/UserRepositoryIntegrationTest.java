@@ -20,7 +20,7 @@ public class UserRepositoryIntegrationTest {
     private UserRepository userRepository;
 
     @Test
-    public void findByUsername_success() {
+     void findByUsername_success() {
         // given
         User user = new User();
         user.setPassword("Firstname Lastname");

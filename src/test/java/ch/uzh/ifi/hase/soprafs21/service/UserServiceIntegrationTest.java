@@ -30,12 +30,12 @@ public class UserServiceIntegrationTest {
     private UserService userService;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         userRepository.deleteAll();
     }
 
     @Test
-    public void createUser_validInputs_success() {
+     void createUser_validInputs_success() {
         // given
         assertNull(userRepository.findByUsername("testUsername"));
 
@@ -55,7 +55,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void editProfile_validInputs_success() {
+     void editProfile_validInputs_success() {
         // given
         assertNull(userRepository.findByUsername("testUsername"));
 
@@ -66,7 +66,7 @@ public class UserServiceIntegrationTest {
         User createdUser = userService.createUser(testUser);//tested above
 
         //when
-        userService.EditProfile(createdUser, createdUser.getToken(),"testname2","password123", "London");
+        userService.editProfile(createdUser, createdUser.getToken(),"testname2","password123", "London");
 
         //then
         assertEquals("testname2",createdUser.getUsername());
@@ -76,7 +76,7 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
-    public void editProfile_validInputsNotAll_success() {
+     void editProfile_validInputsNotAll_success() {
         // given
         assertNull(userRepository.findByUsername("testUsername"));
 
@@ -87,7 +87,7 @@ public class UserServiceIntegrationTest {
         User createdUser = userService.createUser(testUser);//tested above
 
         //when
-        userService.EditProfile(createdUser, createdUser.getToken(),null,"password123", null);
+        userService.editProfile(createdUser, createdUser.getToken(),null,"password123", null);
 
         //then
         assertEquals("testUsername",createdUser.getUsername());
@@ -106,11 +106,11 @@ public class UserServiceIntegrationTest {
         User createdUser = userService.createUser(testUser);//tested above
 
         // check that an error is thrown
-        assertThrows(ResponseStatusException.class, () -> userService.EditProfile(createdUser, createdUser.getToken(),"testname2","password123", "Londonnnnnnnnnn"));
+        assertThrows(ResponseStatusException.class, () -> userService.editProfile(createdUser, createdUser.getToken(),"testname2","password123", "Londonnnnnnnnnn"));
     }
 
     @Test
-    public void createUser_duplicateUsername_throwsException() {
+     void createUser_duplicateUsername_throwsException() {
         assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();

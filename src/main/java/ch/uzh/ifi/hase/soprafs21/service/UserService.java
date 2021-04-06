@@ -69,13 +69,13 @@ public class UserService {
      * @return found
      * @throws ResponseStatusException
      */
-    public User UserIn(User user) {
+    public User userIn(User user) {
         User found = userRepository.findByUsername(user.getUsername());//can be null if not found
         if(found ==null){// name does not exist
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Not a valid username"));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not a valid username");
         }
         if(! user.getPassword().equals(found.getPassword())){// wrong password
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format("wrong password"));
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "wrong password");
         }
         found.setStatus(UserStatus.ONLINE);
 
@@ -93,7 +93,7 @@ public class UserService {
      * @param user
      * @throws ResponseStatusException
      */
-    public void UserLogout(User user) {
+    public void userLogout(User user) {
         if(user !=null){// token has corresponding user
             user.setStatus(UserStatus.OFFLINE);
 
@@ -117,38 +117,32 @@ public class UserService {
      * @param token
      * @throws ResponseStatusException
      */
-    public void EditProfile(User found, String token, String username, String password, String location){
+    public void editProfile(User found, String token, String username, String password, String location){
         if(found ==null){// id does not exist,   should never happen but...
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("user with userId was not found"));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
         }
         if(! found.getToken().equals(token)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, String.format("Not your Profile"));
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not your Profile");
 
         }
         //check if new name already exists
         User UserWithName = userRepository.findByUsername(username);
-        if(! (UserWithName==null)&&!(found.equals(UserWithName))){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Username taken/invalid"));
+        if((UserWithName!=null)&&!(found.equals(UserWithName))){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Username taken/invalid");
         }
 
-        if(!(username==null)){
+        if(username!=null){
             found.setUsername(username);
-
-//            found = userRepository.save(found);
-//            userRepository.flush();
 
             log.debug("User changed Username: ", found);
         }
-        if(!(password==null)){
+        if(password!=null){
             found.setPassword(password);
-
-//            found = userRepository.save(found);
-//            userRepository.flush();
 
             log.debug("User changed Password: ", found);
         }
 
-        if(!(location==null)){// this will change,  we need to check if valid location
+        if(location!=null){// this will change,  we need to check if valid location
             try {
                 // test if location exists by making a request
                 URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+location+"&appid=d9c0704e11e748296bd7ce40527678a5");//last part is the key
@@ -160,16 +154,15 @@ public class UserService {
 
                 //change if location was found
                 found.setLocation(location);
-//                found = userRepository.save(found);
-//                userRepository.flush();
+
                 log.debug("User changed location: ", found);
             }catch (Exception e){
                 System.out.println(e);
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Invalid location or to many requests"));
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid location or to many requests");
             }
         }
         // cant do that after every change or only the 1. will get saved
-        found = userRepository.save(found);
+        userRepository.save(found);
         userRepository.flush();
     }
 

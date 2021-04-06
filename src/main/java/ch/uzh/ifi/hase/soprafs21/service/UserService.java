@@ -44,7 +44,7 @@ public class UserService {
     /**
      * Creates an user with given username/password
      *
-     * @param newUser
+     * @param newUser the user with password/username we want to create
      * @return newUser
      * @throws ResponseStatusException
      */
@@ -58,7 +58,7 @@ public class UserService {
         newUser = userRepository.save(newUser);
         userRepository.flush();
 
-        log.debug("Created Information for User: {}", newUser);
+        log.debug(String.format("User created: %b", newUser));
         return newUser;
     }
 
@@ -82,7 +82,7 @@ public class UserService {
         user = userRepository.save(found);
         userRepository.flush();
 
-        log.debug("User now online: ", user);
+        log.debug(String.format("User now online:  %b", user));
 
         return found;
     }
@@ -100,7 +100,7 @@ public class UserService {
             user = userRepository.save(user);
             userRepository.flush();
 
-            log.debug("User now offline: ", user);
+            log.debug(String.format("User now offline:  %b", user));
         }
         else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found/invalid token");
@@ -134,12 +134,12 @@ public class UserService {
         if(username!=null){
             found.setUsername(username);
 
-            log.debug("User changed Username: ", found);
+            log.debug(String.format("User changed Username: %b", found));
         }
         if(password!=null){
             found.setPassword(password);
 
-            log.debug("User changed Password: ", found);
+            log.debug(String.format("User changed Password: %b", found));
         }
 
         if(location!=null){// this will change,  we need to check if valid location
@@ -155,7 +155,7 @@ public class UserService {
                 //change if location was found
                 found.setLocation(location);
 
-                log.debug("User changed location: ", found);
+                log.debug(String.format("User changed location: %b", found));
             }catch (Exception e){
                 System.out.println(e);
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid location or to many requests");

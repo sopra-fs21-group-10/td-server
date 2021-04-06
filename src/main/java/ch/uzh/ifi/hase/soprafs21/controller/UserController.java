@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostInDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserUserIdTokenPatchDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -67,6 +68,21 @@ public class UserController {
         User found = userRepository.findByToken(token.getToken());
 
         userService.UserLogout(found);
+    }
+
+    @PatchMapping("/users/{userid}/{token}")//patch allowed??
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void ChangeData(@PathVariable("userId") Long userId,@PathVariable("token") String token,@RequestBody UserUserIdTokenPatchDTO userUserIdTokenPatchDTO) {
+
+        User found = userRepository.getOne(userId);
+
+        // did not want to convert input to user because some not nullable attributes are allowed to be null here
+        // (maybe we only want to change location)
+        userService.EditProfile(found, token,
+                userUserIdTokenPatchDTO.getUsername(),
+                userUserIdTokenPatchDTO.getPassword(),
+                userUserIdTokenPatchDTO.getLocation());
     }
 
     @PostMapping("/users")

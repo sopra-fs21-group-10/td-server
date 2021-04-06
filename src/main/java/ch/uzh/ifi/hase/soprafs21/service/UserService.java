@@ -104,7 +104,7 @@ public class UserService {
     }
 
     /**
-     * Changes User information, if the input provided is valid and not null
+     * Changes User information, if the input provided is valid and not null, and token must match id
      *
      * @param found
      * @param username
@@ -113,7 +113,7 @@ public class UserService {
      * @param token
      * @throws ResponseStatusException
      */
-    public void EditProfile(User found,String username, String password,String location, String token){
+    public void EditProfile(User found,String token , String username, String password,String location){
         if(found ==null){// id does not exist,   should never happen but...
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("user with userId was not found"));
         }
@@ -126,22 +126,24 @@ public class UserService {
         if(! (UserWithName==null)&&!(found.equals(UserWithName))){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Username taken/invalid"));
         }
+
         if(!(username==null)){
-            found.setPassword(username);
-
-            found = userRepository.save(found);
-            userRepository.flush();
-
-            log.debug("User changed Username: ", found);
-        }
-        if(!(password==null)){
-            found.setUsername(password);
+            found.setUsername(username);
 
             found = userRepository.save(found);
             userRepository.flush();
 
             log.debug("User changed password: ", found);
         }
+        if(!(password==null)){
+            found.setPassword(password);
+
+            found = userRepository.save(found);
+            userRepository.flush();
+
+            log.debug("User changed Username: ", found);
+        }
+
         if(!(location==null)){// this will change,  we need to check if valid location
             found.setLocation(location);
 

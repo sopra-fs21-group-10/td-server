@@ -3,6 +3,9 @@ package ch.uzh.ifi.hase.soprafs21.service;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.WeatherDTO;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
@@ -113,7 +117,7 @@ public class UserService {
      * @param token
      * @throws ResponseStatusException
      */
-    public void EditProfile(User found,String token , String username, String password,String location){
+    public void EditProfile(User found, String token, String username, String password, String location){
         if(found ==null){// id does not exist,   should never happen but...
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("user with userId was not found"));
         }
@@ -130,44 +134,44 @@ public class UserService {
         if(!(username==null)){
             found.setUsername(username);
 
-            found = userRepository.save(found);
-            userRepository.flush();
+//            found = userRepository.save(found);
+//            userRepository.flush();
 
-            log.debug("User changed password: ", found);
+            log.debug("User changed Username: ", found);
         }
         if(!(password==null)){
             found.setPassword(password);
 
-            found = userRepository.save(found);
-            userRepository.flush();
+//            found = userRepository.save(found);
+//            userRepository.flush();
 
-            log.debug("User changed Username: ", found);
+            log.debug("User changed Password: ", found);
         }
 
         if(!(location==null)){// this will change,  we need to check if valid location
-            found.setLocation(location);
+            try {
+                // test if location exists by making a request
+                URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+location+"&appid=d9c0704e11e748296bd7ce40527678a5");//last part is the key
 
-            found = userRepository.save(found);
-            userRepository.flush();
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-            log.debug("User changed location: ", found);
+                WeatherDTO jweather = mapper.readValue(jsonUrl, WeatherDTO.class);
+
+                //change if location was found
+                found.setLocation(location);
+//                found = userRepository.save(found);
+//                userRepository.flush();
+                log.debug("User changed location: ", found);
+            }catch (Exception e){
+                System.out.println(e);
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Invalid location or to many requests"));
+            }
         }
+        // cant do that after every change or only the 1. will get saved
+        found = userRepository.save(found);
+        userRepository.flush();
     }
-
-//    /**
-//     * Changes Username of User
-//     *
-//     * @param User
-//     * @param NewName
-//     */
-//    public void ChangeUsername(User User, String NewName) {
-//        User.setUsername(NewName);
-//
-//        User = userRepository.save(User);
-//        userRepository.flush();
-//
-//        log.debug("User changed Username: ", User);
-//    }
 
     /**
      * This is a helper method that will check the uniqueness criteria of the username and the name

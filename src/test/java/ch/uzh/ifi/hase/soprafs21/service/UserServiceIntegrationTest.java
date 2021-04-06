@@ -55,6 +55,61 @@ public class UserServiceIntegrationTest {
     }
 
     @Test
+    public void editProfile_validInputs_success() {
+        // given
+        assertNull(userRepository.findByUsername("testUsername"));
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+
+        User createdUser = userService.createUser(testUser);//tested above
+
+        //when
+        userService.EditProfile(createdUser, createdUser.getToken(),"testname2","password123", "London");
+
+        //then
+        assertEquals("testname2",createdUser.getUsername());
+        assertEquals("password123",createdUser.getPassword());
+        assertEquals("London",createdUser.getLocation());
+        assertNull(userRepository.findByUsername("testUsername"));
+    }
+
+    @Test
+    public void editProfile_validInputsNotAll_success() {
+        // given
+        assertNull(userRepository.findByUsername("testUsername"));
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+
+        User createdUser = userService.createUser(testUser);//tested above
+
+        //when
+        userService.EditProfile(createdUser, createdUser.getToken(),null,"password123", null);
+
+        //then
+        assertEquals("testUsername",createdUser.getUsername());
+        assertEquals("password123",createdUser.getPassword());
+        assertEquals("Zurich",createdUser.getLocation());
+    }
+
+    @Test
+    public void editProfile_invalidLocation_throwsException() {
+        // given
+        assertNull(userRepository.findByUsername("testUsername"));
+
+        User testUser = new User();
+        testUser.setPassword("testName");
+        testUser.setUsername("testUsername");
+        User createdUser = userService.createUser(testUser);//tested above
+
+        // check that an error is thrown
+        assertThrows(ResponseStatusException.class, () -> userService.EditProfile(createdUser, createdUser.getToken(),"testname2","password123", "Londonnnnnnnnnn"));
+    }
+
+    @Test
     public void createUser_duplicateUsername_throwsException() {
         assertNull(userRepository.findByUsername("testUsername"));
 

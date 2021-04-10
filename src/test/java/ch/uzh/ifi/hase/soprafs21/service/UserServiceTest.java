@@ -39,7 +39,7 @@ class UserServiceTest {
     }
 
     @Test
-     void createUser_validInputs_success() {
+    void createUser_validInputs_success() {
         // when -> any object is being save in the userRepository -> return the dummy testUser
         User createdUser = userService.createUser(testUser);
 
@@ -54,7 +54,7 @@ class UserServiceTest {
     }
 
     @Test
-     void createUser_duplicateUsername_throwsException() {
+    void createUser_duplicateUsername_throwsException() {
         // given -> a first user has already been created
         userService.createUser(testUser);
 
@@ -66,7 +66,7 @@ class UserServiceTest {
     }
 
     @Test
-     void createUser_duplicateInputs_throwsException() {
+    void createUser_duplicateInputs_throwsException() {
         // given -> a first user has already been created
         userService.createUser(testUser);
 
@@ -80,8 +80,7 @@ class UserServiceTest {
     @Test
     void userIn_validInputs_success() {
         // given -> a first user has already been created
-        assertEquals(testUser.getStatus(), UserStatus.OFFLINE);
-
+        assertEquals(UserStatus.OFFLINE, testUser.getStatus());
 
         // when -> setup additional mocks for UserRepository
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
@@ -94,7 +93,7 @@ class UserServiceTest {
     @Test
     void userIn_noName_throwsException() {
         // given -> a first user has already been created
-        assertEquals(testUser.getStatus(), UserStatus.OFFLINE);
+        assertEquals(UserStatus.OFFLINE, testUser.getStatus());
 
 
         // when -> setup additional mocks for UserRepository
@@ -107,7 +106,7 @@ class UserServiceTest {
     @Test
     void userIn_wrongPassword_throwsException() {
         // given -> a first user has already been created
-        assertEquals(testUser.getStatus(), UserStatus.OFFLINE);
+        assertEquals(UserStatus.OFFLINE, testUser.getStatus());
 
         User user2 =new User();
         user2.setId(testUser.getId());
@@ -121,5 +120,4 @@ class UserServiceTest {
         // then -> attempt to create second user with same user -> check that an error is thrown
         assertThrows(ResponseStatusException.class, () -> userService.userIn(user2));
     }
-
 }

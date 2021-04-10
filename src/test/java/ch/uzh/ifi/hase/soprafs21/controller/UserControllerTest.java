@@ -25,8 +25,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -96,7 +95,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
-    public void createUser_invalidInput_userCreated() throws Exception {
+    public void createUser_invalidInput_throw() throws Exception {
         // username already exists
         // thee test does not make much sense, as wi test if it sends what we mock
         // the important test par should be in service(check if user exists)
@@ -119,6 +118,60 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         // then
         mockMvc.perform(postRequest)
                 .andExpect(status().isConflict())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
+    }
+
+    @Test
+    void login_validInput_returnToken() throws Exception {
+        // given
+        User user = new User();
+        user.setId(1L);
+        user.setPassword("TestUser");
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setStatus(UserStatus.OFFLINE);
+
+        UserPostInDTO userPostInDTO = new UserPostInDTO();
+        userPostInDTO.setPassword("TestUser");
+        userPostInDTO.setUsername("testUsername");
+
+        given(userService.userIn(Mockito.any())).willReturn(user);
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder putRequest = put("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostInDTO));
+
+        // then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token", is(user.getToken())));
+    }
+
+    @Test
+    void login_invalidInput_throw() throws Exception {
+        // given
+        User user = new User();
+        user.setId(1L);
+        user.setPassword("TestUser");
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setStatus(UserStatus.OFFLINE);
+
+        UserPostInDTO userPostInDTO = new UserPostInDTO();
+        userPostInDTO.setPassword("TestUser");
+        userPostInDTO.setUsername("testUsername");
+
+        Exception thrownByService=new ResponseStatusException(HttpStatus.NOT_FOUND, "Not a valid username");
+
+        given(userService.userIn(Mockito.any())).willThrow(thrownByService);
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder putRequest = put("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostInDTO));
+
+        // then
+        mockMvc.perform(putRequest)
+                .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
     }
 

@@ -25,7 +25,6 @@ public class Lobby implements Serializable {
     private boolean player2Ready=false;//game can only be started if player 2 is ready
 
 
-
     public boolean isPlayer2Ready() {
         return player2Ready;
     }

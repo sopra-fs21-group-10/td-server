@@ -32,6 +32,7 @@ class UserServiceTest {
         testUser.setId(1L);
         testUser.setPassword("testName");
         testUser.setUsername("testUsername");
+        testUser.setStatus(UserStatus.OFFLINE);
 
         // when -> any object is being save in the userRepository -> return the dummy testUser
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(testUser);
@@ -76,5 +77,49 @@ class UserServiceTest {
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
     }
 
+    @Test
+    void userIn_validInputs_success() {
+        // given -> a first user has already been created
+        assertEquals(testUser.getStatus(), UserStatus.OFFLINE);
+
+
+        // when -> setup additional mocks for UserRepository
+        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
+        User LoggedUser = userService.userIn(testUser);
+
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        assertEquals(UserStatus.ONLINE, LoggedUser.getStatus());
+    }
+
+    @Test
+    void userIn_noName_throwsException() {
+        // given -> a first user has already been created
+        assertEquals(testUser.getStatus(), UserStatus.OFFLINE);
+
+
+        // when -> setup additional mocks for UserRepository
+        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
+
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        assertThrows(ResponseStatusException.class, () -> userService.userIn(testUser));
+    }
+
+    @Test
+    void userIn_wrongPassword_throwsException() {
+        // given -> a first user has already been created
+        assertEquals(testUser.getStatus(), UserStatus.OFFLINE);
+
+        User user2 =new User();
+        user2.setId(testUser.getId());
+        user2.setPassword("testNameNotTheSame");
+        user2.setUsername(testUser.getUsername());
+        user2.setStatus(testUser.getStatus());
+
+        // when -> setup additional mocks for UserRepository
+        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
+
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        assertThrows(ResponseStatusException.class, () -> userService.userIn(user2));
+    }
 
 }

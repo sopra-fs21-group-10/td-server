@@ -95,7 +95,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
-    public void createUser_invalidInput_throw() throws Exception {
+     void createUser_invalidInput_throw() throws Exception {
         // username already exists
         // thee test does not make much sense, as wi test if it sends what we mock
         // the important test par should be in service(check if user exists)
@@ -174,6 +174,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
     }
+
+//    @Test
+//    void changeData_validInput_dataChanged() throws Exception {
+//        // given
+//        User user = new User();
+//        user.setId(1L);
+//        user.setPassword("TestUser");
+//        user.setUsername("testUsername");
+//        user.setToken("12a3");
+//        user.setStatus(UserStatus.OFFLINE);
+//
+//        UserUserIdTokenPatchDTO userUserIdTokenPatchDTO = new UserUserIdTokenPatchDTO();
+//        userUserIdTokenPatchDTO.setPassword("TestUser2");
+//        userUserIdTokenPatchDTO.setUsername("testUsername2");
+//        userUserIdTokenPatchDTO.setLocation("London");
+//
+//        given(userRepository.getOne(Mockito.any())).willReturn(user);
+//        Mockito.doNothing().when(userService).editProfile(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any());
+//        // when/then -> do the request + validate the result
+//        MockHttpServletRequestBuilder patchRequest = patch("/users/{userid}/{token}",user.getId(),user.getToken())
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(asJsonString(userUserIdTokenPatchDTO));
+//
+//        // then
+//        mockMvc.perform(patchRequest)
+//                .andExpect(status().isOk());
+//    }
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input can be processed

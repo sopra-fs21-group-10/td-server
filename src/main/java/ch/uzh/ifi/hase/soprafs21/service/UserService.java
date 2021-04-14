@@ -123,7 +123,6 @@ public class UserService {
         }
         if(! found.getToken().equals(token)){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not your Profile");
-
         }
         //check if new name already exists
         User userWithName = userRepository.findByUsername(username);
@@ -164,6 +163,35 @@ public class UserService {
         userRepository.save(found);
         userRepository.flush();
     }
+
+    /**
+     * returns the weather type(Clouds..) from a given user by looking ath their location as string
+     *
+     * @param user user, whose weather shall be returned
+     * @throws ResponseStatusException HTTP
+     */
+    public String ReturnWeatherTypePlayer(User user){
+        if(user ==null){// id does not exist,   should never happen but...
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
+        }
+
+        try {// location should always exist because it is checked before being entered, but for safety
+
+            URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+user.getLocation()+"&appid=key");//last part is the key
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            WeatherDTO weather = mapper.readValue(jsonUrl, WeatherDTO.class);
+            String main = weather.getWeather().get(0).get("main");
+            System.out.println("provided location:"+ main);
+
+            return main;
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid location or to many requests");
+        }
+    }
+
 
     /**
      * This is a helper method that will check the uniqueness criteria of the username and the name

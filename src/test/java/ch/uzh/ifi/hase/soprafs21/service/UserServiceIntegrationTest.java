@@ -128,4 +128,22 @@ import static org.junit.jupiter.api.Assertions.*;
         // check that an error is thrown
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
     }
+
+//    @Test
+//    void ReturnWeatherTypePlayer_validInputs_success() {
+//        // given -> a first user has already been created
+//        User testUser = new User();
+//        testUser.setPassword("testName");
+//        testUser.setUsername("testUsername");
+//        assertEquals("Zurich", testUser.getLocation());
+//
+//        // when -> setup additional mocks for UserRepository
+//
+////        String returned =
+//        userService.ReturnWeatherTypePlayer(testUser);
+//
+//        // then -> attempt to create second user with same user -> check that an error is thrown
+//        // the weather is not always the same so the test cant check for the right one
+//
+//    }
 }

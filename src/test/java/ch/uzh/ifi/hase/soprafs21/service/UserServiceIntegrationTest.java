@@ -54,26 +54,26 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(UserStatus.ONLINE, createdUser.getStatus());
     }
 
-//    @Test
-//     void editProfile_validInputs_success() {
-//        // given
-//        assertNull(userRepository.findByUsername("testUsername"));
-//
-//        User testUser = new User();
-//        testUser.setUsername("testUsername");
-//        testUser.setPassword("testPassword");
-//
-//        User createdUser = userService.createUser(testUser);//tested above
-//
-//        //when
-//        userService.editProfile(createdUser, createdUser.getToken(),"testname2","password123", "London");
-//
-//        //then
-//        assertEquals("testname2",createdUser.getUsername());
-//        assertEquals("password123",createdUser.getPassword());
-//        assertEquals("London",createdUser.getLocation());
-//        assertNull(userRepository.findByUsername("testUsername"));
-//    }
+    @Test
+     void editProfile_validInputs_success() {
+        // given
+        assertNull(userRepository.findByUsername("testUsername"));
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+
+        User createdUser = userService.createUser(testUser);//tested above
+
+        //when
+        userService.editProfile(createdUser, createdUser.getToken(),"testname2","password123", "London");
+
+        //then
+        assertEquals("testname2",createdUser.getUsername());
+        assertEquals("password123",createdUser.getPassword());
+        assertEquals("London",createdUser.getLocation());
+        assertNull(userRepository.findByUsername("testUsername"));
+    }
 
     @Test
      void editProfile_validInputsNotAll_success() {
@@ -129,21 +129,19 @@ import static org.junit.jupiter.api.Assertions.*;
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
     }
 
-//    @Test
-//    void ReturnWeatherTypePlayer_validInputs_success() {
-//        // given -> a first user has already been created
-//        User testUser = new User();
-//        testUser.setPassword("testName");
-//        testUser.setUsername("testUsername");
-//        assertEquals("Zurich", testUser.getLocation());
-//
-//        // when -> setup additional mocks for UserRepository
-//
-////        String returned =
-//        userService.ReturnWeatherTypePlayer(testUser);
-//
-//        // then -> attempt to create second user with same user -> check that an error is thrown
-//        // the weather is not always the same so the test cant check for the right one
-//
-//    }
+    @Test
+    void ReturnWeatherTypePlayer_validInputs_success() {
+        // given -> a first user has already been created
+        User testUser = new User();
+        testUser.setPassword("testName");
+        testUser.setUsername("testUsername");
+        assertEquals("Zurich", testUser.getLocation());
+
+        // when -> setup additional mocks for UserRepository
+
+        String returned =userService.returnWeatherTypePlayer(testUser);
+
+        // then -> attempt to create second user with same user -> check that an error is thrown
+        // the weather is not always the same so the test cant check for the right one
+    }
 }

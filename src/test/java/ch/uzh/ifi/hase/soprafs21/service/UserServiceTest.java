@@ -99,7 +99,7 @@ class UserServiceTest {
         // when -> setup additional mocks for UserRepository
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
 
-        // then -> attempt to create second user with same user -> check that an error is thrown
+        // then -> login
         assertThrows(ResponseStatusException.class, () -> userService.userIn(testUser));
     }
 
@@ -117,7 +117,32 @@ class UserServiceTest {
         // when -> setup additional mocks for UserRepository
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
 
-        // then -> attempt to create second user with same user -> check that an error is thrown
+        // then -> login with wrong password
         assertThrows(ResponseStatusException.class, () -> userService.userIn(user2));
+    }
+
+    @Test
+    void userLogout_validInput_success() {
+        // given -> a first user has already been created
+        testUser.setStatus(UserStatus.ONLINE);
+        assertEquals(UserStatus.ONLINE, testUser.getStatus());
+
+        // when -> setup additional mocks for UserRepository
+        userService.userLogout(testUser);
+
+        // then -> user logged out
+        assertEquals(UserStatus.OFFLINE, testUser.getStatus());
+    }
+
+    @Test
+    void userLogout_nullUser_throw() {
+        // given -> a first user has already been created
+        testUser.setStatus(UserStatus.ONLINE);
+        assertEquals(UserStatus.ONLINE, testUser.getStatus());
+
+        // when -> setup additional mocks for UserRepository
+
+        // then -> logout not existing user
+        assertThrows(ResponseStatusException.class, () -> userService.userLogout(null));
     }
 }

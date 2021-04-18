@@ -212,9 +212,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
         }
         User userById = optionalUser.get();
-        if(userById==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
-        }
         return userById;
     }
 }

@@ -16,6 +16,9 @@ Download your IDE of choice: (e.g., [Eclipse](http://www.eclipse.org/downloads/)
 
 To build right click the `build.gradle` file and choose `Run Build`
 
+## WeatherAPI
+For running the application on your machine set the environment variable WeatherKey to your OpenWeather key
+
 ### VS Code
 The following extensions will help you to run it more easily:
 -   `pivotal.vscode-spring-boot`

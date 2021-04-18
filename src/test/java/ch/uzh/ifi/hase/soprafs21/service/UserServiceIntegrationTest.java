@@ -75,25 +75,6 @@ import static org.junit.jupiter.api.Assertions.*;
         assertNull(userRepository.findByUsername("testUsername"));
     }
 
-    @Test
-     void editProfile_validInputsNotAll_success() {
-        // given
-        assertNull(userRepository.findByUsername("testUsername"));
-
-        User testUser = new User();
-        testUser.setUsername("testUsername");
-        testUser.setPassword("testPassword");
-
-        User createdUser = userService.createUser(testUser);//tested above
-
-        //when
-        userService.editProfile(createdUser, createdUser.getToken(),null,"password123", null);
-
-        //then
-        assertEquals("testUsername",createdUser.getUsername());
-        assertEquals("password123",createdUser.getPassword());
-        assertEquals("Zurich",createdUser.getLocation());
-    }
 
     @Test
      void editProfile_invalidLocation_throwsException() {

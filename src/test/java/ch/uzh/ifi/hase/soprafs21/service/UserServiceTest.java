@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 class UserServiceTest {
 
@@ -32,6 +33,7 @@ class UserServiceTest {
         testUser.setId(1L);
         testUser.setPassword("testName");
         testUser.setUsername("testUsername");
+        testUser.setToken("token");
         testUser.setStatus(UserStatus.OFFLINE);
 
         // when -> any object is being save in the userRepository -> return the dummy testUser
@@ -144,5 +146,71 @@ class UserServiceTest {
 
         // then -> logout not existing user
         assertThrows(ResponseStatusException.class, () -> userService.userLogout(null));
+    }
+
+    @Test
+    void editProfile_validInputsNotAll_success() {
+        // given
+        assertNull(userRepository.findByUsername("testUsername"));
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+
+        User createdUser = userService.createUser(testUser);//tested above
+
+        //when
+        userService.editProfile(createdUser, createdUser.getToken(),null,"password123", null);
+
+        //then
+        assertEquals("testUsername",createdUser.getUsername());
+        assertEquals("password123",createdUser.getPassword());
+        assertEquals("Zurich",createdUser.getLocation());
+    }
+
+    @Test
+    void editProfile_invalidInputs_throw() {
+        // given
+        assertNull(userRepository.findByUsername("testUsername"));
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+
+        User createdUser = userService.createUser(testUser);//tested above
+
+        //when
+
+        //then
+        //no user
+        assertThrows(ResponseStatusException.class, () ->
+                userService.editProfile(null, createdUser.getToken(),null,"password123", null));
+        // token does not belong to user
+        assertThrows(ResponseStatusException.class, () ->
+                userService.editProfile(testUser, "token2",null,"password123", null));
+    }
+
+    @Test
+    void editProfile_dublicateName_throw() {
+        // given
+        assertNull(userRepository.findByUsername("testUsername"));
+
+        User testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setPassword("testPassword");
+
+        User user2 = new User();
+
+        User createdUser = userService.createUser(testUser);//tested above
+
+        //when
+        given(userRepository.findByUsername(Mockito.any())).willReturn(user2);
+
+
+        //then
+        //no user
+        assertThrows(ResponseStatusException.class, () ->
+                userService.editProfile(createdUser, createdUser.getToken(),null,"password123", null));
+
     }
 }

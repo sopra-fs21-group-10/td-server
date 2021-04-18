@@ -149,7 +149,7 @@ public class UserService {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-                WeatherDTO weather = mapper.readValue(jsonUrl, WeatherDTO.class);
+                mapper.readValue(jsonUrl, WeatherDTO.class);
 
                 //change if location was found
                 found.setLocation(location);
@@ -183,9 +183,8 @@ public class UserService {
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             WeatherDTO weather = mapper.readValue(jsonUrl, WeatherDTO.class);
-            String main = weather.getWeather().get(0).get("main");
 
-            return main;
+            return weather.getWeather().get(0).get("main");
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid location or to many requests");
         }

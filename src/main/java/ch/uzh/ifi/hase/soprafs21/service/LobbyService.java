@@ -41,6 +41,10 @@ public class LobbyService {
     }
 
     public Long create_lobby(User owner){
+        Lobby temp = lobbyRepository.findLobbyByOwner(owner);
+        if(temp!=null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"a lobby owner can only have one lobby at a time");
+        }
         Lobby newLobby = new Lobby();
         newLobby.setOwner(owner);
         newLobby = lobbyRepository.save(newLobby);

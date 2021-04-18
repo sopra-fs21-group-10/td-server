@@ -33,7 +33,7 @@ public class LobbyController {
         // convert API user to internal representation
         //User userInput = DTOMapper.INSTANCE.convertUserPostInDTOtoEntity(userInPostDTO);
         User lobbyOwner = userService.checkIfUserExistById(lobbyPostDTO.getId());
-        Long createdLobbyId = lobbyService.create_lobby(lobbyOwner);
+        Long createdLobbyId = lobbyService.createLobby(lobbyOwner);
         // create user
         //User createdUser = userService.createUser(userInput);
 

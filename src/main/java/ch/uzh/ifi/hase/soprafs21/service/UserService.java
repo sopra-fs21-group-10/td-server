@@ -115,16 +115,13 @@ public class UserService {
      * @param username provided username for change
      * @param password provided for change
      * @param location provided for change
-     * @param token token for authentication
      * @throws ResponseStatusException HTTP
      */
-    public void editProfile(User found, String token, String username, String password, String location){
+    public void editProfile(User found, String username, String password, String location){
         if(found ==null){// id does not exist,   should never happen but...
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
         }
-        if(! found.getToken().equals(token)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not your Profile");
-        }
+
         //check if new name already exists
         User userWithName = userRepository.findByUsername(username);
         if((userWithName!=null)&&!(found.equals(userWithName))){

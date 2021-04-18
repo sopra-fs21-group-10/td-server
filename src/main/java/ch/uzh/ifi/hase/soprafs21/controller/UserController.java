@@ -70,16 +70,16 @@ public class UserController {
         userService.userLogout(found);
     }
 
-    @PatchMapping("/users/{userid}/{token}")//patch allowed??
+    @PatchMapping("/users/profiles/{token}")//patch allowed??
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void changeData(@PathVariable("userid") Long userId, @PathVariable("token") String token,@RequestBody UserUserIdTokenPatchDTO userUserIdTokenPatchDTO) {
+    public void changeData(@PathVariable("token") String token,@RequestBody UserUserIdTokenPatchDTO userUserIdTokenPatchDTO) {
 
-        User found = userRepository.getOne(userId);
+        User found = userRepository.findByToken(token);
 
         // did not want to convert input to user because some not nullable attributes are allowed to be null here
         // (maybe we only want to change location)
-        userService.editProfile(found, token,
+        userService.editProfile(found,
                 userUserIdTokenPatchDTO.getUsername(),
                 userUserIdTokenPatchDTO.getPassword(),
                 userUserIdTokenPatchDTO.getLocation());

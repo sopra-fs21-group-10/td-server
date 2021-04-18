@@ -23,6 +23,10 @@ public class Lobby implements Serializable {
         return lobbyId;
     }
 
+    public void setLobbyId(long lobbyId) {
+        this.lobbyId= lobbyId;
+    }
+
     public User getOwner() {
         return owner;
     }

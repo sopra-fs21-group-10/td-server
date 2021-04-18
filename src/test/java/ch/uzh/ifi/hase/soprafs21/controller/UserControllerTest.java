@@ -193,9 +193,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userUserIdTokenPatchDTO.setLocation("London");
 
         given(userRepository.getOne(Mockito.any())).willReturn(user);
-        Mockito.doNothing().when(userService).editProfile(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any());
+        Mockito.doNothing().when(userService).editProfile(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any());
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder patchRequest = patch("/users/{userid}/{token}",user.getId(),user.getToken())
+        MockHttpServletRequestBuilder patchRequest = patch("/users/profiles/{token}",user.getId(),user.getToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userUserIdTokenPatchDTO));
 

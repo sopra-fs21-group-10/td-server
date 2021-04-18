@@ -160,7 +160,7 @@ class UserServiceTest {
         User createdUser = userService.createUser(testUser);//tested above
 
         //when
-        userService.editProfile(createdUser, createdUser.getToken(),null,"password123", null);
+        userService.editProfile(createdUser,null,"password123", null);
 
         //then
         assertEquals("testUsername",createdUser.getUsername());
@@ -184,10 +184,7 @@ class UserServiceTest {
         //then
         //no user
         assertThrows(ResponseStatusException.class, () ->
-                userService.editProfile(null, createdUser.getToken(),null,"password123", null));
-        // token does not belong to user
-        assertThrows(ResponseStatusException.class, () ->
-                userService.editProfile(testUser, "token2",null,"password123", null));
+                userService.editProfile(null, null,"password123", null));
     }
 
     @Test
@@ -210,7 +207,7 @@ class UserServiceTest {
         //then
         //no user
         assertThrows(ResponseStatusException.class, () ->
-                userService.editProfile(createdUser, createdUser.getToken(),null,"password123", null));
+                userService.editProfile(createdUser,null,"password123", null));
 
     }
 }

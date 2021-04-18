@@ -66,7 +66,7 @@ import static org.junit.jupiter.api.Assertions.*;
         User createdUser = userService.createUser(testUser);//tested above
 
         //when
-        userService.editProfile(createdUser, createdUser.getToken(),"testname2","password123", "London");
+        userService.editProfile(createdUser,"testname2","password123", "London");
 
         //then
         assertEquals("testname2",createdUser.getUsername());
@@ -87,7 +87,7 @@ import static org.junit.jupiter.api.Assertions.*;
         User createdUser = userService.createUser(testUser);//tested above
 
         // check that an error is thrown
-        assertThrows(ResponseStatusException.class, () -> userService.editProfile(createdUser, createdUser.getToken(),"testname2","password123", "Londonnnnnnnnnn"));
+        assertThrows(ResponseStatusException.class, () -> userService.editProfile(createdUser,"testname2","password123", "Londonnnnnnnnnn"));
     }
 
     @Test
@@ -120,7 +120,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
         // when -> setup additional mocks for UserRepository
 
-        String returned =userService.returnWeatherTypePlayer(testUser);
+        userService.returnWeatherTypePlayer(testUser);
 
         // then -> attempt to create second user with same user -> check that an error is thrown
         // the weather is not always the same so the test cant check for the right one

@@ -177,7 +177,7 @@ class UserServiceTest {
         testUser.setUsername("testUsername");
         testUser.setPassword("testPassword");
 
-        User createdUser = userService.createUser(testUser);//tested above
+        userService.createUser(testUser);//tested above
 
         //when
 

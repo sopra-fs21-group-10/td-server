@@ -203,8 +203,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the user could not be created!");
         }
     }
-    public User checkIfUserExistById(Long input_id){
-        Optional<User> optionalUser= userRepository.findById(input_id);
+    public User checkIfUserExistById(Long inputId){
+        Optional<User> optionalUser= userRepository.findById(inputId);
         if(optionalUser.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
         }

@@ -32,7 +32,7 @@ public class LobbyService {
         this.lobbyRepository = lobbyRepository;
     }
 
-    public Long create_lobby(User owner){
+    public Long createLobby(User owner){
         Lobby temp = lobbyRepository.findLobbyByOwner(owner);
         if(temp!=null){
             throw new ResponseStatusException(HttpStatus.CONFLICT,"a lobby owner can only have one lobby at a time");

@@ -97,7 +97,7 @@ import static org.junit.jupiter.api.Assertions.*;
         User testUser = new User();
         testUser.setPassword("testPassword");
         testUser.setUsername("testUsername");
-        User createdUser = userService.createUser(testUser);
+        userService.createUser(testUser);
 
         // attempt to create second user with same username
         User testUser2 = new User();

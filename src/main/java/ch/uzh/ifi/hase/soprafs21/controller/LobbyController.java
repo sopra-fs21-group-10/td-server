@@ -1,15 +1,18 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
+import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyPostDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostInDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Lobby Controller
@@ -28,6 +31,25 @@ public class LobbyController {
         this.userService = userService;
         this.lobbyService = lobbyService;
     }
+
+    @GetMapping("/lobbies")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<LobbiesGetDTO> getAllUsers() {
+        // fetch all users in the internal representation
+        List<Lobby> lobbies = lobbyService.getLobbies();
+        List<LobbiesGetDTO> lobbiesGetDTOs = new ArrayList<>();
+
+        // convert each user to the API representation
+        for (Lobby lobby : lobbies) {
+            LobbiesGetDTO temp = new LobbiesGetDTO();
+            temp.setLobbyId(lobby.getLobbyId());
+            temp.setOwnerName(lobby.getOwner().getUsername());
+                lobbiesGetDTOs.add(temp);
+            }
+        return lobbiesGetDTOs;
+    }
+
     @PostMapping("/lobbies")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -42,5 +64,6 @@ public class LobbyController {
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntitytoLobbyPostDTO(createdLobbyId);
     }
+
 
 }

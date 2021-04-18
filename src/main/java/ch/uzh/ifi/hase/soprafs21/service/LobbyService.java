@@ -49,6 +49,9 @@ public class LobbyService {
         log.debug("Created Lobby for User: {}", owner);
         return newLobby.getLobbyId();
     }
+    public List <Lobby> getLobbies(){
+        return this.lobbyRepository.findAll();
+    }
 }
 
 

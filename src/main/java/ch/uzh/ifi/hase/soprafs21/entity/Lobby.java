@@ -1,22 +1,25 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerLobbyStatus;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 @Entity
+@Table(name = "Lobby")
 public class Lobby implements Serializable {
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue
     private Long lobbyId;
+
     @OneToOne
     private User owner;
+
     @OneToOne
     private User player2;
+
     @Enumerated
     private PlayerLobbyStatus playerLobbyStatus = PlayerLobbyStatus.WAITING;
 
@@ -52,5 +55,3 @@ public class Lobby implements Serializable {
         this.playerLobbyStatus = playerLobbyStatus;
     }
 }
-
-

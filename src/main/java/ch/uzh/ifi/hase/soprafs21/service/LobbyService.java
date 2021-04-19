@@ -48,4 +48,11 @@ public class LobbyService {
     public List<Lobby> getLobbies(){
         return this.lobbyRepository.findAll();
     }
+    public Lobby findLobbyById(Long lobbyId){
+        Lobby lobbyById = lobbyRepository.findLobbyByLobbyId(lobbyId);
+        if (lobbyById==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"the lobbyId provided is invalid/ doesnt exist");
+        }
+        return lobbyById;
+    }
 }

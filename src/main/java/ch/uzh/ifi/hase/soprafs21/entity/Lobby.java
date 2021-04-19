@@ -18,7 +18,7 @@ public class Lobby implements Serializable {
     @OneToOne
     private User player2;
     @Enumerated
-    private PlayerLobbyStatus playerLobbyStatus;
+    private PlayerLobbyStatus playerLobbyStatus = PlayerLobbyStatus.WAITING;
 
     public Long getLobbyId() {
         return lobbyId;

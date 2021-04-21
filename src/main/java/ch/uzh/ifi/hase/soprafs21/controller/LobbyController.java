@@ -6,7 +6,6 @@ import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbiesGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyByIdGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyPostDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.UserUserIdTokenPatchDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -38,7 +37,7 @@ public class LobbyController {
     @GetMapping("/lobbies")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<LobbiesGetDTO> getAllUsers() {
+    public List<LobbiesGetDTO> getAllLobbies() {
         // fetch all users in the internal representation
         List<Lobby> lobbies = lobbyService.getLobbies();
         List<LobbiesGetDTO> lobbiesGetDTOs = new ArrayList<>();
@@ -57,11 +56,9 @@ public class LobbyController {
     @ResponseBody
     public LobbyPostDTO createLobby(@RequestBody LobbyPostDTO lobbyPostDTO) {
         // convert API user to internal representation
-        //User userInput = DTOMapper.INSTANCE.convertUserPostInDTOtoEntity(userInPostDTO);
         User lobbyOwner = userService.checkIfUserExistById(lobbyPostDTO.getId());
+
         Long createdLobbyId = lobbyService.createLobby(lobbyOwner);
-        // create user
-        //User createdUser = userService.createUser(userInput);
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntitytoLobbyPostDTO(createdLobbyId);
@@ -70,7 +67,7 @@ public class LobbyController {
     @GetMapping("/lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public LobbyByIdGetDTO GetLobbyWithId(@PathVariable("lobbyId") Lobby lobbyId, @RequestBody LobbyPostDTO lobbyPostDTO) {
+    public LobbyByIdGetDTO getLobbyWithId(@PathVariable("lobbyId") Lobby lobbyId, @RequestBody LobbyPostDTO lobbyPostDTO) {
        Lobby lobbyById = lobbyService.findLobbyById(lobbyPostDTO.getId());
        LobbyByIdGetDTO lobbyByIdGetDTO = new LobbyByIdGetDTO();
        lobbyByIdGetDTO.setLobbyOwner(lobbyById.getOwner().getUsername());

@@ -1,8 +1,11 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GamePostDTO;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Game Controller
@@ -19,4 +22,13 @@ public class GameController {
         this.gameService = gameService;
     }
 
+    @PostMapping("/games")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public GameGetDTO createGame(@RequestBody GamePostDTO gamePostDTO) {
+
+        // create user
+
+        return gameService.createGame(gamePostDTO.getPlayer1Id(), gamePostDTO.getPlayer2Id());
+    }
 }

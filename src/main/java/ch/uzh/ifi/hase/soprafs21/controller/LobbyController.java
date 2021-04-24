@@ -61,7 +61,7 @@ public class LobbyController {
         Long createdLobbyId = lobbyService.createLobby(lobbyOwner);
 
         // convert internal representation of user back to API
-        return DTOMapper.INSTANCE.convertEntitytoLobbyPostDTO(createdLobbyId);
+        return DTOMapper.INSTANCE.convertEntityToLobbyPostDTO(createdLobbyId);
     }
 
     @GetMapping("/lobbies/{lobbyId}")

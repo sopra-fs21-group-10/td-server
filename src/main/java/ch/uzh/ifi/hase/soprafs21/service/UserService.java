@@ -163,32 +163,6 @@ public class UserService {
     }
 
     /**
-     * returns the weather type(Clouds..) from a given user by looking ath their location as string
-     *
-     * @param user user, whose weather shall be returned
-     * @throws ResponseStatusException HTTP
-     */
-    public String returnWeatherTypePlayer(User user){
-        if(user ==null){// id does not exist,   should never happen but...
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
-        }
-
-        try {// location should always exist because it is checked before being entered, but for safety
-
-            URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+user.getLocation()+"&appid="+System.getenv("WeatherKey"));//last part is the key
-
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            WeatherDTO weather = mapper.readValue(jsonUrl, WeatherDTO.class);
-
-            return weather.getWeather().get(0).get("main");
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid location or to many requests");
-        }
-    }
-
-    /**
      * This is a helper method that will check the uniqueness criteria of the username and the name
      * defined in the User entity. The method will do nothing if the input is unique and throw an error otherwise.
      *

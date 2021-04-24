@@ -73,7 +73,7 @@ public class UserController {
     @PatchMapping("/users/profiles/{token}")//patch allowed??
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void changeData(@PathVariable("token") String token,@RequestBody UserUserIdTokenPatchDTO userUserIdTokenPatchDTO) {
+    public void changeData(@PathVariable("token") String token, @RequestBody UserUserIdTokenPatchDTO userUserIdTokenPatchDTO) {
 
         User found = userRepository.findByToken(token);
 

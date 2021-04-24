@@ -40,11 +40,11 @@ public class Game implements Serializable {
         this.player1Board = player1Board;
     }
 
-    public Board getPlayer2() {
+    public Board getPlayer2Board() {
         return player2Board;
     }
 
-    public void setPlayer2(Board player2Board) {
+    public void setPlayer2Board(Board player2Board) {
         this.player2Board = player2Board;
     }
 }

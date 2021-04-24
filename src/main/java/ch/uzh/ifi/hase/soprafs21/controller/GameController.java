@@ -30,4 +30,13 @@ public class GameController {
         // create game
         return gameService.createGame(gamePostDTO.getPlayer1Id(), gamePostDTO.getPlayer2Id());
     }
+
+    @PostMapping("/games/{gameId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public GameGetDTO getGame(@PathVariable("gameId") long gameId) {
+
+        // return state of game
+        return gameService.returnGameInformation(gameId);
+    }
 }

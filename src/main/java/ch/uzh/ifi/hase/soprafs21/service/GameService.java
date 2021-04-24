@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Game Service
@@ -48,14 +49,14 @@ public class GameService {
     public GameGetDTO createGame(Long player1Id, Long player2Id) {
         User player1 = userRepository.getOne(player1Id);
 
-        if(player1Id == null|| player1==null){// no player 1
+        if(Objects.isNull(player1Id)|| player1==null){// no player 1
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
         }
         if(checkIfPlayerInGame(player1)){// player 1 already in game
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Players already in game");
         }
 
-        if(player2Id == null){// no player 2 == single player
+        if(Objects.isNull(player2Id)){// no player 2 == single player
             HashMap<String, Object> p1Map = createSinglePlayer(player1);
             GameGetDTO gameGetDTO = new GameGetDTO();
             gameGetDTO.setPlayer1(p1Map);
@@ -79,6 +80,20 @@ public class GameService {
             return gameGetDTO;
 
         }
+    }
+
+    public GameGetDTO returnGameInformation(long gameId){
+        Game game = gameRepository.getOne(gameId);
+        if(Objects.isNull(gameId)|| game==null){// no player 1
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
+        }
+        GameGetDTO gameGetDTO = new GameGetDTO();
+        gameGetDTO.setPlayer1(returnPlayerState(game.getPlayer1Board().getOwner()));
+
+        if(game.getPlayer2Board() != null){//single player
+            gameGetDTO.setPlayer2(returnPlayerState(game.getPlayer2Board().getOwner()));
+        }
+        return gameGetDTO;
     }
 
     private HashMap<String, Object> createSinglePlayer(User player1){

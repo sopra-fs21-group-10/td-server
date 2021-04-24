@@ -24,20 +24,20 @@ public class Board implements Serializable {
     @Column(nullable = false)
     private int gold = 100;
 
-
     @Column(nullable = false)
     private String weather;
 
+    private String blocked = "blocked";
 
     @Column(nullable = false)
-    private String[][] board = {{null, "blocked", null ,null, null, null, null},
-            {null, "blocked", null ,null, null, null, null},
-            {null, "blocked", "blocked", null, null, null, null},
-            {null, null, "blocked", null, null, null, null},
-            {null, null, "blocked", null, null, null, null},
-            {null, null, "blocked", "blocked", null, null, null},
-            {null, null, null , "blocked", null, null, null},};// for now just a dummy,
-    // could also be another table with an attribute for each tile
+    private String[][] board = {{null, blocked, null ,null, null, null, null},
+            {null, blocked, null ,null, null, null, null},
+            {null, blocked, blocked, null, null, null, null},
+            {null, null, blocked, null, null, null, null},
+            {null, null, blocked, null, null, null, null},
+            {null, null, blocked, blocked, null, null, null},
+            {null, null, null , blocked, null, null, null},};
+    // for now just a dummy, could also be another entity  with a one to many relationship
 
     public String[][] getBoard() {
         return board;

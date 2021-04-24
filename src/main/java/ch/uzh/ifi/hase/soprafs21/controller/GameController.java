@@ -27,8 +27,7 @@ public class GameController {
     @ResponseBody
     public GameGetDTO createGame(@RequestBody GamePostDTO gamePostDTO) {
 
-        // create user
-
+        // create game
         return gameService.createGame(gamePostDTO.getPlayer1Id(), gamePostDTO.getPlayer2Id());
     }
 }

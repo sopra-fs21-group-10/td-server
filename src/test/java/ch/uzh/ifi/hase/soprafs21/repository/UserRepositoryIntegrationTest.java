@@ -41,4 +41,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         assertEquals(found.getToken(), user.getToken());
         assertEquals(found.getStatus(), user.getStatus());
     }
+
+    @Test
+    void findByToken_success() {
+        // given
+        User user = new User();
+        user.setPassword("Firstname Lastname");
+        user.setUsername("firstname@lastname");
+        user.setStatus(UserStatus.OFFLINE);
+        user.setToken("1");
+
+        entityManager.persist(user);
+        entityManager.flush();
+
+        // when
+        User found = userRepository.findByToken(user.getToken());
+
+        // then
+        assertNotNull(found.getId());
+        assertEquals(found.getPassword(), user.getPassword());
+        assertEquals(found.getUsername(), user.getUsername());
+        assertEquals(found.getToken(), user.getToken());
+        assertEquals(found.getStatus(), user.getStatus());
+    }
 }

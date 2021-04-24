@@ -30,7 +30,6 @@ public class Board implements Serializable {
 
 
     @Column(nullable = false)
-
     private String[][] board = {{null, "blocked", null ,null, null, null, null},
             {null, "blocked", null ,null, null, null, null},
             {null, "blocked", "blocked", null, null, null, null},

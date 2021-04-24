@@ -1,0 +1,22 @@
+package ch.uzh.ifi.hase.soprafs21.controller;
+
+import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs21.service.GameService;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * Game Controller
+ * This class is responsible for handling all REST request that are related to the game itself.
+ * The controller will receive the request and delegate the execution to the GameService and finally return the result.
+ */
+@RestController
+public class GameController {
+    private final GameRepository gameRepository;
+    private final GameService gameService;
+
+    GameController(GameRepository gameRepository, GameService gameService) {
+        this.gameRepository = gameRepository;
+        this.gameService = gameService;
+    }
+
+}

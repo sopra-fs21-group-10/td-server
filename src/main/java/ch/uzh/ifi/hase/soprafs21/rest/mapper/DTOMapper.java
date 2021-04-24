@@ -2,7 +2,8 @@ package ch.uzh.ifi.hase.soprafs21.rest.mapper;
 
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -18,11 +19,21 @@ public interface DTOMapper {
 
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
+    @SuppressWarnings("Unmapped target properties")
     @Mapping(source = "password", target = "password")
     @Mapping(source = "username", target = "username")
+    @Mapping(target = "location", ignore = true)//to get rid of warning
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "token", ignore = true)
+    @Mapping(target = "status", ignore = true)
     User convertUserPostInDTOtoEntity(UserPostInDTO userPostDTO);//warning is irrelevant
 
     @Mapping(source = "token", target = "token")
+    @Mapping(target = "location", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "username", ignore = true)
+    @Mapping(target = "password", ignore = true)
     User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
 
     @Mapping(source = "token", target = "token")
@@ -34,11 +45,9 @@ public interface DTOMapper {
     UserGetDTO convertEntityToUserGetDTO(User user);
 
     @Mapping(source = "id", target = "id")
-    LobbyPostDTO convertEntitytoLobbyPostDTO(Long id);
+    LobbyPostDTO convertEntityToLobbyPostDTO(Long id);
 
     @Mapping(source = "lobbyId", target = "lobbyId")
     @Mapping(source = "ownerName", target = "ownerName")
-    LobbiesGetDTO convertEntitytoLobbyPostDTO(Long lobbyId, String ownerName);
-
-
+    LobbiesGetDTO convertEntityToLobbyPostDTO(Long lobbyId, String ownerName);
 }

@@ -33,7 +33,7 @@ public class GameController {
         return gameService.returnGameInformation(gameId);// return game-state == getGame
     }
 
-    @PostMapping("/games/{gameId}")
+    @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameGetDTO getGame(@PathVariable("gameId") long gameId) {
@@ -42,4 +42,5 @@ public class GameController {
 
         return gameService.returnGameInformation(gameId);
     }
+
 }

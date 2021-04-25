@@ -185,4 +185,14 @@ public class UserService {
         User userById = optionalUser.get();
         return userById;
     }
+    public User checkIfUserExistbyToken(String inputToken){
+        if (inputToken==null){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "token is not allowed to be null");
+        }
+        User userByToken=userRepository.findByToken(inputToken);
+        if(userByToken == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with given userToken was not found");
+        }
+        return userByToken;
+    }
 }

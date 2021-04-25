@@ -3,9 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbiesGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyByIdGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -54,9 +52,9 @@ public class LobbyController {
     @PostMapping("/lobbies")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public LobbyPostDTO createLobby(@RequestBody LobbyPostDTO lobbyPostDTO) {
+    public LobbyPostDTO createLobby(@RequestBody TokenDTO tokenDTO) {
         // convert API user to internal representation
-        User lobbyOwner = userService.checkIfUserExistById(lobbyPostDTO.getId());
+        User lobbyOwner = userService.checkIfUserExistbyToken(tokenDTO.getToken());
 
         Long createdLobbyId = lobbyService.createLobby(lobbyOwner);
 
@@ -67,7 +65,7 @@ public class LobbyController {
     @GetMapping("/lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public LobbyByIdGetDTO getLobbyWithId(@PathVariable("lobbyId") Lobby lobbyId, @RequestBody LobbyPostDTO lobbyPostDTO) {
+    public LobbyByIdGetDTO getLobbyWithId(@PathVariable("lobbyId") Long lobbyId, @RequestBody LobbyPostDTO lobbyPostDTO) {
        Lobby lobbyById = lobbyService.findLobbyById(lobbyPostDTO.getId());
        LobbyByIdGetDTO lobbyByIdGetDTO = new LobbyByIdGetDTO();
        lobbyByIdGetDTO.setLobbyOwner(lobbyById.getOwner().getUsername());
@@ -80,5 +78,37 @@ public class LobbyController {
            lobbyByIdGetDTO.setPlayer2Status(lobbyById.getPlayer2().getStatus().toString());
        }
        return lobbyByIdGetDTO;
+    }
+    @PatchMapping("lobbies/{lobbyId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public LobbyByIdGetDTO joinALobby(@PathVariable("lobbyId") Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){
+        //check if player exists
+        User userToBeAdded = userService.checkIfUserExistbyToken(lobbyPutAndPatchDTO.getToken());
+        //check if lobby exists
+        //check if lobby is full
+        //check if lobby is full
+        Lobby lobbyById = lobbyService.addUserToLobby(lobbyPutAndPatchDTO.getLobbyId(),userToBeAdded);
+        //return infos about updated Lobby
+        LobbyByIdGetDTO lobbyByIdGetDTO = new LobbyByIdGetDTO();
+        lobbyByIdGetDTO.setPlayer2(lobbyById.getPlayer2().getUsername());
+        lobbyByIdGetDTO.setLobbyOwner(lobbyById.getOwner().getUsername());
+        lobbyByIdGetDTO.setPlayer2Status(lobbyById.getLobbyStatus().toString());
+
+        return new LobbyByIdGetDTO();
+    }
+
+    @PutMapping ("lobbies/{lobbyId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){
+        //Player not found
+        User userToBeRemoved = userService.checkIfUserExistbyToken(lobbyPutAndPatchDTO.getToken());
+        //lobby not found
+        //check if is host
+        //--> delete lobby if host leaves else delete player2 from lobby
+        lobbyService.deleteUserFromLobby(lobbyPutAndPatchDTO.getLobbyId(),userToBeRemoved);
+
+
     }
 }

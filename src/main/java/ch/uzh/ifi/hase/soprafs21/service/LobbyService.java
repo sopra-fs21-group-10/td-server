@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.service;
 
+import ch.uzh.ifi.hase.soprafs21.constant.PlayerLobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
@@ -54,5 +55,28 @@ public class LobbyService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"the lobbyId provided is invalid/ doesn't exist");
         }
         return lobbyById;
+    }
+    public Lobby addUserToLobby(Long lobbyId,User userToBeAdded){
+        Lobby lobby = findLobbyById(lobbyId);
+        if(lobby.getPlayer2().getId()!=null){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The lobby is full, a new player can not join");
+        }
+        lobby.setPlayer2(userToBeAdded);
+        lobby.setLobbyStatus(PlayerLobbyStatus.WAITING);
+        lobbyRepository.saveAndFlush(lobby);
+        return lobby;
+    }
+    public Lobby deleteUserFromLobby(Long lobbyId, User userToBeRemoved){
+        Lobby lobby = findLobbyById(lobbyId);
+        if(lobby.getPlayer2().getId()==userToBeRemoved.getId()){
+            lobby.setPlayer2(null);
+            lobby.setLobbyStatus(PlayerLobbyStatus.WAITING);
+            lobbyRepository.saveAndFlush(lobby);
+        }
+        else {
+        lobbyRepository.delete(lobby);
+        lobbyRepository.flush();
+        }
+        return lobby;
     }
 }

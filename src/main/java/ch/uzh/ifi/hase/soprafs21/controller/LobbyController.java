@@ -65,8 +65,8 @@ public class LobbyController {
     @GetMapping("/lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public LobbyByIdGetDTO getLobbyWithId(@PathVariable("lobbyId") Long lobbyId, @RequestBody LobbyPostDTO lobbyPostDTO) {
-       Lobby lobbyById = lobbyService.findLobbyById(lobbyPostDTO.getId());
+    public LobbyByIdGetDTO getLobbyWithId(@PathVariable("lobbyId") Long lobbyId) {
+       Lobby lobbyById = lobbyService.findLobbyById(lobbyId);
        LobbyByIdGetDTO lobbyByIdGetDTO = new LobbyByIdGetDTO();
        lobbyByIdGetDTO.setLobbyOwner(lobbyById.getOwner().getUsername());
        if(lobbyById.getPlayer2()==null){
@@ -88,14 +88,15 @@ public class LobbyController {
         //check if lobby exists
         //check if lobby is full
         //check if lobby is full
-        Lobby lobbyById = lobbyService.addUserToLobby(lobbyPutAndPatchDTO.getLobbyId(),userToBeAdded);
+        lobbyService.addUserToLobby(lobbyPutAndPatchDTO.getLobbyId(),userToBeAdded);
         //return infos about updated Lobby
+        Lobby lobbyById = lobbyService.findLobbyById(lobbyId);
         LobbyByIdGetDTO lobbyByIdGetDTO = new LobbyByIdGetDTO();
         lobbyByIdGetDTO.setPlayer2(lobbyById.getPlayer2().getUsername());
         lobbyByIdGetDTO.setLobbyOwner(lobbyById.getOwner().getUsername());
         lobbyByIdGetDTO.setPlayer2Status(lobbyById.getLobbyStatus().toString());
 
-        return new LobbyByIdGetDTO();
+        return lobbyByIdGetDTO;
     }
 
     @PutMapping ("lobbies/{lobbyId}")

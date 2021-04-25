@@ -46,7 +46,7 @@ public class GameService {
         this.userRepository = userRepository;
     }
 
-    public GameGetDTO createGame(Long player1Id, Long player2Id) {
+    public long createGame(Long player1Id, Long player2Id) {
         User player1 = userRepository.getOne(player1Id);
 
         if(Objects.isNull(player1Id)|| player1==null){// no player 1
@@ -57,11 +57,7 @@ public class GameService {
         }
 
         if(Objects.isNull(player2Id)){// no player 2 == single player
-            HashMap<String, Object> p1Map = createSinglePlayer(player1);
-            GameGetDTO gameGetDTO = new GameGetDTO();
-            gameGetDTO.setPlayer1(p1Map);
-
-            return gameGetDTO;
+            return createSinglePlayer(player1);
         }
 
         else{
@@ -73,11 +69,7 @@ public class GameService {
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Player 2 already in game");
             }
             //multiplayer game
-            HashMap<String, HashMap<String, Object>> maps = createMultiPlayer(player1, player2);
-            GameGetDTO gameGetDTO = new GameGetDTO();
-            gameGetDTO.setPlayer1(maps.get("player1"));
-            gameGetDTO.setPlayer2(maps.get("player2"));
-            return gameGetDTO;
+            return createMultiPlayer(player1, player2);
 
         }
     }
@@ -87,65 +79,80 @@ public class GameService {
         if(Objects.isNull(gameId)|| game==null){// no player 1
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
-        GameGetDTO gameGetDTO = new GameGetDTO();
-        gameGetDTO.setPlayer1(returnPlayerState(game.getPlayer1Board().getOwner()));
+        Board player1Board = game.getPlayer1Board();
 
-        if(game.getPlayer2Board() != null){//single player
-            gameGetDTO.setPlayer2(returnPlayerState(game.getPlayer2Board().getOwner()));
+        if(player1Board==null){// no player 1 board
+            throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "Game board not found");
+        }
+        GameGetDTO gameGetDTO = new GameGetDTO();
+        gameGetDTO.setPlayer1(returnPlayerState(player1Board, game));
+
+        Board player2Board = game.getPlayer2Board();
+        if(player2Board != null){//single player
+            gameGetDTO.setPlayer2(returnPlayerState(player2Board, game));
         }
         return gameGetDTO;
     }
 
-    private HashMap<String, Object> createSinglePlayer(User player1){
+    private long createSinglePlayer(User player1){
         if(player1==null){// no player
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
         }
 
         Game game = new Game();
-        Board player1Board = new Board();
-        player1Board.setOwner(player1);
-        player1Board.setWeather(returnWeatherTypePlayer(player1));
-        game.setPlayer1Board(player1Board);
 
-        return returnPlayerState(player1);
+        game.setPlayer1Board(setBoard(player1));
+
+        Game created = gameRepository.save(game);
+        gameRepository.flush();
+
+        return created.getGameId();
     }
 
-    private HashMap<String, HashMap<String, Object>> createMultiPlayer(User player1, User player2){
-        if(player1==null || player2==null){// no player
+    private long createMultiPlayer(User player1, User player2){
+        if(player1==null || player2==null){// no player, should not happen but...
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
         }
 
         Game game = new Game();
-        Board player1Board = new Board();
-        player1Board.setOwner(player1);
-        player1Board.setWeather(returnWeatherTypePlayer(player1));
-        game.setPlayer1Board(player1Board);
 
-        HashMap<String, HashMap<String, Object>> playerMapping = new HashMap<>();
-        playerMapping.put("player1",returnPlayerState(player1));
-        playerMapping.put("player2",returnPlayerState(player2));
-        return playerMapping;
+        game.setPlayer1Board(setBoard(player1));
+        game.setPlayer2Board(setBoard(player2));
+
+        Game created = gameRepository.save(game);
+        gameRepository.flush();
+
+        return created.getGameId();
     }
 
-    private HashMap<String, Object> returnPlayerState(User player1){
+    private Board setBoard(User player1){
         if(player1==null){// no player 1
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
         }
+        Board playerBoard = new Board();
+        playerBoard.setOwner(player1);
+        playerBoard.setWeather(returnWeatherTypePlayer(player1));
 
-        Game game = new Game();
-        Board player1Board = new Board();
-        player1Board.setOwner(player1);
-        player1Board.setWeather(returnWeatherTypePlayer(player1));
-        game.setPlayer1Board(player1Board);
+        Board createdBoard = boardRepository.saveAndFlush(playerBoard);
+
+        log.debug("Created Information for Board: {}", createdBoard);
+
+        return playerBoard;
+    }
+
+    private HashMap<String, Object> returnPlayerState(Board board, Game game){
+        if(board==null){// no board(should never happen but...)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
 
         HashMap<String, Object> returnMapping = new HashMap<>();
-        returnMapping.put("gold",player1Board.getGold());
-        returnMapping.put("health",player1Board.getHealth());
-        returnMapping.put("owner",player1Board.getOwner().getUsername());
+        returnMapping.put("gold",board.getGold());
+        returnMapping.put("health",board.getHealth());
+        returnMapping.put("owner",board.getOwner().getUsername());
         returnMapping.put("gameId",game.getGameId());
-        returnMapping.put("weather",returnWeatherTypePlayer(player1));
-        returnMapping.put("boardId",player1Board.getBoardId());
-        returnMapping.put("board", player1Board.getBoard());
+        returnMapping.put("weather",returnWeatherTypePlayer(board.getOwner()));
+        returnMapping.put("boardId",board.getBoardId());
+        returnMapping.put("board", board.getBoard());
         return returnMapping;
     }
 

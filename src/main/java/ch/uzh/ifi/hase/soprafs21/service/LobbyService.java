@@ -51,7 +51,7 @@ public class LobbyService {
     public Lobby findLobbyById(Long lobbyId){
         Lobby lobbyById = lobbyRepository.findLobbyByLobbyId(lobbyId);
         if (lobbyById==null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"the lobbyId provided is invalid/ doesnt exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"the lobbyId provided is invalid/ doesn't exist");
         }
         return lobbyById;
     }

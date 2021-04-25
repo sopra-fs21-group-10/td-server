@@ -40,7 +40,7 @@ public class GameRepositoryIntegrationTest {
         board.setOwner(user);
         board.setGold(100);
         board.setHealth(50);
-        board.setGame(game);
+//        board.setGame(game);
         // don't set board because default val
 
         entityManager.persist(board);
@@ -51,7 +51,7 @@ public class GameRepositoryIntegrationTest {
 
         // then
         assertNotNull(found.getBoardId());
-        assertEquals(found.getGame(), board.getGame());
+//        assertEquals(found.getGame(), board.getGame());
         assertEquals(found.getBoard(), board.getBoard());
         assertEquals(found.getGold(), board.getGold());
         assertEquals(found.getHealth(), board.getHealth());

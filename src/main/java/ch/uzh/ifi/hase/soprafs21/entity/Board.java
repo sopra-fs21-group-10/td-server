@@ -1,11 +1,13 @@
 package ch.uzh.ifi.hase.soprafs21.entity;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Board")
+@Table(name = "BOARD")
 public class Board implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -15,8 +17,8 @@ public class Board implements Serializable {
     @OneToOne
     private User owner;
 
-    @OneToOne
-    private Game game;
+//    @OneToOne
+//    private Game game;
 
     @Column(nullable = false)
     private int health = 50;
@@ -36,7 +38,7 @@ public class Board implements Serializable {
             {null, null, blocked, null, null, null, null},
             {null, null, blocked, null, null, null, null},
             {null, null, blocked, blocked, null, null, null},
-            {null, null, null , blocked, null, null, null},};
+            {null, null, null , blocked, null, null, null}};
     // for now just a dummy, could also be another entity  with a one to many relationship
 
     public String[][] getBoard() {
@@ -47,13 +49,13 @@ public class Board implements Serializable {
         this.board = board;
     }
 
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
+//    public Game getGame() {
+//        return game;
+//    }
+//
+//    public void setGame(Game game) {
+//        this.game = game;
+//    }
 
     public String getWeather() {
         return weather;

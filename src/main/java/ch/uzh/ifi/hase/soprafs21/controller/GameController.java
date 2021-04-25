@@ -28,7 +28,9 @@ public class GameController {
     public GameGetDTO createGame(@RequestBody GamePostDTO gamePostDTO) {
 
         // create game
-        return gameService.createGame(gamePostDTO.getPlayer1Id(), gamePostDTO.getPlayer2Id());
+        Long gameId = gameService.createGame(gamePostDTO.getPlayer1Id(), gamePostDTO.getPlayer2Id());
+
+        return gameService.returnGameInformation(gameId);// return game-state == getGame
     }
 
     @PostMapping("/games/{gameId}")
@@ -37,6 +39,7 @@ public class GameController {
     public GameGetDTO getGame(@PathVariable("gameId") long gameId) {
 
         // return state of game
+
         return gameService.returnGameInformation(gameId);
     }
 }

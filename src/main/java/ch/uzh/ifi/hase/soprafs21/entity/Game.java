@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Game")
+@Table(name = "GAME")
 public class Game implements Serializable {
     /*
     making a lot of optional variables for player 2 health, gold.... seems very bad
@@ -21,7 +21,7 @@ public class Game implements Serializable {
     @OneToOne
     private Board player1Board;
 
-    @OneToOne
+    @OneToOne(optional = true)
     private Board player2Board;
 
     public Long getGameId() {

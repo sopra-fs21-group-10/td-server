@@ -31,7 +31,7 @@ import java.util.Objects;
 @Service
 @Transactional
 public class GameService {
-    private final Logger log = LoggerFactory.getLogger(UserService.class);
+    private final Logger log = LoggerFactory.getLogger(GameService.class);
 
     private final GameRepository gameRepository;
     private final BoardRepository boardRepository;

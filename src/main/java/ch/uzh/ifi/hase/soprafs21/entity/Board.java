@@ -17,9 +17,6 @@ public class Board implements Serializable {
     @OneToOne
     private User owner;
 
-//    @OneToOne
-//    private Game game;
-
     @Column(nullable = false)
     private int health = 50;
 
@@ -48,14 +45,6 @@ public class Board implements Serializable {
     public void setBoard(String[][] board) {
         this.board = board;
     }
-
-//    public Game getGame() {
-//        return game;
-//    }
-//
-//    public void setGame(Game game) {
-//        this.game = game;
-//    }
 
     public String getWeather() {
         return weather;

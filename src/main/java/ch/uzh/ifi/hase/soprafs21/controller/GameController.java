@@ -43,4 +43,33 @@ public class GameController {
         return gameService.returnGameInformation(gameId);
     }
 
+//    @PostMapping("/games/towers/{gameId}")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @ResponseBody
+//    public boolean placeTower(@PathVariable("gameId") long gameId, @RequestBody GamePostDTO gamePostDTO) {
+//
+//        // create game
+//
+//        return true;// return game-state == getGame
+//    }
+
+//    @PatchMapping("/games/towers/{gameId}")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @ResponseBody
+//    public boolean upgradeTower(@PathVariable("gameId") long gameId, @RequestBody GamePostDTO gamePostDTO) {
+//
+//        // create game
+//
+//        return true;// return game-state == getGame
+//    }
+
+//    @DeleteMapping("/games/towers/{gameId}")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @ResponseBody
+//    public boolean sellTower(@PathVariable("gameId") long gameId, @RequestBody GamePostDTO gamePostDTO) {
+//
+//        // create game
+//
+//        return true;// return game-state == getGame
+//    }
 }

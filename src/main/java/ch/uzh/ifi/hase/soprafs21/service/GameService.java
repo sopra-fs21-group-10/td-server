@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Game Service
@@ -47,49 +48,49 @@ public class GameService {
     }
 
     public long createGame(Long player1Id, Long player2Id) {
-        User player1 = userRepository.getOne(player1Id);
+        Optional<User> player1 = userRepository.findById(player1Id);
 
-        if(Objects.isNull(player1Id)|| player1==null){// no player 1
+        if(player1Id == 0L|| player1.isEmpty()){// no player 1, 0L == no Long provided
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
         }
-        if(checkIfPlayerInGame(player1)){// player 1 already in game
+        if(checkIfPlayerInGame(player1.get())){// player 1 already in game
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Players already in game");
         }
 
         if(Objects.isNull(player2Id)){// no player 2 == single player
-            return createSinglePlayer(player1);
+            return createSinglePlayer(player1.get());
         }
 
         else{
-            User player2 = userRepository.getOne(player2Id);
-            if(player2==null){// player 2 id false
+            Optional<User> player2 = userRepository.findById(player2Id);
+            if(player2.isEmpty()){// player 2 id false
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player 2 not found");
             }
-            if(checkIfPlayerInGame(player1)){// player 2 already in game
+            if(checkIfPlayerInGame(player1.get())){// player 2 already in game
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Player 2 already in game");
             }
             //multiplayer game
-            return createMultiPlayer(player1, player2);
+            return createMultiPlayer(player1.get(), player2.get());
 
         }
     }
 
     public GameGetDTO returnGameInformation(long gameId){
-        Game game = gameRepository.getOne(gameId);
-        if(Objects.isNull(gameId)|| game==null){// no player 1
+        Optional<Game> game = gameRepository.findById(gameId);
+        if(gameId == 0L|| game.isEmpty()){// no player 1
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found");
         }
-        Board player1Board = game.getPlayer1Board();
+        Board player1Board = game.get().getPlayer1Board();
 
         if(player1Board==null){// no player 1 board
             throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "Game board not found");
         }
         GameGetDTO gameGetDTO = new GameGetDTO();
-        gameGetDTO.setPlayer1(returnPlayerState(player1Board, game));
+        gameGetDTO.setPlayer1(returnPlayerState(player1Board, game.get()));
 
-        Board player2Board = game.getPlayer2Board();
+        Board player2Board = game.get().getPlayer2Board();
         if(player2Board != null){//single player
-            gameGetDTO.setPlayer2(returnPlayerState(player2Board, game));
+            gameGetDTO.setPlayer2(returnPlayerState(player2Board, game.get()));
         }
         return gameGetDTO;
     }

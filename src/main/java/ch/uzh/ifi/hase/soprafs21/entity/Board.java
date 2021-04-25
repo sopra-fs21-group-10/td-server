@@ -30,16 +30,16 @@ public class Board implements Serializable {
 
     @Column(nullable = false, length = 1000)
     private String[][] board = {
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null}
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null}
     };
     // for now just a dummy, could also be another entity  with a one to many relationship
 

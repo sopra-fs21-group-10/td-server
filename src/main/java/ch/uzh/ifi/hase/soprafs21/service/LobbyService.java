@@ -58,7 +58,6 @@ public class LobbyService {
     }
     public Lobby addUserToLobby(Long lobbyId,User userToBeAdded){
         Lobby lobby = findLobbyById(lobbyId);
-      
         if(lobby.getPlayer2()!=null){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The lobby is full, a new player can not join");
         }
@@ -74,7 +73,7 @@ public class LobbyService {
             lobby.setLobbyStatus(PlayerLobbyStatus.WAITING);
             lobbyRepository.saveAndFlush(lobby);
         }
-        else if (lobby.getOwner()==userToBeRemoved){
+       if (lobby.getOwner()==userToBeRemoved){
         lobbyRepository.delete(lobby);
         lobbyRepository.flush();
         }

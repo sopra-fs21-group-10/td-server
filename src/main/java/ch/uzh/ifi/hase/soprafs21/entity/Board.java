@@ -26,16 +26,21 @@ public class Board implements Serializable {
     @Column(nullable = false)
     private String weather;
 
-    private String blocked = "blocked";
+    private final String blocked = "blocked";
 
-    @Column(nullable = false)
-    private String[][] board = {{null, blocked, null ,null, null, null, null},
-            {null, blocked, null ,null, null, null, null},
-            {null, blocked, blocked, null, null, null, null},
-            {null, null, blocked, null, null, null, null},
-            {null, null, blocked, null, null, null, null},
-            {null, null, blocked, blocked, null, null, null},
-            {null, null, null , blocked, null, null, null}};
+    @Column(nullable = false, length = 1000)
+    private String[][] board = {
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null},
+            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null,null}
+    };
     // for now just a dummy, could also be another entity  with a one to many relationship
 
     public String[][] getBoard() {

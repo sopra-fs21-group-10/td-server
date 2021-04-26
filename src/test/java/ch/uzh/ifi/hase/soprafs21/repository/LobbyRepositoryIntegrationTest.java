@@ -18,7 +18,7 @@ public class LobbyRepositoryIntegrationTest {
 
     @Autowired
     private LobbyRepository lobbyRepository;
-    private
+
 
     @Test
     void findLobbyByOwner_sucess(){
@@ -31,7 +31,7 @@ public class LobbyRepositoryIntegrationTest {
         user.setToken("1");
         User user2 = new User();
         user2.setPassword("password2");
-        user2.setUsername("username1");
+        user2.setUsername("username2");
         user2.setStatus(UserStatus.OFFLINE);
         user2.setToken("2");
 

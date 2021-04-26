@@ -20,8 +20,6 @@ public class LobbyServiceTest {
 
     @Mock
     private LobbyRepository lobbyRepository;
-    @Mock
-    private UserRepository userRepository;
 
     @InjectMocks
     private LobbyService lobbyService;

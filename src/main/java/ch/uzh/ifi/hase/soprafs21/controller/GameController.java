@@ -79,7 +79,7 @@ public class GameController {
         Board payerBoard = boardRepository.findByOwner(player);// not sure if this returns an error or fails if no player was found
 
         GameGoldDTO gameGoldDTO = new GameGoldDTO();
-        gameGoldDTO.setGold(gameService.upgradeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
+        gameGoldDTO.setGold(gameService.upgradeTower(payerBoard, gameMoveDTO.getCoordinates()));
 
         return gameGoldDTO;//
         }

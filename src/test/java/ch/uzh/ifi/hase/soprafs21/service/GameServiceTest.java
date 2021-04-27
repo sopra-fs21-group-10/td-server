@@ -109,6 +109,30 @@ public class GameServiceTest {
     }
 
     @Test
+    void placeTower_invalidCoordinates_throwsException() {
+        int[] coordinates = new int[]{0,19};
+        dummyBoard.setGold(200);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
+    }
+
+    @Test
+    void placeTower_invalidTower_throwsException() {
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(200);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "SuperGigaTower123"));// cannot upgrade anymore
+    }
+
+    @Test
+    void placeTower_insufficientFunds_throwsException() {
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(20);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
+    }
+
+    @Test
     void upgradeTowerTwice_validInputs_success() {
         int[] coordinates = new int[]{0,14};
         dummyBoard.setGold(1000);
@@ -122,7 +146,7 @@ public class GameServiceTest {
     }
 
     @Test
-    void upgradeTower_invalidTower_success() {
+    void upgradeTower_invalidTower_throwsException() {
         int[] coordinates = new int[]{0,14};
         dummyBoard.setGold(1000);
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
@@ -132,5 +156,26 @@ public class GameServiceTest {
         gameService.upgradeTower(dummyBoard, coordinates, "FireTower2");// already tested
 
         assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates, "FireTower3"));// cannot upgrade anymore
+    }
+
+    @Test
+    void upgradeTower_invalidLocationNoTower_throwsException() {
+        int[] coordinates = new int[]{0,14};
+        int[] coordinates2 = new int[]{0,13};
+
+        dummyBoard.setGold(1000);
+        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
+
+        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates2, "FireTower1"));// cannot upgrade anymore
+    }
+
+    @Test
+    void upgradeTower_insufficientFunds_throwsException() {
+        int[] coordinates = new int[]{0,14};
+
+        dummyBoard.setGold(100);
+        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
+
+        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
     }
 }

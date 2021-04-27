@@ -55,7 +55,7 @@ public class LobbyController {
     @ResponseBody
     public LobbyIdDTO createLobby(@RequestBody TokenDTO tokenDTO) {
         // convert API user to internal representation
-        User lobbyOwner = userService.checkIfUserExistbyToken(tokenDTO.getToken());
+        User lobbyOwner = userService.checkIfUserExistByToken(tokenDTO.getToken());
 
         Long createdLobbyId = lobbyService.createLobby(lobbyOwner);
 
@@ -85,7 +85,7 @@ public class LobbyController {
     @ResponseBody
     public LobbyByIdGetDTO joinALobby(@PathVariable("lobbyId") Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){
         //check if player exists
-        User userToBeAdded = userService.checkIfUserExistbyToken(lobbyPutAndPatchDTO.getToken());
+        User userToBeAdded = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
         //check if lobby exists
         //check if lobby is full
         //check if lobby is full
@@ -105,7 +105,7 @@ public class LobbyController {
     @ResponseBody
     public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){
         //Player not found
-        User userToBeRemoved = userService.checkIfUserExistbyToken(lobbyPutAndPatchDTO.getToken());
+        User userToBeRemoved = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
         //lobby not found
         //check if is host
         //--> delete lobby if host leaves else delete player2 from lobby

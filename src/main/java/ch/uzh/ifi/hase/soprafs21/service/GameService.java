@@ -173,7 +173,7 @@ public class GameService {
         return board.getGold();
     }
 
-    public int upgradeTower(Board board, int[] coordinates, String towerName){
+    public int upgradeTower(Board board, int[] coordinates){
         // check board
         if (board==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
@@ -182,8 +182,10 @@ public class GameService {
         // check coordinates
         checkCoordinates(coordinates);// throws error if not valid
 
+        String towerName = board.getGameMap()[coordinates[0]][coordinates[1]];
+
         //can I place / is there space
-        if (towerLevel1Map.containsKey(board.getGameMap()[coordinates[0]][coordinates[1]])){// tower lvl 1
+        if (towerLevel1Map.containsKey(towerName)){// tower lvl 1
             String upgraded = towerName.substring(0, towerName.length()-1)+"2";
             System.out.println(upgraded);
             // can I pay for it?
@@ -203,7 +205,7 @@ public class GameService {
             board = boardRepository.saveAndFlush(board);
             return board.getGold();
         }
-        else if (towerLevel2Map.containsKey(board.getGameMap()[coordinates[0]][coordinates[1]])){// tower level 2
+        else if (towerLevel2Map.containsKey(towerName)){// tower level 2
             String upgraded = towerName.substring(0, towerName.length()-1)+"3";
             // can I pay for it?
             if (! towerLevel3Map.containsKey(upgraded)){

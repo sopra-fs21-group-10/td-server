@@ -49,6 +49,7 @@ public class LobbyService {
     public List<Lobby> getLobbies(){
         return this.lobbyRepository.findAll();
     }
+
     public Lobby findLobbyById(Long lobbyId){
         Lobby lobbyById = lobbyRepository.findLobbyByLobbyId(lobbyId);
         if (lobbyById==null){
@@ -68,6 +69,9 @@ public class LobbyService {
     }
     public Lobby deleteUserFromLobby(Long lobbyId, User userToBeRemoved){
         Lobby lobby = findLobbyById(lobbyId);
+        if(lobby.getPlayer2()!=userToBeRemoved&&lobby.getOwner()!=userToBeRemoved){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"the user to be deleted is not in that lobby");
+        }
         if(lobby.getPlayer2()==userToBeRemoved){
             lobby.setPlayer2(null);
             lobby.setLobbyStatus(PlayerLobbyStatus.WAITING);
@@ -77,6 +81,7 @@ public class LobbyService {
         lobbyRepository.delete(lobby);
         lobbyRepository.flush();
         }
+
         return lobby;
     }
 }

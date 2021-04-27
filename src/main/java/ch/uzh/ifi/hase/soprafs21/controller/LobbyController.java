@@ -52,14 +52,14 @@ public class LobbyController {
     @PostMapping("/lobbies")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public LobbyPostDTO createLobby(@RequestBody TokenDTO tokenDTO) {
+    public LobbyIdDTO createLobby(@RequestBody TokenDTO tokenDTO) {
         // convert API user to internal representation
         User lobbyOwner = userService.checkIfUserExistbyToken(tokenDTO.getToken());
 
         Long createdLobbyId = lobbyService.createLobby(lobbyOwner);
 
         // convert internal representation of user back to API
-        return DTOMapper.INSTANCE.convertEntityToLobbyPostDTO(createdLobbyId);
+        return DTOMapper.INSTANCE.convertEntityToLobbyIdDTO(createdLobbyId);
     }
 
     @GetMapping("/lobbies/{lobbyId}")

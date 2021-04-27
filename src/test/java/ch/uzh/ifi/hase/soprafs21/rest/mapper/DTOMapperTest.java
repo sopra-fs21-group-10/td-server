@@ -69,7 +69,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         user.setToken("1");
 
         // MAP -> Create userPostDTO
-        UserPostDTO userPostDTO = DTOMapper.INSTANCE.convertEntitytoUserPostDTO(user);
+        UserPostDTO userPostDTO = DTOMapper.INSTANCE.convertEntityToUserPostDTO(user);
 
         // check content
         assertEquals(user.getToken(), userPostDTO.getToken());

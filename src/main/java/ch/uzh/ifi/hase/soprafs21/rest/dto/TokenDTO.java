@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
-public class TokenDTO {
+public class TokenDTO {//=userPostDTO
     private String token;
 
     public String getToken() {

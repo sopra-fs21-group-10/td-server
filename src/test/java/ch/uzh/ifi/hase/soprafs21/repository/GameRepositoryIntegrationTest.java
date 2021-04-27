@@ -18,9 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
     private TestEntityManager entityManager;
 
     @Autowired
-    private TestEntityManager entityManager2;
-
-    @Autowired
     private BoardRepository boardRepository;
 
     @Test
@@ -39,9 +36,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         board.setWeather("Clouds");
         board.setOwner(user);
 
-        entityManager2.persist(board);
-        entityManager2.flush();
-//        // don't set board because default val
+        entityManager.persist(board);
+        entityManager.flush();
 
         // when
         Board found = boardRepository.findByOwner(user);

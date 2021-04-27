@@ -57,10 +57,10 @@ public class UserController {
 
         User loggedIn = userService.userIn(userInput);
 
-        return DTOMapper.INSTANCE.convertEntitytoUserPostDTO(loggedIn);
+        return DTOMapper.INSTANCE.convertEntityToUserPostDTO(loggedIn);
     }
 
-    @PatchMapping("/users")//patch allowed??
+    @PatchMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void logout(@RequestBody UserPostDTO token) {
@@ -96,6 +96,6 @@ public class UserController {
         User createdUser = userService.createUser(userInput);
 
         // convert internal representation of user back to API
-        return DTOMapper.INSTANCE.convertEntitytoUserPostDTO(createdUser);
+        return DTOMapper.INSTANCE.convertEntityToUserPostDTO(createdUser);
     }
 }

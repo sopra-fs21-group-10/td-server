@@ -1,7 +1,13 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
+import ch.uzh.ifi.hase.soprafs21.entity.Board;
+import ch.uzh.ifi.hase.soprafs21.entity.User;
+import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGoldDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameMoveDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GamePostDTO;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import org.springframework.http.HttpStatus;
@@ -15,11 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class GameController {
     private final GameRepository gameRepository;
+    private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
+
     private final GameService gameService;
 
-    GameController(GameRepository gameRepository, GameService gameService) {
+    GameController(GameRepository gameRepository,
+                   GameService gameService,
+                   UserRepository userRepository,
+                   BoardRepository boardRepository) {
         this.gameRepository = gameRepository;
         this.gameService = gameService;
+        this.userRepository = userRepository;
+        this.boardRepository = boardRepository;
     }
 
     @PostMapping("/games")
@@ -34,7 +48,7 @@ public class GameController {
     }
 
     @GetMapping("/games/{gameId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameGetDTO getGame(@PathVariable("gameId") long gameId) {
 
@@ -43,15 +57,19 @@ public class GameController {
         return gameService.returnGameInformation(gameId);
     }
 
-//    @PostMapping("/games/towers/{gameId}")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @ResponseBody
-//    public boolean placeTower(@PathVariable("gameId") long gameId, @RequestBody GamePostDTO gamePostDTO) {
-//
-//        // create game
-//
-//        return true;// return game-state == getGame
-//    }
+    @PostMapping("/games/towers/{token}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public GameGoldDTO placeTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
+        User player = userRepository.findByToken(token);
+
+        Board payerBoard = boardRepository.findByOwner(player);// not sure if this returns an error or fails if no player was found
+
+        GameGoldDTO gameGoldDTO = new GameGoldDTO();
+        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
+
+        return gameGoldDTO;// return game-state == getGame
+    }
 
 //    @PatchMapping("/games/towers/{gameId}")
 //    @ResponseStatus(HttpStatus.CREATED)

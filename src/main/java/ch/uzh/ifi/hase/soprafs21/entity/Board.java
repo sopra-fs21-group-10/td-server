@@ -28,8 +28,8 @@ public class Board implements Serializable {
 
     private final String blocked = "blocked";
 
-    @Column(nullable = false, length = 1000)
-    private String[][] board = {
+    @Column(nullable = false, length = 1000)// caused error, maybe increase even more
+    private String[][] board = {//10*15
             {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
             {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
             {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},

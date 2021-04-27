@@ -21,7 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Game Service
@@ -32,6 +35,12 @@ import java.util.Objects;
 @Transactional
 public class GameService {
     private final Logger log = LoggerFactory.getLogger(GameService.class);
+
+
+    Map<String, Integer> towerLevel1Map = Stream.of(new Object[][] {//tower, cost
+            { "FireTower1", 100},
+            { "WaterTower1", 200 },
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
     private final GameRepository gameRepository;
     private final BoardRepository boardRepository;
@@ -92,6 +101,60 @@ public class GameService {
             gameGetDTO.setPlayer2(returnPlayerState(player2Board, game));
         }
         return gameGetDTO;
+    }
+
+    public int placeTower(Board board, int[] coordinates, String towerName){
+        // check board
+        if (board==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
+
+        // check coordinates
+        checkCoordinates(coordinates);// throws error if not valid
+
+        // check valid tower
+        if (! towerLevel1Map.containsKey(towerName)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tower not found");
+        }
+
+        //can I place / is there space
+        if (board.getBoard()[coordinates[0]][coordinates[1]] != null){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower is blocked/ cannot be placed there");
+        }
+
+        // can I pay for it?
+        if (board.getGold() < towerLevel1Map.get(towerName)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient funds");
+        }
+
+        // pay / place
+        String[][] newBoard = board.getBoard();
+        newBoard[coordinates[0]][coordinates[1]] = towerName;
+        board.setGold(board.getGold() - towerLevel1Map.get(towerName));//pay
+        board.setBoard(newBoard);
+
+        board = boardRepository.saveAndFlush(board);
+
+        return board.getGold();
+    }
+
+    /**
+     * Checks if coordinates are valid(inside board...)
+     *
+     * @param coordinates int[]
+     * @return if coordinates are ok
+     * @throws ResponseStatusException HTTP
+     */
+    private void checkCoordinates(int[] coordinates){
+        if (coordinates.length !=2){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid coordinate size");
+        }
+        if (coordinates[0]>9 ||  coordinates[0]<0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid coordinates");
+        }
+        if (coordinates[1]>14 ||  coordinates[1]<0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid coordinates");
+        }
     }
 
     private long createSinglePlayer(User player1){

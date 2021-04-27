@@ -178,4 +178,24 @@ public class GameServiceTest {
 
         assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
     }
+
+    @Test
+    void sellTower_validInputs_success() {
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(1000);
+        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
+
+        int newGold = gameService.sellTower(dummyBoard, coordinates);
+
+        assertEquals(970, newGold); // 1000-100+.7*100
+    }
+
+    @Test
+    void sellTower_invalidLocationNoTower_success() {
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(1000);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.sellTower(dummyBoard, coordinates));// cannot upgrade anymore
+
+    }
 }

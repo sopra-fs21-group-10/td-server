@@ -84,15 +84,17 @@ public class GameController {
         return gameGoldDTO;//
         }
 
-//    @DeleteMapping("/games/towers/{token}")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @ResponseBody
-//    public GameGoldDTO sellTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
+    @DeleteMapping("/games/towers/{token}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public GameGoldDTO sellTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
+        User player = userRepository.findByToken(token);
 
-//
-//        GameGoldDTO gameGoldDTO = new GameGoldDTO();
-//        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
-//
-//        return gameGoldDTO;
-//    }
+        Board payerBoard = boardRepository.findByOwner(player);// not sure if this returns an error or fails if no player was found
+
+        GameGoldDTO gameGoldDTO = new GameGoldDTO();
+        gameGoldDTO.setGold(gameService.sellTower(payerBoard, gameMoveDTO.getCoordinates()));
+
+        return gameGoldDTO;
+    }
 }

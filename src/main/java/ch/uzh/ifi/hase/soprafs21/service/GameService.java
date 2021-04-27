@@ -182,8 +182,6 @@ public class GameService {
         // check coordinates
         checkCoordinates(coordinates);// throws error if not valid
 
-
-
         //can I place / is there space
         if (towerLevel1Map.containsKey(board.getGameMap()[coordinates[0]][coordinates[1]])){// tower lvl 1
             String upgraded = towerName.substring(0, towerName.length()-1)+"2";
@@ -225,8 +223,55 @@ public class GameService {
             return board.getGold();
         }
 
-
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Upgrading not possible");
+    }
+
+    public int sellTower(Board board, int[] coordinates){
+        // check board
+        if (board==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
+
+        // check coordinates
+        checkCoordinates(coordinates);// throws error if not valid
+
+        String tower = board.getGameMap()[coordinates[0]][coordinates[1]];
+        //can I place / is there space
+        if (towerLevel1Map.containsKey(tower)){// tower lvl 1
+            int cost = towerLevel1Map.get(tower);
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = null;
+            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+        else if (towerLevel2Map.containsKey(tower)){// tower lvl 2
+            int cost = towerLevel2Map.get(tower);
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = null;
+            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+        else if (towerLevel2Map.containsKey(tower)){// tower lvl 3
+            int cost = towerLevel2Map.get(tower);
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = null;
+            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "could not sell");
     }
 
     /**

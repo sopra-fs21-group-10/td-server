@@ -185,7 +185,7 @@ public class UserService {
         User userById = optionalUser.get();
         return userById;
     }
-    public User checkIfUserExistByToken(String inputToken){
+    public User checkIfUserExistbyToken(String inputToken){
         if (inputToken==null){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "token is not allowed to be null");
         }

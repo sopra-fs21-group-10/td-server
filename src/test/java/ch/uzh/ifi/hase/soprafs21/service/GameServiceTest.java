@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.web.server.ResponseStatusException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GameServiceTest {
     @InjectMocks
@@ -74,7 +74,6 @@ public class GameServiceTest {
 
     @Test
     void createGame_validInputsSinglePlayer_success() {
-        //given
         assertEquals(1L, testUser.getUserId());
         gameService.createGame(testUser.getUserId(), null);
     }
@@ -88,7 +87,6 @@ public class GameServiceTest {
 
     @Test
     void returnGameInformation_validInputs_success() {
-        //given
         dummyGame.setPlayer1Board(dummyBoard);
         Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
         GameGetDTO gameGetDTO = gameService.returnGameInformation(dummyGame.getGameId());
@@ -103,138 +101,10 @@ public class GameServiceTest {
 
     @Test
     void placeTower_validInputs_success() {
-        //given
         int[] coordinates = new int[]{0,14};
         dummyBoard.setGold(200);
         int newGold = gameService.placeTower(dummyBoard, coordinates, "FireTower1");
 
         assertEquals(100, newGold);
-    }
-
-    @Test
-    void placeTower_invalidCoordinates_throwsException() {
-        //given
-        int[] coordinates = new int[]{0,19};
-        dummyBoard.setGold(200);
-
-        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
-    }
-
-    @Test
-    void placeTower_invalidTower_throwsException() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(200);
-
-        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "SuperGigaTower123"));// cannot upgrade anymore
-    }
-
-    @Test
-    void placeTower_insufficientFunds_throwsException() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(20);
-
-        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
-    }
-
-    @Test
-    void upgradeTowerTwice_validInputs_success() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
-        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
-
-        gameService.upgradeTower(dummyBoard, coordinates);
-
-        int newGold = gameService.upgradeTower(dummyBoard, coordinates);
-
-        assertEquals(400, newGold); // 1000-100-200-300=400
-    }
-
-    @Test
-    void upgradeTower_invalidTower_throwsException() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
-        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
-
-        gameService.upgradeTower(dummyBoard, coordinates);
-
-        gameService.upgradeTower(dummyBoard, coordinates);// already tested
-
-        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates));// cannot upgrade anymore
-    }
-
-    @Test
-    void upgradeTower_invalidLocationNoTower_throwsException() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        int[] coordinates2 = new int[]{0,13};
-
-        dummyBoard.setGold(1000);
-        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
-
-        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates2));// cannot upgrade anymore
-    }
-
-    @Test
-    void upgradeTower_insufficientFunds_throwsException() {
-        //given
-        int[] coordinates = new int[]{0,14};
-
-        dummyBoard.setGold(100);
-        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
-
-        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates));// cannot upgrade anymore
-    }
-
-    @Test
-    void sellTower_validInputs_success() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
-        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
-
-        int newGold = gameService.sellTower(dummyBoard, coordinates);
-
-        assertEquals(970, newGold); // 1000-100+.7*100
-    }
-
-    @Test
-    void sellTower2_validInputs_success() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
-        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
-        gameService.upgradeTower(dummyBoard, coordinates);
-
-        int newGold = gameService.sellTower(dummyBoard, coordinates);
-
-
-        assertEquals(840, newGold);
-    }
-
-    @Test
-    void sellTower3_validInputs_success() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
-        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
-        gameService.upgradeTower(dummyBoard, coordinates);
-        gameService.upgradeTower(dummyBoard, coordinates);
-
-        int newGold = gameService.sellTower(dummyBoard, coordinates);
-
-        assertEquals(610, newGold);
-    }
-
-    @Test
-    void sellTower_invalidLocationNoTower_success() {
-        //given
-        int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
-
-        assertThrows(ResponseStatusException.class, () -> gameService.sellTower(dummyBoard, coordinates));// cannot upgrade anymore
     }
 }

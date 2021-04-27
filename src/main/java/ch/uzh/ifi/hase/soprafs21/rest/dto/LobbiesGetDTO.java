@@ -2,7 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 public class LobbiesGetDTO {
     private Long lobbyId;
-    private String ownerName;
+    private String lobbyOwner;
 
     public Long getLobbyId() {
         return lobbyId;
@@ -12,11 +12,11 @@ public class LobbiesGetDTO {
         this.lobbyId = lobbyId;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public String getLobbyOwner() {
+        return lobbyOwner;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setLobbyOwner(String lobbyOwner) {
+        this.lobbyOwner = lobbyOwner;
     }
 }

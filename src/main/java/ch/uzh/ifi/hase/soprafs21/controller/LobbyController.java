@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
+import ch.uzh.ifi.hase.soprafs21.constant.PlayerLobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
@@ -44,7 +45,7 @@ public class LobbyController {
         for (Lobby lobby : lobbies) {
             LobbiesGetDTO temp = new LobbiesGetDTO();
             temp.setLobbyId(lobby.getLobbyId());
-            temp.setOwnerName(lobby.getOwner().getUsername());
+            temp.setLobbyOwner(lobby.getOwner().getUsername());
             lobbiesGetDTOs.add(temp);
         }
         return lobbiesGetDTOs;
@@ -71,11 +72,11 @@ public class LobbyController {
        lobbyByIdGetDTO.setLobbyOwner(lobbyById.getOwner().getUsername());
        if(lobbyById.getPlayer2()==null){
            lobbyByIdGetDTO.setPlayer2("");
-           lobbyByIdGetDTO.setPlayer2Status("");
+           lobbyByIdGetDTO.setPlayer2Status(PlayerLobbyStatus.WAITING.toString());
        }
        else {
            lobbyByIdGetDTO.setPlayer2(lobbyById.getPlayer2().getUsername());
-           lobbyByIdGetDTO.setPlayer2Status(lobbyById.getPlayer2().getStatus().toString());
+           lobbyByIdGetDTO.setPlayer2Status(lobbyById.getLobbyStatus().toString());
        }
        return lobbyByIdGetDTO;
     }

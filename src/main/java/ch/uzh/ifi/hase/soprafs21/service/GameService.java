@@ -259,8 +259,8 @@ public class GameService {
             board = boardRepository.saveAndFlush(board);
             return board.getGold();
         }
-        else if (towerLevel2Map.containsKey(tower)){// tower lvl 3
-            int cost = towerLevel2Map.get(tower);
+        else if (towerLevel3Map.containsKey(tower)){// tower lvl 3
+            int cost = towerLevel3Map.get(tower);
             // pay / place
             String[][] newBoard = board.getGameMap();
             newBoard[coordinates[0]][coordinates[1]] = null;

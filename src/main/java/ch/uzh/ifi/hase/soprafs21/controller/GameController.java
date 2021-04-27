@@ -70,21 +70,24 @@ public class GameController {
         return gameGoldDTO;// return game-state == getGame
     }
 
-//    @PatchMapping("/games/towers/{gameId}")
+    @PatchMapping("/games/towers/{token}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public GameGoldDTO upgradeTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
+        User player = userRepository.findByToken(token);
+
+        Board payerBoard = boardRepository.findByOwner(player);// not sure if this returns an error or fails if no player was found
+
+        GameGoldDTO gameGoldDTO = new GameGoldDTO();
+        gameGoldDTO.setGold(gameService.upgradeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
+
+        return gameGoldDTO;//
+        }
+
+//    @DeleteMapping("/games/towers/{token}")
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @ResponseBody
-//    public GameGoldDTO upgradeTower(@PathVariable("gameId") long gameId, @RequestBody GameMoveDTO gameMoveDTO) {
-
-//        GameGoldDTO gameGoldDTO = new GameGoldDTO();
-//        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
-//
-//        return gameGoldDTO;//
-//        }
-
-//    @DeleteMapping("/games/towers/{gameId}")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @ResponseBody
-//    public GameGoldDTO sellTower(@PathVariable("gameId") long gameId, @RequestBody GameMoveDTO gameMoveDTO) {
+//    public GameGoldDTO sellTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
 
 //
 //        GameGoldDTO gameGoldDTO = new GameGoldDTO();

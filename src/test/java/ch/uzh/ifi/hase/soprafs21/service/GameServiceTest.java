@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameServiceTest {
     @InjectMocks
@@ -106,5 +106,31 @@ public class GameServiceTest {
         int newGold = gameService.placeTower(dummyBoard, coordinates, "FireTower1");
 
         assertEquals(100, newGold);
+    }
+
+    @Test
+    void upgradeTowerTwice_validInputs_success() {
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(1000);
+        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
+
+        gameService.upgradeTower(dummyBoard, coordinates, "FireTower1");
+
+        int newGold = gameService.upgradeTower(dummyBoard, coordinates, "FireTower2");
+
+        assertEquals(400, newGold); // 1000-100-200-300=400
+    }
+
+    @Test
+    void upgradeTower_invalidTower_success() {
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(1000);
+        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
+
+        gameService.upgradeTower(dummyBoard, coordinates, "FireTower1");
+
+        gameService.upgradeTower(dummyBoard, coordinates, "FireTower2");// already tested
+
+        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates, "FireTower3"));// cannot upgrade anymore
     }
 }

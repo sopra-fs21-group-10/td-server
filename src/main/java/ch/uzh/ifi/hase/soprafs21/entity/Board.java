@@ -26,10 +26,10 @@ public class Board implements Serializable {
     @Column(nullable = false)
     private String weather;
 
-    private final String blocked = "blocked";
+    private static final String blocked = "blocked"; // the path where the minions walk through
 
     @Column(nullable = false, length = 1000)// caused error, maybe increase even more
-    private String[][] board = {//10*15
+    private String[][] gameMap = {//10*15
             {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
             {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
             {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
@@ -43,12 +43,12 @@ public class Board implements Serializable {
     };
     // for now just a dummy, could also be another entity  with a one to many relationship
 
-    public String[][] getBoard() {
-        return board;
+    public String[][] getGameMap() {
+        return gameMap;
     }
 
-    public void setBoard(String[][] board) {
-        this.board = board;
+    public void setGameMap(String[][] gameMap) {
+        this.gameMap = gameMap;
     }
 
     public String getWeather() {

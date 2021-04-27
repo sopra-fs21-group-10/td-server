@@ -79,7 +79,7 @@ public class GameController {
 //        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
 //
 //        return gameGoldDTO;//
-//    }
+//        }
 
 //    @DeleteMapping("/games/towers/{gameId}")
 //    @ResponseStatus(HttpStatus.CREATED)

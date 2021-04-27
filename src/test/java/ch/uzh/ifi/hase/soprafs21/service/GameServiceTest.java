@@ -48,7 +48,7 @@ public class GameServiceTest {
         testUser.setPassword("testName");
         testUser.setUsername("testUsername");
         testUser.setToken("token");
-        testUser.setId(1L);
+        testUser.setUserId(1L);
         testUser.setStatus(UserStatus.ONLINE);
 
         testUser2 = new User();
@@ -56,7 +56,7 @@ public class GameServiceTest {
         testUser2.setUsername("testUsername2");
         testUser2.setToken("token2");
         testUser2.setStatus(UserStatus.ONLINE);
-        testUser2.setId(2L);
+        testUser2.setUserId(2L);
 
         dummyBoard = new Board();
         dummyBoard.setOwner(testUser);
@@ -67,21 +67,22 @@ public class GameServiceTest {
         dummyGame.setPlayer1Board(dummyBoard);
 
         // when -> any object is being save in the userRepository -> return the dummy
-        Mockito.when(userRepository.getOne(testUser.getId())).thenReturn(testUser);
+        Mockito.when(userRepository.getOne(testUser.getUserId())).thenReturn(testUser);
         Mockito.when(boardRepository.saveAndFlush(Mockito.any())).thenReturn(dummyBoard);
         Mockito.when(gameRepository.save(Mockito.any())).thenReturn(dummyGame);
     }
 
     @Test
     void createGame_validInputsSinglePlayer_success() {
-        gameService.createGame(testUser.getId(), null);
+        assertEquals(1L, testUser.getUserId());
+        gameService.createGame(testUser.getUserId(), null);
     }
 
     @Test
     void createGame_validInputsMultiPlayer_success() {
-        Mockito.when(userRepository.getOne(testUser2.getId())).thenReturn(testUser2);
+        Mockito.when(userRepository.getOne(testUser2.getUserId())).thenReturn(testUser2);
 
-        gameService.createGame(testUser.getId(), testUser2.getId());
+        gameService.createGame(testUser.getUserId(), testUser2.getUserId());
     }
 
     @Test

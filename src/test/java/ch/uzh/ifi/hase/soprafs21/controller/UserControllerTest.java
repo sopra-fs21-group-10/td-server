@@ -73,7 +73,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
      void createUser_validInput_userCreated() throws Exception {
         // given
         User user = new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setPassword("TestUser");
         user.setUsername("testUsername");
         user.setToken("1");
@@ -127,7 +127,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     void login_validInput_returnToken() throws Exception {
         // given
         User user = new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setPassword("TestUser");
         user.setUsername("testUsername");
         user.setToken("1");
@@ -153,7 +153,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     void login_invalidInput_throw() throws Exception {
         // given
         User user = new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setPassword("TestUser");
         user.setUsername("testUsername");
         user.setToken("1");
@@ -182,7 +182,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         // integration because weatherAPI
         // given
         User user = new User();
-        user.setId(1L);
+        user.setUserId(1L);
         user.setPassword("TestUser");
         user.setUsername("testUsername");
         user.setToken("12a3");
@@ -196,7 +196,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         given(userRepository.getOne(Mockito.any())).willReturn(user);
         Mockito.doNothing().when(userService).editProfile(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any());
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder patchRequest = patch("/users/profiles/{token}",user.getId(),user.getToken())
+        MockHttpServletRequestBuilder patchRequest = patch("/users/profiles/{token}",user.getUserId(),user.getToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userUserIdTokenPatchDTO));
 

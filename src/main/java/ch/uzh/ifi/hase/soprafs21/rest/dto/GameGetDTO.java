@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class GameGetDTO {
@@ -13,5 +12,5 @@ public class GameGetDTO {
 
     public Map<String, Object> getPlayer2() {return player2;}
 
-    public void setPlayer2(HashMap<String, Object> player2) {this.player2 = player2;}
+    public void setPlayer2(Map<String, Object> player2) {this.player2 = player2;}
 }

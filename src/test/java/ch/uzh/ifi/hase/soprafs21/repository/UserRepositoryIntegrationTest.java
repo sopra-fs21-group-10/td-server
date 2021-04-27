@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         User found = userRepository.findByUsername(user.getUsername());
 
         // then
-        assertNotNull(found.getId());
+        assertNotNull(found.getUserId());
         assertEquals(found.getPassword(), user.getPassword());
         assertEquals(found.getUsername(), user.getUsername());
         assertEquals(found.getToken(), user.getToken());
@@ -58,7 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         User found = userRepository.findByToken(user.getToken());
 
         // then
-        assertNotNull(found.getId());
+        assertNotNull(found.getUserId());
         assertEquals(found.getPassword(), user.getPassword());
         assertEquals(found.getUsername(), user.getUsername());
         assertEquals(found.getToken(), user.getToken());

@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 //         then
         assertNotNull(found.getBoardId());
-        assertEquals(found.getBoard(), board.getBoard());
+        assertEquals(found.getGameMap(), board.getGameMap());
         assertEquals(found.getGold(), board.getGold());
         assertEquals(found.getHealth(), board.getHealth());
         assertEquals(found.getOwner(), board.getOwner());

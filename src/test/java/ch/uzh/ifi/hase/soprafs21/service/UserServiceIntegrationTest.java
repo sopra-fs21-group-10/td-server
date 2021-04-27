@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.*;
         User createdUser = userService.createUser(testUser);
 
         // then
-        assertEquals(testUser.getId(), createdUser.getId());
+        assertEquals(testUser.getUserId(), createdUser.getUserId());
         assertEquals(testUser.getPassword(), createdUser.getPassword());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());

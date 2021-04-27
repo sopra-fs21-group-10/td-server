@@ -2,7 +2,7 @@ package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 public class UserPostDTO {
     private String token;
-    private long id;
+    private long userId;
 
     public String getToken() {
         return token;
@@ -12,7 +12,7 @@ public class UserPostDTO {
         this.token = token;
     }
 
-    public long getId() { return id;}
+    public long getUserId() { return userId;}
 
-    public void setId(long id) {this.id = id;}
+    public void setUserId(long userId) {this.userId = userId;}
 }

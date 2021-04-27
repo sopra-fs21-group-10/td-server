@@ -142,7 +142,7 @@ public class GameService {
         }
 
         //can I place / is there space
-        if (board.getBoard()[coordinates[0]][coordinates[1]] != null){
+        if (board.getGameMap()[coordinates[0]][coordinates[1]] != null){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower is blocked/ cannot be placed there");
         }
 
@@ -152,10 +152,10 @@ public class GameService {
         }
 
         // pay / place
-        String[][] newBoard = board.getBoard();
+        String[][] newBoard = board.getGameMap();
         newBoard[coordinates[0]][coordinates[1]] = towerName;
         board.setGold(board.getGold() - towerLevel1Map.get(towerName));//pay
-        board.setBoard(newBoard);
+        board.setGameMap(newBoard);
 
         board = boardRepository.saveAndFlush(board);
 
@@ -269,7 +269,7 @@ public class GameService {
         returnMapping.put("gameId",game.getGameId());
         returnMapping.put("weather",returnWeatherTypePlayer(board.getOwner()));
         returnMapping.put("boardId",board.getBoardId());
-        returnMapping.put("board", board.getBoard());
+        returnMapping.put("board", board.getGameMap());
         return returnMapping;
     }
 

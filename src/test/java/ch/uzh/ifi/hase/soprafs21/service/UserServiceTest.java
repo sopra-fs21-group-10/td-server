@@ -30,7 +30,7 @@ class UserServiceTest {
 
         // given
         testUser = new User();
-        testUser.setId(1L);
+        testUser.setUserId(1L);
         testUser.setPassword("testName");
         testUser.setUsername("testUsername");
         testUser.setToken("token");
@@ -48,7 +48,7 @@ class UserServiceTest {
         // then
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
 
-        assertEquals(testUser.getId(), createdUser.getId());
+        assertEquals(testUser.getUserId(), createdUser.getUserId());
         assertEquals(testUser.getPassword(), createdUser.getPassword());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
@@ -111,7 +111,7 @@ class UserServiceTest {
         assertEquals(UserStatus.OFFLINE, testUser.getStatus());
 
         User user2 =new User();
-        user2.setId(testUser.getId());
+        user2.setUserId(testUser.getUserId());
         user2.setPassword("testNameNotTheSame");
         user2.setUsername(testUser.getUsername());
         user2.setStatus(testUser.getStatus());

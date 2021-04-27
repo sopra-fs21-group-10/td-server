@@ -51,8 +51,6 @@ public class GameServiceTest {
         testUser.setId(1L);
         testUser.setStatus(UserStatus.ONLINE);
 
-
-
         testUser2 = new User();
         testUser2.setPassword("testName2");
         testUser2.setUsername("testUsername2");
@@ -76,14 +74,14 @@ public class GameServiceTest {
 
     @Test
     void createGame_validInputsSinglePlayer_success() {
-        long gameId = gameService.createGame(testUser.getId(), null);
+        gameService.createGame(testUser.getId(), null);
     }
 
     @Test
     void createGame_validInputsMultiPlayer_success() {
         Mockito.when(userRepository.getOne(testUser2.getId())).thenReturn(testUser2);
 
-        long gameId = gameService.createGame(testUser.getId(), testUser2.getId());
+        gameService.createGame(testUser.getId(), testUser2.getId());
     }
 
     @Test
@@ -92,20 +90,21 @@ public class GameServiceTest {
         Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
         GameGetDTO gameGetDTO = gameService.returnGameInformation(dummyGame.getGameId());
 
-
         assertNotNull(gameGetDTO.getPlayer1());
         assertEquals(50, gameGetDTO.getPlayer1().get("health"));
         assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
+        // etc
+    }
 
-//        assertNotNull(gameGetDTO.getPlayer2());
-////        assertNotNull(gameGetDTO.getPlayer2().get("gameId"));
-//        assertEquals(50,gameGetDTO.getPlayer2().get("health"));
-//        assertEquals(100, gameGetDTO.getPlayer2().get("gold"));
-//        assertEquals(gameGetDTO.getPlayer2().get("owner"), testUser2.getUsername());
-//        assertNotNull(gameGetDTO.getPlayer2().get("weather"));
-//        // etc
+    @Test
+    void placeTower_validInputs_success() {
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(200);
+        int newGold = gameService.placeTower(dummyBoard, coordinates, "FireTower1");
+
+        assertEquals(100, newGold);
 
     }
 }

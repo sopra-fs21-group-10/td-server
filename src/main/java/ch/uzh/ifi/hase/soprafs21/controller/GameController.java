@@ -53,7 +53,6 @@ public class GameController {
     public GameGetDTO getGame(@PathVariable("gameId") long gameId) {
 
         // return state of game
-
         return gameService.returnGameInformation(gameId);
     }
 
@@ -74,20 +73,23 @@ public class GameController {
 //    @PatchMapping("/games/towers/{gameId}")
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @ResponseBody
-//    public boolean upgradeTower(@PathVariable("gameId") long gameId, @RequestBody GamePostDTO gamePostDTO) {
+//    public GameGoldDTO upgradeTower(@PathVariable("gameId") long gameId, @RequestBody GameMoveDTO gameMoveDTO) {
+
+//        GameGoldDTO gameGoldDTO = new GameGoldDTO();
+//        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
 //
-//        // create game
-//
-//        return true;// return game-state == getGame
+//        return gameGoldDTO;//
 //    }
 
 //    @DeleteMapping("/games/towers/{gameId}")
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @ResponseBody
-//    public boolean sellTower(@PathVariable("gameId") long gameId, @RequestBody GamePostDTO gamePostDTO) {
+//    public GameGoldDTO sellTower(@PathVariable("gameId") long gameId, @RequestBody GameMoveDTO gameMoveDTO) {
+
 //
-//        // create game
+//        GameGoldDTO gameGoldDTO = new GameGoldDTO();
+//        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
 //
-//        return true;// return game-state == getGame
+//        return gameGoldDTO;
 //    }
 }

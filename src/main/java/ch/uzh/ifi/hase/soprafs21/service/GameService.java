@@ -55,6 +55,14 @@ public class GameService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * checks how many players and creates a game for the, end returns its id
+     *
+     * @param player1Id player 1, error if null
+     * @param player2Id player2, can be null
+     * @return long id of created game
+     * @throws ResponseStatusException HTTP
+     */
     public long createGame(Long player1Id, Long player2Id) {
         User player1 = userRepository.getOne(player1Id);
 
@@ -83,6 +91,13 @@ public class GameService {
         }
     }
 
+    /**
+     * checks if game exists, and returns a representation of the game-state
+     *
+     * @param gameId game of interest
+     * @return GameGetDTO == player1{game info}, player2{game info}
+     * @throws ResponseStatusException HTTP
+     */
     public GameGetDTO returnGameInformation(long gameId){
         Game game = gameRepository.getOne(gameId);
         if(Objects.isNull(gameId)|| game==null){// no player 1
@@ -103,6 +118,15 @@ public class GameService {
         return gameGetDTO;
     }
 
+    /**
+     * Places a tower on the board and adjusts the gold of the owner
+     *
+     * @param board target board to place tower
+     * @param coordinates where to place the tower inside board [0-9, 0-14]
+     * @param towerName name of the type of tower which is to be placed
+     * @return remaining gold after buying tower
+     * @throws ResponseStatusException HTTP
+     */
     public int placeTower(Board board, int[] coordinates, String towerName){
         // check board
         if (board==null){
@@ -157,6 +181,13 @@ public class GameService {
         }
     }
 
+    /**
+     * creates a game with 1 player
+     *
+     * @param player1 owner of board 1
+     * @return long gameId of created game
+     * @throws ResponseStatusException HTTP
+     */
     private long createSinglePlayer(User player1){
         if(player1==null){// no player
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
@@ -172,6 +203,14 @@ public class GameService {
         return created.getGameId();
     }
 
+    /**
+     * creates a game with 2 players
+     *
+     * @param player1 owner of board 1
+     * @param player2 owner of board 2
+     * @return long gameId of created game
+     * @throws ResponseStatusException HTTP
+     */
     private long createMultiPlayer(User player1, User player2){
         if(player1==null || player2==null){// no player, should not happen but...
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
@@ -188,6 +227,13 @@ public class GameService {
         return created.getGameId();
     }
 
+    /**
+     * creates a board for the player
+     *
+     * @param player1 owner of board
+     * @return created board
+     * @throws ResponseStatusException HTTP
+     */
     private Board setBoard(User player1){
         if(player1==null){// no player 1
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
@@ -203,6 +249,14 @@ public class GameService {
         return playerBoard;
     }
 
+    /**
+     * returns a representation of a board-state (health, board-setup)
+     *
+     * @param board whose info is to be returned
+     * @param game to which the board belongs
+     * @return map of game-state == {gold:int, health:int, owner: str, ...}
+     * @throws ResponseStatusException HTTP
+     */
     private HashMap<String, Object> returnPlayerState(Board board, Game game){
         if(board==null){// no board(should never happen but...)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
@@ -245,6 +299,13 @@ public class GameService {
         }
     }
 
+    /**
+     * checks if user is already in a game
+     *
+     * @param user target to check
+     * @return true if player in a game
+     * @throws ResponseStatusException HTTP
+     */
     private boolean checkIfPlayerInGame(User user){
         if (user==null){
             return false;//player does not exist

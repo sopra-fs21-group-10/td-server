@@ -105,6 +105,5 @@ public class GameServiceTest {
         int newGold = gameService.placeTower(dummyBoard, coordinates, "FireTower1");
 
         assertEquals(100, newGold);
-
     }
 }

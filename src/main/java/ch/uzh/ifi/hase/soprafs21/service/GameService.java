@@ -37,10 +37,21 @@ public class GameService {
     private final Logger log = LoggerFactory.getLogger(GameService.class);
 
 
-    Map<String, Integer> towerLevel1Map = Stream.of(new Object[][] {//tower, cost
+    private final Map<String, Integer> towerLevel1Map = Stream.of(new Object[][] {//tower, cost            { "FireTower1", 100},
             { "FireTower1", 100},
             { "WaterTower1", 200 },
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+
+    private final Map<String, Integer> towerLevel2Map = Stream.of(new Object[][] {//tower, cost
+            { "FireTower2", 200},
+            { "WaterTower2", 400 },
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+
+    private final Map<String, Integer> towerLevel3Map = Stream.of(new Object[][] {//tower, cost
+            { "FireTower3", 300},
+            { "WaterTower3", 1000 },
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+    // solving everything with strings etc seems very bad design, but we are running out of time
 
     private final GameRepository gameRepository;
     private final BoardRepository boardRepository;
@@ -160,6 +171,109 @@ public class GameService {
         board = boardRepository.saveAndFlush(board);
 
         return board.getGold();
+    }
+
+    public int upgradeTower(Board board, int[] coordinates){
+        // check board
+        if (board==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
+
+        // check coordinates
+        checkCoordinates(coordinates);// throws error if not valid
+
+        String towerName = board.getGameMap()[coordinates[0]][coordinates[1]];
+
+        //can I place / is there space
+        if (towerLevel1Map.containsKey(towerName)){// tower lvl 1
+            String upgraded = towerName.substring(0, towerName.length()-1)+"2";
+            System.out.println(upgraded);
+            // can I pay for it?
+            if (! towerLevel2Map.containsKey(upgraded)){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower not upgradeable");// there exists no tower on this level
+            }
+            int cost = towerLevel2Map.get(upgraded);
+            if (board.getGold() < cost){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient funds");
+            }
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = upgraded;
+            board.setGold(board.getGold() - cost);//pay
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+        else if (towerLevel2Map.containsKey(towerName)){// tower level 2
+            String upgraded = towerName.substring(0, towerName.length()-1)+"3";
+            // can I pay for it?
+            if (! towerLevel3Map.containsKey(upgraded)){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower not upgradeable");// there exists no tower on this level
+            }
+            int cost = towerLevel3Map.get(upgraded);
+            if (board.getGold() < cost){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient funds");
+            }
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = upgraded;
+            board.setGold(board.getGold() - cost);//pay
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Upgrading not possible");
+    }
+
+    public int sellTower(Board board, int[] coordinates){
+        // check board
+        if (board==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
+
+        // check coordinates
+        checkCoordinates(coordinates);// throws error if not valid
+
+        String tower = board.getGameMap()[coordinates[0]][coordinates[1]];
+        //can I place / is there space
+        if (towerLevel1Map.containsKey(tower)){// tower lvl 1
+            int cost = towerLevel1Map.get(tower);
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = null;
+            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+        else if (towerLevel2Map.containsKey(tower)){// tower lvl 2
+            int cost = towerLevel2Map.get(tower);
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = null;
+            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+        else if (towerLevel3Map.containsKey(tower)){// tower lvl 3
+            int cost = towerLevel3Map.get(tower);
+            // pay / place
+            String[][] newBoard = board.getGameMap();
+            newBoard[coordinates[0]][coordinates[1]] = null;
+            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGameMap(newBoard);
+
+            board = boardRepository.saveAndFlush(board);
+            return board.getGold();
+        }
+
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "could not sell");
     }
 
     /**

@@ -277,10 +277,9 @@ public class GameService {
     }
 
     /**
-     * Checks if coordinates are valid(inside board...)
+     * Checks if coordinates are valid(inside board...) or throws error
      *
      * @param coordinates int[]
-     * @return if coordinates are ok
      * @throws ResponseStatusException HTTP
      */
     private void checkCoordinates(int[] coordinates){

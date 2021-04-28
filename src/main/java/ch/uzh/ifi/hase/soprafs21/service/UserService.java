@@ -182,8 +182,7 @@ public class UserService {
         if(optionalUser.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
         }
-        User userById = optionalUser.get();
-        return userById;
+        return optionalUser.get();
     }
     public User checkIfUserExistbyToken(String inputToken){
         if (inputToken==null){

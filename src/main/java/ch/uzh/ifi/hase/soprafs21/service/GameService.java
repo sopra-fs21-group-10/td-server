@@ -90,15 +90,13 @@ public class GameService {
 
         else{
             User player2 = userRepository.getOne(player2Id);
-            if(player2==null){// player 2 id false
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player 2 not found");
-            }
+           // player 2 id false testing player2==null => bug because getOne should always return stg.
+
             if(checkIfPlayerInGame(player1)){// player 2 already in game
                 throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Player 2 already in game");
             }
             //multiplayer game
             return createMultiPlayer(player1, player2);
-
         }
     }
 

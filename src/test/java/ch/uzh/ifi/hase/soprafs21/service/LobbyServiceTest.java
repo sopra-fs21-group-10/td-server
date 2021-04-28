@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class LobbyServiceTest {
+class LobbyServiceTest {
 
     @Mock
     private LobbyRepository lobbyRepository;
@@ -44,9 +44,8 @@ public class LobbyServiceTest {
         testUser2.setUsername("testUsername2");
         testUser2.setToken("token2");
         testUser2.setStatus(UserStatus.OFFLINE);
-
-
     }
+
     @Test
     void create_Lobby_sucess(){
         Lobby testLobby = new Lobby();
@@ -92,7 +91,6 @@ public class LobbyServiceTest {
         foundLobby.setPlayer2(testUser);
         Mockito.when(lobbyRepository.findLobbyByLobbyId(Mockito.any())).thenReturn(foundLobby);
         assertThrows(ResponseStatusException.class,()-> lobbyService.addUserToLobby(Mockito.anyLong(),testUser));
-
     }
     @Test
     void addUserToLobby_sucess(){
@@ -116,7 +114,6 @@ public class LobbyServiceTest {
         Lobby returnedLobby = lobbyService.deleteUserFromLobby(2L,testUser2);
         //check if lobby update was correct
         assertEquals(null,returnedLobby.getPlayer2());
-
     }
 
     @Test
@@ -132,8 +129,6 @@ public class LobbyServiceTest {
         //call the method
         Lobby returnedLobby = lobbyService.deleteUserFromLobby(2L,testUser);
         //hard to test the lobbyrepository.delete(lobby)statement so test is just that no error is thrown
-
-
     }
 
     @Test
@@ -149,8 +144,5 @@ public class LobbyServiceTest {
 
         // call method and catch error
         assertThrows(ResponseStatusException.class,()-> lobbyService.deleteUserFromLobby(2L,testuser3));
-
     }
-
-
 }

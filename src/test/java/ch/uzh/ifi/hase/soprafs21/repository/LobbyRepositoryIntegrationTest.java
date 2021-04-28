@@ -1,7 +1,7 @@
 package ch.uzh.ifi.hase.soprafs21.repository;
+
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerLobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
-import ch.uzh.ifi.hase.soprafs21.entity.Board;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
-public class LobbyRepositoryIntegrationTest {
+class LobbyRepositoryIntegrationTest {
     @Autowired TestEntityManager entityManager;
 
     @Autowired

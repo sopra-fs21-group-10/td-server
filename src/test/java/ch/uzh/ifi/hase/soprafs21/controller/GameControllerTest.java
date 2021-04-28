@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.entity.Board;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
-import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGoldDTO;
@@ -46,8 +45,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     private BoardRepository boardRepository;
     @MockBean
     private UserRepository userRepository;
-    @MockBean
-    private GameRepository gameRepository;
 
     @Test
     void given1Player_whenCreateGame_thenReturnJsonArray() throws Exception {

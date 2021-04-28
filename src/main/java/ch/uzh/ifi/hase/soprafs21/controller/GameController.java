@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.entity.Board;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
-import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGoldDTO;
@@ -20,17 +19,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 public class GameController {
-    private final GameRepository gameRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
 
     private final GameService gameService;
 
-    GameController(GameRepository gameRepository,
-                   GameService gameService,
+    GameController(GameService gameService,
                    UserRepository userRepository,
                    BoardRepository boardRepository) {
-        this.gameRepository = gameRepository;
         this.gameService = gameService;
         this.userRepository = userRepository;
         this.boardRepository = boardRepository;

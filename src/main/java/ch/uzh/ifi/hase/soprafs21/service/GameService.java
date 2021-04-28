@@ -267,7 +267,7 @@ public class GameService {
         returnMapping.put("health",board.getHealth());
         returnMapping.put("owner",board.getOwner().getUsername());
         returnMapping.put("gameId",game.getGameId());
-        returnMapping.put("weather",returnWeatherTypePlayer(board.getOwner()));
+        returnMapping.put("weather",board.getWeather());
         returnMapping.put("boardId",board.getBoardId());
         returnMapping.put("board", board.getGameMap());
         return returnMapping;

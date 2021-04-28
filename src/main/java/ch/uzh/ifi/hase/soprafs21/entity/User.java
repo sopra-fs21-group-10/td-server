@@ -23,7 +23,7 @@ public class User implements Serializable {
     private Long userId;
 
     @Column(nullable = false)
-    private String location= "Zurich";//default value
+    private String location = "Zurich"; //default value
 
     @Column(nullable = false, unique = true)
     private String username;

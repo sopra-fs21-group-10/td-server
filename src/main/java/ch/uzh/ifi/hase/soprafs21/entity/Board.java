@@ -26,20 +26,20 @@ public class Board implements Serializable {
     @Column(nullable = false)
     private String weather;
 
-    private static final String blocked = "blocked"; // the path where the minions walk through
+    private static final String BLOCKED = "blocked"; // the path where the minions walk through
 
     @Column(nullable = false, length = 1000)// caused error, maybe increase even more
     private String[][] gameMap = {//10*15
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null},
-            {null, blocked, null ,null, null, null, null,null, blocked, null ,null, null, null, null, null}
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null}
     };
     // for now just a dummy, could also be another entity  with a one to many relationship
 

@@ -301,4 +301,54 @@ class GameServiceTest {
         assertEquals(900, newGold);
         assertEquals(2, board2.getExtraMinions().get("Goblin"));
     }
+
+    @Test
+    void buyMinion_invalidInputs_throws() {
+        //given
+        Board board2 = new Board();
+        dummyBoard.setGold(1000);
+        dummyGame.setPlayer2Board(board2);
+
+        Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);
+        Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
+        Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
+
+        assertThrows(ResponseStatusException.class,
+                () -> gameService.buyMinion(testUser.getToken(),
+                        dummyGame.getGameId(),  "Goblindqwdqwd"));// cannot upgrade anymore
+
+    }
+
+    @Test
+    void buyMinion_insufficientFunds_throws() {
+        //given
+        Board board2 = new Board();
+        dummyBoard.setGold(0);
+        dummyGame.setPlayer2Board(board2);
+
+        Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);
+        Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
+        Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
+
+        assertThrows(ResponseStatusException.class,
+                () -> gameService.buyMinion(testUser.getToken(),
+                        dummyGame.getGameId(),  "Goblin"));// cannot upgrade anymore
+
+    }
+
+    @Test
+    void buyMinion_SinglePlayer_throws() {
+        //given
+        Board board2 = new Board();
+        dummyBoard.setGold(1000);
+
+        Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);
+        Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
+        Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
+
+        assertThrows(ResponseStatusException.class,
+                () -> gameService.buyMinion(testUser.getToken(),
+                        dummyGame.getGameId(),  "goblin"));// cannot upgrade anymore
+
+    }
 }

@@ -55,7 +55,7 @@ public class GameService {
 
     private final Map<String, Integer> minionMap = new HashMap<>();
     {//tower, cost
-        minionMap.put("Goblin", 500);
+        minionMap.put("Goblin", 50);
         minionMap.put("goblinOverlord", 500);
     }
 
@@ -281,7 +281,7 @@ public class GameService {
     }
 
     /**
-     *
+     * Checks if multiplayer and adds opponent to enemy extra minions
      *
      * @param token to identify the player
      * @param gameId see if there is an opponent
@@ -289,7 +289,7 @@ public class GameService {
      * @return remaining gold after buying tower
      * @throws ResponseStatusException HTTP
      */
-    public int buyMinion(String token,long gameId, String minionName){
+    public int buyMinion(String token, long gameId, String minionName){
         User player = userRepository.findByToken(token);
         Board board = boardRepository.findByOwner(player);
 

@@ -92,7 +92,7 @@ public class GameController {
     }
 
     @PostMapping("/games/minions/{gameId}/{token}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameGoldDTO buyMinion(@PathVariable("token") String token, @PathVariable("gameId") long gameId, @RequestBody GameMinionsPostDTO gameMinionsPostDTO) {
         GameGoldDTO gameGoldDTO = new GameGoldDTO();

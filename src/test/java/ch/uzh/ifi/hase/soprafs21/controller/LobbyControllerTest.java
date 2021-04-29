@@ -1,11 +1,9 @@
 package ch.uzh.ifi.hase.soprafs21.controller;
 
-import antlr.Token;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbiesGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyPutAndPatchDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.TokenDTO;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
@@ -14,9 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -41,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * This tests if the LobbyController works.
  */
 @WebMvcTest(LobbyController.class)
-public class LobbyControllerTest {
+class LobbyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 

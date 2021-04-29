@@ -4,10 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Board;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGoldDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameMoveDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GamePostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -112,6 +109,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // then
         mockMvc.perform(postRequest).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.gold", is(54)));
+    }
+
+    @Test
+    void givenPlayerAndMinionName_whenBuyMinion_thenReturnJsonArray() throws Exception {
+        // given
+        GameMinionsPostDTO gameMinionsPostDTO = new GameMinionsPostDTO();
+
+        gameMinionsPostDTO.setMinion("Goblin");
+
+
+        // this mocks the Service/repo
+        given(gameService.buyMinion("token",1,"Goblin")).willReturn(54);
+
+        // when
+        MockHttpServletRequestBuilder postRequest = post("/games/minions/"+1+"/"+"token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(gameMinionsPostDTO));
+
+        // then
+        mockMvc.perform(postRequest).andExpect(status().isOk())
                 .andExpect(jsonPath("$.gold", is(54)));
     }
 

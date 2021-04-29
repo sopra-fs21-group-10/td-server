@@ -18,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class GameServiceTest {
     @InjectMocks
     private GameService gameService;
@@ -110,6 +109,27 @@ class GameServiceTest {
         int newGold = gameService.placeTower(dummyBoard, coordinates, "FireTower1");
 
         assertEquals(100, newGold);
+    }
+
+    @Test
+    void placeTower_onPath_throwsException() {
+        //given
+        int[] coordinates = new int[]{0,1};
+        dummyBoard.setGold(200);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
+    }
+
+    @Test
+    void placeTower_onTower_throwsException() {
+        //given
+        int[] coordinates = new int[]{0,14};
+        dummyBoard.setGold(200);
+        // place 1. tower
+        gameService.placeTower(dummyBoard, coordinates, "FireTower1");// tested
+
+        //place 2. tower at same location
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
     }
 
     @Test

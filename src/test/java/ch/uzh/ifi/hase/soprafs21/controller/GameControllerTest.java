@@ -4,7 +4,10 @@ import ch.uzh.ifi.hase.soprafs21.entity.Board;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameMinionsPostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameMoveDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GamePostDTO;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,8 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -89,9 +91,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         gameMoveDTO.setCoordinates(coordinates);
         gameMoveDTO.setEntity("FireTower1");
 
-        GameGoldDTO gameGoldDTO= new GameGoldDTO();
-        gameGoldDTO.setGold(54);
-
         User dummyUser = new User();
         dummyUser.setToken("token");
         Board dummyBoard = new Board();
@@ -109,6 +108,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // then
         mockMvc.perform(postRequest).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.gold", is(54)));
+    }
+
+    @Test
+    void givenPlayerTowerCoordinates_whenUpgradeTower_thenReturnJsonArray() throws Exception {
+        // given
+        GameMoveDTO gameMoveDTO = new GameMoveDTO();
+        int[] coordinates = new int[]{1,1};
+        gameMoveDTO.setCoordinates(coordinates);
+
+
+
+        User dummyUser = new User();
+        dummyUser.setToken("token");
+        Board dummyBoard = new Board();
+
+        // this mocks the Service/repo
+        given(userRepository.findByToken(Mockito.any())).willReturn(dummyUser);
+        given(boardRepository.findByOwner(Mockito.any())).willReturn(dummyBoard);
+
+        given(gameService.upgradeTower(Mockito.any(), Mockito.any())).willReturn(54);
+
+        // when
+        MockHttpServletRequestBuilder postRequest = patch("/games/towers/"+dummyUser.getToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(gameMoveDTO));
+
+        // then
+        mockMvc.perform(postRequest).andExpect(status().isOk())
                 .andExpect(jsonPath("$.gold", is(54)));
     }
 

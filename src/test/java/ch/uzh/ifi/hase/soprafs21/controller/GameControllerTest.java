@@ -141,6 +141,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
+    void givenPlayerTowerCoordinates_whenSellTower_thenReturnJsonArray() throws Exception {
+        // given
+        GameMoveDTO gameMoveDTO = new GameMoveDTO();
+        int[] coordinates = new int[]{1,1};
+        gameMoveDTO.setCoordinates(coordinates);
+
+
+
+        User dummyUser = new User();
+        dummyUser.setToken("token");
+        Board dummyBoard = new Board();
+
+        // this mocks the Service/repo
+        given(userRepository.findByToken(Mockito.any())).willReturn(dummyUser);
+        given(boardRepository.findByOwner(Mockito.any())).willReturn(dummyBoard);
+
+        given(gameService.sellTower(Mockito.any(), Mockito.any())).willReturn(54);
+
+        // when
+        MockHttpServletRequestBuilder postRequest = delete("/games/towers/"+dummyUser.getToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(gameMoveDTO));
+
+        // then
+        mockMvc.perform(postRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$.gold", is(54)));
+    }
+
+    @Test
     void givenPlayerAndMinionName_whenBuyMinion_thenReturnJsonArray() throws Exception {
         // given
         GameMinionsPostDTO gameMinionsPostDTO = new GameMinionsPostDTO();

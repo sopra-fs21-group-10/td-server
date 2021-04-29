@@ -23,8 +23,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Game Service
@@ -37,26 +35,29 @@ public class GameService {
     private final Logger log = LoggerFactory.getLogger(GameService.class);
 
 
-    private final Map<String, Integer> towerLevel1Map = Stream.of(new Object[][] {//tower, cost            { "FireTower1", 100},
-            { "FireTower1", 100},
-            { "WaterTower1", 200 },
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+    private final Map<String, Integer> towerLevel1Map = new HashMap<>();
+    {//tower, cost
+        towerLevel1Map.put("FireTower1", 100);
+        towerLevel1Map.put("WaterTower1", 200);
+    }
 
-    private final Map<String, Integer> towerLevel2Map = Stream.of(new Object[][] {//tower, cost
-            { "FireTower2", 200},
-            { "WaterTower2", 400 },
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+    private final Map<String, Integer> towerLevel2Map = new HashMap<>();
+    {//tower, cost
+        towerLevel2Map.put("FireTower2", 200);
+        towerLevel2Map.put("WaterTower2", 400);
+    }
 
-    private final Map<String, Integer> towerLevel3Map = Stream.of(new Object[][] {//tower, cost
-            { "FireTower3", 300},
-            { "WaterTower3", 1000 },
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+    private final Map<String, Integer> towerLevel3Map = new HashMap<>();
+    {//tower, cost
+        towerLevel3Map.put("FireTower3", 300);
+        towerLevel3Map.put("WaterTower3", 1000);
+    }
 
-    private final Map<String, Integer> minionMap = Stream.of(new Object[][] {//minion, cost
-            { "Goblin", 50},
-            { "goblinOverlord", 500 },
-    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
-    // solving everything with strings etc seems very bad design, but we are running out of time
+    private final Map<String, Integer> minionMap = new HashMap<>();
+    {//tower, cost
+        minionMap.put("Goblin", 500);
+        minionMap.put("goblinOverlord", 500);
+    }
 
     private final GameRepository gameRepository;
     private final BoardRepository boardRepository;

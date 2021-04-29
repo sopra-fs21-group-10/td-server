@@ -4,10 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Board;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGoldDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameMoveDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GamePostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +63,8 @@ public class GameController {
         return gameGoldDTO;// return game-state == getGame
     }
 
-     @PatchMapping("/games/towers/{token}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PatchMapping("/games/towers/{token}")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameGoldDTO upgradeTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
         User player = userRepository.findByToken(token);
@@ -78,10 +75,10 @@ public class GameController {
         gameGoldDTO.setGold(gameService.upgradeTower(payerBoard, gameMoveDTO.getCoordinates()));
 
         return gameGoldDTO;//
-        }
+    }
 
     @DeleteMapping("/games/towers/{token}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameGoldDTO sellTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
         User player = userRepository.findByToken(token);
@@ -92,5 +89,16 @@ public class GameController {
         gameGoldDTO.setGold(gameService.sellTower(payerBoard, gameMoveDTO.getCoordinates()));
 
         return gameGoldDTO;
+    }
+
+    @PostMapping("/games/minions/{gameId}/{token}")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public GameGoldDTO buyMinion(@PathVariable("token") String token, @PathVariable("gameId") long gameId, @RequestBody GameMinionsPostDTO gameMinionsPostDTO) {
+        GameGoldDTO gameGoldDTO = new GameGoldDTO();
+
+        gameGoldDTO.setGold(gameService.buyMinion(token, gameId, gameMinionsPostDTO.getMinion()));
+
+        return gameGoldDTO;// return game-state == getGame
     }
 }

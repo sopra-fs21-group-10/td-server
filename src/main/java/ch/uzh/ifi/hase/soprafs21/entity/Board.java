@@ -3,6 +3,8 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "BOARD")
@@ -41,7 +43,20 @@ public class Board implements Serializable {
             {null, BLOCKED, BLOCKED ,BLOCKED, BLOCKED, BLOCKED, BLOCKED,BLOCKED, BLOCKED, BLOCKED ,null, null, null, null, null},
             {null, null, null ,null, null, null, null,null, null, BLOCKED ,null, null, null, null, null}
     };
-    // for now just a dummy, could also be another entity  with a one to many relationship
+
+    @ElementCollection
+    @MapKeyColumn(name="MinionName")
+    @Column(name="Cost")
+    @CollectionTable(name="extraMinions", joinColumns=@JoinColumn(name="board_id"))
+    Map<String, Integer> extraMinions = new HashMap<>();
+
+    public Map<String, Integer> getExtraMinions() {
+        return extraMinions;
+    }
+
+    public void setExtraMinions(Map<String, Integer> extraMinions) {
+        this.extraMinions = extraMinions;
+    }
 
     public String[][] getGameMap() {
         return gameMap;

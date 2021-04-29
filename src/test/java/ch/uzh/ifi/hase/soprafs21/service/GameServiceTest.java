@@ -102,6 +102,7 @@ class GameServiceTest {
         // etc
     }
 
+    //_____________________________tower tests_______________________________________
     @Test
     void placeTower_validInputs_success() {
         int[] coordinates = new int[]{0,14};
@@ -257,5 +258,47 @@ class GameServiceTest {
         dummyBoard.setGold(1000);
 
         assertThrows(ResponseStatusException.class, () -> gameService.sellTower(dummyBoard, coordinates));// cannot upgrade anymore
+    }
+
+    //___________________________minions_________________________________________
+    @Test
+    void buyMinion_validInputs_success() {
+        //given
+        Board board2 = new Board();
+        dummyBoard.setGold(1000);
+        dummyGame.setPlayer2Board(board2);
+
+        Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);
+        Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
+        Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
+
+
+        int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
+
+        System.out.println(dummyBoard.getExtraMinions());
+
+        assertEquals(950, newGold);
+        assertEquals(1, board2.getExtraMinions().get("Goblin"));
+    }
+
+    @Test
+    void buyMinions_validInputs_success() {
+        //given
+        Board board2 = new Board();
+        dummyBoard.setGold(1000);
+        dummyGame.setPlayer2Board(board2);
+
+        Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);
+        Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
+        Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
+
+        gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");// tested
+
+        int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
+
+        System.out.println(dummyBoard.getExtraMinions());
+
+        assertEquals(900, newGold);
+        assertEquals(2, board2.getExtraMinions().get("Goblin"));
     }
 }

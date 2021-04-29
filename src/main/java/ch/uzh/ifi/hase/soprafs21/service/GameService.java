@@ -51,6 +51,11 @@ public class GameService {
             { "FireTower3", 300},
             { "WaterTower3", 1000 },
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+
+    private final Map<String, Integer> minionMap = Stream.of(new Object[][] {//minion, cost
+            { "Goblin", 50},
+            { "goblinOverlord", 500 },
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
     // solving everything with strings etc seems very bad design, but we are running out of time
 
     private final GameRepository gameRepository;
@@ -272,6 +277,65 @@ public class GameService {
         }
 
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "could not sell");
+    }
+
+    /**
+     *
+     *
+     * @param token to identify the player
+     * @param gameId see if there is an opponent
+     * @param minionName of the minion being bought
+     * @return remaining gold after buying tower
+     * @throws ResponseStatusException HTTP
+     */
+    public int buyMinion(String token,long gameId, String minionName){
+        User player = userRepository.findByToken(token);
+        Board board = boardRepository.findByOwner(player);
+
+        // check board
+        if (board==null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
+        Game game = gameRepository.getOne(gameId);
+
+        if ( game.getPlayer2Board() == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Single-player game (cannot buy minions)");
+        }
+
+        if (!(board==game.getPlayer1Board()) && !(board==game.getPlayer2Board())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not in game");
+        }
+
+        Board opponent = game.getPlayer1Board()==board ? game.getPlayer2Board() : game.getPlayer1Board();
+
+        // check valid tower
+        if (! minionMap.containsKey(minionName)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Minion not found");
+        }
+
+        int cost = minionMap.get(minionName);
+
+        // can I pay for it?
+        if (board.getGold() < cost){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient funds");
+        }
+
+        Map<String, Integer> opponentExtraMinions = opponent.getExtraMinions();
+
+        if(opponentExtraMinions.containsKey(minionName)){
+            opponentExtraMinions.put(minionName, opponent.getExtraMinions().get(minionName)+1);
+        }else {
+            opponentExtraMinions.put(minionName, 1);
+        }
+
+        board.setGold(board.getGold() - cost);//pay
+        opponent.setExtraMinions(opponentExtraMinions);
+
+        boardRepository.saveAndFlush(opponent);
+
+        board = boardRepository.saveAndFlush(board);
+
+        return board.getGold();
     }
 
     /**

@@ -55,7 +55,7 @@ class LobbyRepositoryIntegrationTest {
     }
 
     @Test
-    void findLobbyByLobbyId_sucess(){
+    void findLobbyByLobbyId_success(){
         //given
         Lobby lobby = new Lobby();
         User user = new User();
@@ -85,6 +85,5 @@ class LobbyRepositoryIntegrationTest {
         assertEquals(found.getOwner(), user);
         assertEquals(found.getLobbyStatus(),PlayerLobbyStatus.READY);
         assertEquals(found.getPlayer2(),user2);
-
     }
 }

@@ -138,7 +138,7 @@ class LobbyControllerTest {
     @Test
     void createLobby() throws Exception{
         //mock Service
-        Mockito.when(userService.checkIfUserExistbyToken(Mockito.any())).thenReturn(testuser1);
+        Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(testuser1);
         Mockito.when(lobbyService.createLobby(testuser1)).thenReturn(testLobbyNotFull.getLobbyId());
         TokenDTO tokenDTO = new TokenDTO();
         tokenDTO.setToken(testuser1.getToken());
@@ -156,7 +156,7 @@ class LobbyControllerTest {
     @Test
     void patchlobby() throws Exception{
         //mock Service
-        Mockito.when(userService.checkIfUserExistbyToken(Mockito.any())).thenReturn(testuser2);
+        Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(testuser2);
         Mockito.when(lobbyService.addUserToLobby(1L,testuser2)).thenReturn(testLobbyFull);
         Mockito.when(lobbyService.findLobbyById(Mockito.any())).thenReturn(testLobbyFull);
         LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
@@ -183,7 +183,7 @@ class LobbyControllerTest {
     @Test
     void putDeleteOwner() throws Exception{
         //mock Service
-        Mockito.when(userService.checkIfUserExistbyToken(Mockito.any())).thenReturn(testuser2);
+        Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(testuser2);
         Mockito.when(lobbyService.addUserToLobby(1L,testuser2)).thenReturn(testLobbyFull);
         Mockito.when(lobbyService.findLobbyById(Mockito.any())).thenReturn(testLobbyFull);
         LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
@@ -208,7 +208,7 @@ class LobbyControllerTest {
     }
     void putRequest() throws Exception{
         //mock Service
-        Mockito.when(userService.checkIfUserExistbyToken(Mockito.any())).thenReturn(Mockito.any());
+        Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(Mockito.any());
         Mockito.when(lobbyService.deleteUserFromLobby(Mockito.any(),Mockito.any())).thenReturn(Mockito.any());
         LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
         lobbyPutAndPatchDTO.setLobbyId(1L);

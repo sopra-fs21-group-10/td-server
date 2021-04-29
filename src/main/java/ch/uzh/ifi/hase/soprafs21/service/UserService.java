@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -177,14 +176,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the user could not be created!");
         }
     }
-    public User checkIfUserExistById(Long inputId){
-        Optional<User> optionalUser= userRepository.findById(inputId);
-        if(optionalUser.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with userId was not found");
-        }
-        return optionalUser.get();
-    }
-    public User checkIfUserExistbyToken(String inputToken){
+
+    public User checkIfUserExistByToken(String inputToken){
         if (inputToken==null){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "token is not allowed to be null");
         }

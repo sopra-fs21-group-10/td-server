@@ -30,16 +30,16 @@ public class Board implements Serializable {
 
     @Column(nullable = false, length = 1000)// caused error, maybe increase even more
     private String[][] gameMap = {//10*15
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null},
-            {null, BLOCKED, null ,null, null, null, null,null, BLOCKED, null ,null, null, null, null, null}
+            {null, BLOCKED, null ,null, null, null, null,null, null, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, null, null ,null, null, null, null, null},
+            {null, BLOCKED, BLOCKED ,BLOCKED, BLOCKED, BLOCKED, BLOCKED,BLOCKED, BLOCKED, BLOCKED ,BLOCKED, BLOCKED, BLOCKED, BLOCKED, null},
+            {null, null, null ,null, null, null, null,null, null, null ,null, null, null, BLOCKED, null},
+            {null, null, null ,null, null, null, BLOCKED,BLOCKED, BLOCKED, BLOCKED ,BLOCKED, BLOCKED, BLOCKED, BLOCKED, null},
+            {null, null, null ,null, null, BLOCKED, BLOCKED,null, null, null ,null, null, null, null, null},
+            {null, BLOCKED, BLOCKED ,BLOCKED, BLOCKED, BLOCKED, null,null, null, null ,null, null, null, null, null},
+            {null, BLOCKED, null ,null, null, null, null,null, null, null ,null, null, null, null, null},
+            {null, BLOCKED, BLOCKED ,BLOCKED, BLOCKED, BLOCKED, BLOCKED,BLOCKED, BLOCKED, BLOCKED ,null, null, null, null, null},
+            {null, null, null ,null, null, null, null,null, null, BLOCKED ,null, null, null, null, null}
     };
     // for now just a dummy, could also be another entity  with a one to many relationship
 

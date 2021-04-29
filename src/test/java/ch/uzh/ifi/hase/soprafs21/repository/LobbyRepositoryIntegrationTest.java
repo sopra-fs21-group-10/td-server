@@ -48,9 +48,9 @@ class LobbyRepositoryIntegrationTest {
 
         //then
         assertNotNull(found.getLobbyId());
-        assertEquals(found.getOwner(), user);
-        assertEquals(found.getLobbyStatus(),PlayerLobbyStatus.READY);
-        assertEquals(found.getPlayer2(),user2);
+        assertEquals(user, found.getOwner());
+        assertEquals(PlayerLobbyStatus.READY, found.getLobbyStatus());
+        assertEquals(user2, found.getPlayer2());
 
     }
 

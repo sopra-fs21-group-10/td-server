@@ -42,12 +42,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         // when
         Board found = boardRepository.findByOwner(user);
 
-//         then
+        // then
         assertNotNull(found.getBoardId());
-        assertEquals(found.getGameMap(), board.getGameMap());
-        assertEquals(found.getGold(), board.getGold());
-        assertEquals(found.getHealth(), board.getHealth());
-        assertEquals(found.getOwner(), board.getOwner());
-        assertEquals(found.getWeather(), board.getWeather());
+        assertEquals(board.getGameMap(), found.getGameMap());
+        assertEquals(board.getGold(), found.getGold());
+        assertEquals(board.getHealth(), found.getHealth());
+        assertEquals(board.getOwner(), found.getOwner());
+        assertEquals(board.getWeather(), found.getWeather());
+        assertEquals(board.getExtraMinions(), found.getExtraMinions());
     }
 }

@@ -83,7 +83,7 @@ class LobbyControllerTest {
     void getAllLobbies() throws Exception{
         List<Lobby> allUsers = Collections.singletonList(testLobbyNotFull);
 
-        //mock the lobbyservice
+        //mock the lobbyService
         Mockito.when(lobbyService.getLobbies()).thenReturn(allUsers);
 
         //mock the request
@@ -111,10 +111,6 @@ class LobbyControllerTest {
                 .andExpect(jsonPath("$.lobbyOwner", is(testLobbyFull.getOwner().getUsername())))
                 .andExpect(jsonPath("$.player2Status", is(testLobbyFull.getLobbyStatus().toString())))
                 .andExpect(jsonPath("$.player2", is(testLobbyFull.getPlayer2().getUsername())));
-
-
-
-
     }
 
     @Test
@@ -130,11 +126,8 @@ class LobbyControllerTest {
                 .andExpect(jsonPath("$.lobbyOwner", is(testLobbyNotFull.getOwner().getUsername())))
                 .andExpect(jsonPath("$.player2Status", is(testLobbyNotFull.getLobbyStatus().toString())))
                 .andExpect(jsonPath("$.player2", is("")));
-
-
-
-
     }
+
     @Test
     void createLobby() throws Exception{
         //mock Service
@@ -150,11 +143,10 @@ class LobbyControllerTest {
         // perform request
         mockMvc.perform(postCreateLobbyRequest).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.lobbyId", is(testLobbyNotFull.getLobbyId().intValue())));
-
-
     }
+
     @Test
-    void patchlobby() throws Exception{
+    void patchLobby() throws Exception{
         //mock Service
         Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(testuser2);
         Mockito.when(lobbyService.addUserToLobby(1L,testuser2)).thenReturn(testLobbyFull);
@@ -163,7 +155,6 @@ class LobbyControllerTest {
         lobbyPutAndPatchDTO.setLobbyId(1L);
         lobbyPutAndPatchDTO.setToken("sometoken");
         //mock request
-        ObjectMapper mapper = new ObjectMapper();
         MockHttpServletRequestBuilder postCreateLobbyRequest = patch("/lobbies/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(lobbyPutAndPatchDTO));
@@ -175,9 +166,6 @@ class LobbyControllerTest {
                 .andExpect(jsonPath("$.lobbyOwner", is(testLobbyFull.getOwner().getUsername())))
                 .andExpect(jsonPath("$.player2Status", is(testLobbyFull.getLobbyStatus().toString())))
                 .andExpect(jsonPath("$.player2", is(testLobbyFull.getPlayer2().getUsername())));
-
-
-
     }
 
     @Test
@@ -190,46 +178,35 @@ class LobbyControllerTest {
         lobbyPutAndPatchDTO.setLobbyId(1L);
         lobbyPutAndPatchDTO.setToken("sometoken");
         //mock request
-        ObjectMapper mapper = new ObjectMapper();
         MockHttpServletRequestBuilder patchLobbyRequest = patch("/lobbies/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(lobbyPutAndPatchDTO));
 
-
         //perform request
-        // perform request
         mockMvc.perform(patchLobbyRequest).andExpect(status().isOk())
                 .andExpect(jsonPath("$.lobbyOwner", is(testLobbyFull.getOwner().getUsername())))
                 .andExpect(jsonPath("$.player2Status", is(testLobbyFull.getLobbyStatus().toString())))
                 .andExpect(jsonPath("$.player2", is(testLobbyFull.getPlayer2().getUsername())));
-
-
-
     }
-    void putRequest() throws Exception{
-        //mock Service
-        Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(Mockito.any());
-        Mockito.when(lobbyService.deleteUserFromLobby(Mockito.any(),Mockito.any())).thenReturn(Mockito.any());
+
+    @Test
+    void leaveLobby_validInput()throws Exception {
+        // given
         LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
-        lobbyPutAndPatchDTO.setLobbyId(1L);
-        lobbyPutAndPatchDTO.setToken("sometoken");
-        //mock request
-        ObjectMapper mapper = new ObjectMapper();
-        MockHttpServletRequestBuilder putLobbyRequest = patch("/lobbies/1")
+        lobbyPutAndPatchDTO.setToken(testuser2.getToken());
+
+        // mock service
+        Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(testuser2);
+
+        // mock request
+        MockHttpServletRequestBuilder patchLobbyRequest = put("/lobbies/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(lobbyPutAndPatchDTO));
 
-
         //perform request
-        // perform request
-        mockMvc.perform(putLobbyRequest).andExpect(status().isOk())
-                .andExpect(jsonPath("$.lobbyOwner", is(testLobbyFull.getOwner().getUsername())))
-                .andExpect(jsonPath("$.player2Status", is(testLobbyFull.getLobbyStatus().toString())))
-                .andExpect(jsonPath("$.player2", is(testLobbyFull.getPlayer2().getUsername())));
-
-
-
+        mockMvc.perform(patchLobbyRequest).andExpect(status().isOk());
     }
+
     // helpers
     private String asJsonString(final Object object) {
         try {

@@ -12,6 +12,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyServiceTest {
@@ -93,9 +96,27 @@ class LobbyServiceTest {
     void addUserToLobby_success(){
         Lobby foundLobby = new Lobby();
         foundLobby.setOwner(testUser2);
+
         Mockito.when(lobbyRepository.findLobbyByLobbyId(Mockito.any())).thenReturn(foundLobby);
+
         Lobby returnedLobby = lobbyService.addUserToLobby(Mockito.anyLong(),testUser);
+
         assertEquals(testUser,returnedLobby.getPlayer2());
+    }
+
+    @Test
+    void getLobbies_success(){
+        // given
+        Lobby foundLobby = new Lobby();
+        List<Lobby> returned = new ArrayList<>();
+        returned.add(foundLobby);
+
+        // mock repo
+        Mockito.when(lobbyRepository.findAll()).thenReturn(returned);
+
+        List<Lobby> found = lobbyService.getLobbies();
+
+        assertEquals(returned,found);
     }
 
     @Test

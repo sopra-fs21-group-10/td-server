@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerLobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
@@ -21,17 +20,13 @@ import java.util.List;
  */
 @RestController
 public class LobbyController {
-
-    private final LobbyRepository lobbyRepository;
     private final UserService userService;
     private final LobbyService lobbyService;
 
-    LobbyController(LobbyRepository lobbyRepository, UserService userService, LobbyService lobbyService) {
-        this.lobbyRepository = lobbyRepository;
+    LobbyController(UserService userService, LobbyService lobbyService) {
         this.userService = userService;
         this.lobbyService = lobbyService;
     }
-
 
     @GetMapping("/lobbies")
     @ResponseStatus(HttpStatus.OK)
@@ -80,13 +75,14 @@ public class LobbyController {
        }
        return lobbyByIdGetDTO;
     }
+
     @PatchMapping("lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public LobbyByIdGetDTO joinALobby(@PathVariable("lobbyId") Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){
         //check if player exists
         User userToBeAdded = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
-        //check if lobby exists
+
         //check if lobby is full
         lobbyService.addUserToLobby(lobbyPutAndPatchDTO.getLobbyId(),userToBeAdded);
         //return infos about updated Lobby
@@ -102,14 +98,12 @@ public class LobbyController {
     @PutMapping ("lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){
+    public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){//asking for the lobbyId in the boddy too makes no sense
         //Player not found
         User userToBeRemoved = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
         //lobby not found
         //check if is host
         //--> delete lobby if host leaves else delete player2 from lobby
-        lobbyService.deleteUserFromLobby(lobbyPutAndPatchDTO.getLobbyId(),userToBeRemoved);
-
-
+        lobbyService.deleteUserFromLobby(lobbyId, userToBeRemoved);
     }
 }

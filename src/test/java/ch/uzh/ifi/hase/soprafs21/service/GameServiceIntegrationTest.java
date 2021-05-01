@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test class for the GameResource REST resource.
@@ -43,17 +43,27 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     private User testUser;
 
+    private User testUser2;
+
+    private static final String BLOCKED = "blocked";
+
     @BeforeEach
     void setup() {
-        userRepository.deleteAll();
+        // order is important
         gameRepository.deleteAll();
         boardRepository.deleteAll();
+        userRepository.deleteAll();
 
-        // most/all tests need an user
+        // most/all tests need user
         testUser = new User();
         testUser.setUsername("testUser");
         testUser.setPassword("testUser");
         testUser = userService.createUser(testUser);// tested
+
+        testUser2 = new User();
+        testUser2.setUsername("testUser2");
+        testUser2.setPassword("testUser2");
+        testUser2 = userService.createUser(testUser2);// tested
     }
 
     @Test
@@ -65,6 +75,53 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         gameService.returnWeatherTypePlayer(testUser);
 
         // the weather is not always the same so the test cant check for the right one
+    }
+
+    @Test
+    void createMultiPlayer_MultiPlayer_success() {
+        assertTrue(gameRepository.findAll().isEmpty());
+        assertNull(boardRepository.findByOwner(testUser));
+        assertNull(boardRepository.findByOwner(testUser2));
+
+        gameService.createGame(testUser.getUserId(), testUser2.getUserId());
+
+        // test if game/boards have been created
+        assertFalse(gameRepository.findAll().isEmpty());
+        assertNotNull(boardRepository.findByOwner(testUser));
+        assertNotNull(boardRepository.findByOwner(testUser2));
+    }
+
+    @Test
+    void createMultiPlayer_SinglePlayer_success() {
+        assertTrue(gameRepository.findAll().isEmpty());
+        assertNull(boardRepository.findByOwner(testUser));
+        assertNull(boardRepository.findByOwner(testUser2));
+
+        gameService.createGame(testUser.getUserId(), null);
+
+        // test if game/boards have been created
+        assertFalse(gameRepository.findAll().isEmpty());
+        assertNotNull(boardRepository.findByOwner(testUser));
+        assertNull(boardRepository.findByOwner(testUser2));
+    }
+
+    @Test
+    void returnGameInformation_SinglePlayer_success() {
+        // given
+        Long gameId = gameService.createGame(testUser.getUserId(), null); //tested
+
+
+        GameGetDTO gameGetDTO = gameService.returnGameInformation(gameId);
+
+        assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
+        assertEquals(50, gameGetDTO.getPlayer1().get("health"));
+        assertEquals(testUser.getUsername(), gameGetDTO.getPlayer1().get("owner"));
+        assertEquals(gameId, gameGetDTO.getPlayer1().get("gameId"));
+        assertEquals(boardRepository.findByOwner(testUser).getBoardId(), gameGetDTO.getPlayer1().get("boardId"));
+        // do not want to test weather, it has been tested before and the calls are limited, checking for same board is uggly
+        assertNotNull(gameGetDTO.getPlayer1().get("board"));
+        assertNotNull(gameGetDTO.getPlayer1().get("weather"));
+
     }
 
     @Test

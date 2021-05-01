@@ -12,8 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyServiceTest {
 
@@ -47,7 +46,7 @@ class LobbyServiceTest {
     }
 
     @Test
-    void create_Lobby_sucess(){
+    void create_Lobby_success(){
         Lobby testLobby = new Lobby();
         testLobby.setOwner(testUser);
         //mock repo methods
@@ -58,8 +57,9 @@ class LobbyServiceTest {
         assertEquals(lobbyId, testLobby.getLobbyId());
 
     }
+
     @Test
-    void create_Lobby_invalidinput_userIsAleradyOwner(){
+    void create_Lobby_invalidInput_userIsAlreadyOwner(){
         //Mock repo method
         Mockito.when(lobbyRepository.findLobbyByOwner(testUser)).thenReturn(new Lobby());
         //test if exception is thrown
@@ -67,13 +67,9 @@ class LobbyServiceTest {
 
 
     }
-    @Test
-    void getLobbies_test(){
-        //only one method from Lobbyrepo is called already tested
 
-    }
     @Test
-    void findLobbyById_invalidInput_lobbyNotExists_throwsExepction(){
+    void findLobbyById_invalidInput_lobbyNotExists_throwsException(){
         //mock method of repo
         Lobby returnedLobby = new Lobby();
         returnedLobby.setLobbyId(1L);
@@ -85,23 +81,25 @@ class LobbyServiceTest {
     }
 
     @Test
-    void addUserToLobby_invalidInput_lobbyFull_throwsExeption (){
+    void addUserToLobby_invalidInput_lobbyFull_throwsException(){
         Lobby foundLobby = new Lobby();
         foundLobby.setOwner(testUser2);
         foundLobby.setPlayer2(testUser);
         Mockito.when(lobbyRepository.findLobbyByLobbyId(Mockito.any())).thenReturn(foundLobby);
         assertThrows(ResponseStatusException.class,()-> lobbyService.addUserToLobby(Mockito.anyLong(),testUser));
     }
+
     @Test
-    void addUserToLobby_sucess(){
+    void addUserToLobby_success(){
         Lobby foundLobby = new Lobby();
         foundLobby.setOwner(testUser2);
         Mockito.when(lobbyRepository.findLobbyByLobbyId(Mockito.any())).thenReturn(foundLobby);
         Lobby returnedLobby = lobbyService.addUserToLobby(Mockito.anyLong(),testUser);
         assertEquals(testUser,returnedLobby.getPlayer2());
     }
+
     @Test
-    void deleteplayer2FromLobby(){
+    void deletePlayer2FromLobby(){
         //prepare lobby to be modified
         Lobby foundLobby = new Lobby();
         foundLobby.setLobbyId(1L);
@@ -113,7 +111,7 @@ class LobbyServiceTest {
         //call the method
         Lobby returnedLobby = lobbyService.deleteUserFromLobby(2L,testUser2);
         //check if lobby update was correct
-        assertEquals(null,returnedLobby.getPlayer2());
+        assertNull(returnedLobby.getPlayer2());
     }
 
     @Test
@@ -127,14 +125,14 @@ class LobbyServiceTest {
         Mockito.when(lobbyRepository.findLobbyByLobbyId(Mockito.any())).thenReturn(foundLobby);
 
         //call the method
-        Lobby returnedLobby = lobbyService.deleteUserFromLobby(2L,testUser);
+        lobbyService.deleteUserFromLobby(2L,testUser);
         //hard to test the lobbyrepository.delete(lobby)statement so test is just that no error is thrown
     }
 
     @Test
-    void deletePlayerFromLobbyThatDoesntExistsInLobby(){
+    void deletePlayerFromLobbyThatDoesNotExistsInLobby(){
         //prepare lobby to be modified
-        User testuser3 = new User();
+        User testUser3 = new User();
         Lobby foundLobby = new Lobby();
         foundLobby.setLobbyId(1L);
         foundLobby.setOwner(testUser);
@@ -143,6 +141,6 @@ class LobbyServiceTest {
         Mockito.when(lobbyRepository.findLobbyByLobbyId(Mockito.any())).thenReturn(foundLobby);
 
         // call method and catch error
-        assertThrows(ResponseStatusException.class,()-> lobbyService.deleteUserFromLobby(2L,testuser3));
+        assertThrows(ResponseStatusException.class,()-> lobbyService.deleteUserFromLobby(2L,testUser3));
     }
 }

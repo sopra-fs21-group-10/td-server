@@ -21,7 +21,7 @@ class LobbyRepositoryIntegrationTest {
 
 
     @Test
-    void findLobbyByOwner_sucess(){
+    void findLobbyByOwner_success(){
         //given
         Lobby lobby = new Lobby();
         User user = new User();

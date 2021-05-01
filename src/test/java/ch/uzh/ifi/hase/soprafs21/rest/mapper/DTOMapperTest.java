@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setToken("1");
 
-
         // MAP -> Create user
         User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 

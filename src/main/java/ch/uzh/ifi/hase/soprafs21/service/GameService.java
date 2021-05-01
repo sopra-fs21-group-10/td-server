@@ -391,6 +391,9 @@ public class GameService {
         if(player1==null || player2==null){// no player, should not happen but...
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
         }
+        if(player1==player2){// no player, should not happen but...
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Players are teh same");
+        }
 
         Game game = new Game();
 

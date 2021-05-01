@@ -59,9 +59,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
         // then
         assertNotNull(found.getUserId());
-        assertEquals(found.getPassword(), user.getPassword());
-        assertEquals(found.getUsername(), user.getUsername());
-        assertEquals(found.getToken(), user.getToken());
-        assertEquals(found.getStatus(), user.getStatus());
+        assertEquals(user.getPassword(), found.getPassword());
+        assertEquals(user.getUsername(), found.getUsername());
+        assertEquals(user.getToken(), found.getToken());
+        assertEquals( user.getStatus(), found.getStatus());
     }
 }

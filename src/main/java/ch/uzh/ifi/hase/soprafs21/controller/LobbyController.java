@@ -84,7 +84,7 @@ public class LobbyController {
         User userToBeAdded = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
 
         //check if lobby is full
-        lobbyService.addUserToLobby(lobbyPutAndPatchDTO.getLobbyId(),userToBeAdded);
+        lobbyService.addUserToLobby(lobbyId,userToBeAdded);
         //return infos about updated Lobby
         Lobby lobbyById = lobbyService.findLobbyById(lobbyId);
         LobbyByIdGetDTO lobbyByIdGetDTO = new LobbyByIdGetDTO();

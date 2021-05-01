@@ -110,7 +110,6 @@ import static org.junit.jupiter.api.Assertions.*;
         // given
         Long gameId = gameService.createGame(testUser.getUserId(), null); //tested
 
-
         GameGetDTO gameGetDTO = gameService.returnGameInformation(gameId);
 
         assertEquals(100, gameGetDTO.getPlayer1().get("gold"));

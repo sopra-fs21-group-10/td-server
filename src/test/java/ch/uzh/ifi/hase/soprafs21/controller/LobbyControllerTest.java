@@ -152,7 +152,6 @@ class LobbyControllerTest {
         Mockito.when(lobbyService.addUserToLobby(1L,testuser2)).thenReturn(testLobbyFull);
         Mockito.when(lobbyService.findLobbyById(Mockito.any())).thenReturn(testLobbyFull);
         LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
-        lobbyPutAndPatchDTO.setLobbyId(1L);
         lobbyPutAndPatchDTO.setToken("sometoken");
         //mock request
         MockHttpServletRequestBuilder postCreateLobbyRequest = patch("/lobbies/1")
@@ -175,7 +174,6 @@ class LobbyControllerTest {
         Mockito.when(lobbyService.addUserToLobby(1L,testuser2)).thenReturn(testLobbyFull);
         Mockito.when(lobbyService.findLobbyById(Mockito.any())).thenReturn(testLobbyFull);
         LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
-        lobbyPutAndPatchDTO.setLobbyId(1L);
         lobbyPutAndPatchDTO.setToken("sometoken");
         //mock request
         MockHttpServletRequestBuilder patchLobbyRequest = patch("/lobbies/1")

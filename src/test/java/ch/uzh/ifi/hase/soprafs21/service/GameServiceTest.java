@@ -290,21 +290,23 @@ class GameServiceTest {
     @Test
     void buyMinions_validInputs_success() {
         //given
-        Board board2 = new Board();
+        Board board2 = new Board();// board of opponent
         dummyBoard.setGold(1000);
         dummyGame.setPlayer2Board(board2);
 
+        // mock Repositories
         Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);
         Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
         Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
 
-        gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");// tested
+        // buy minions
+        gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
 
         int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
 
-        System.out.println(dummyBoard.getExtraMinions());
-
+        // check if minion count/ gold count is correct
         assertEquals(900, newGold);
+        assertEquals(900, dummyBoard.getGold());
         assertEquals(2, board2.getExtraMinions().get("Goblin"));
     }
 

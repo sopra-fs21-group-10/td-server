@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.*;
         boardRepository.deleteAll();
         userRepository.deleteAll();
 
-        // most/all tests need user
+        // most/all tests need users
         testUser = new User();
         testUser.setUsername("testUser");
         testUser.setPassword("testUser");
@@ -77,10 +77,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @Test
     void createMultiPlayer_MultiPlayer_success() {
+        // check if Repositories empty
         assertTrue(gameRepository.findAll().isEmpty());
         assertNull(boardRepository.findByOwner(testUser));
         assertNull(boardRepository.findByOwner(testUser2));
 
+        // create a multiplayer game
         gameService.createGame(testUser.getUserId(), testUser2.getUserId());
 
         // test if game/boards have been created

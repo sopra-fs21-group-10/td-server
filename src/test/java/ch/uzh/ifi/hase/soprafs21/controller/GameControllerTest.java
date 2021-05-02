@@ -99,9 +99,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         given(userRepository.findByToken(Mockito.any())).willReturn(dummyUser);
         given(boardRepository.findByOwner(Mockito.any())).willReturn(dummyBoard);
 
-        given(gameService.placeTower(Mockito.any(),Mockito.any(),Mockito.any())).willReturn(54);
+        given(gameService.placeTower(dummyBoard, coordinates, "FireTower1")).willReturn(54);
 
-        // when
+        // when request
         MockHttpServletRequestBuilder postRequest = post("/games/towers/"+dummyUser.getToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(gameMoveDTO));
@@ -146,8 +146,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         GameMoveDTO gameMoveDTO = new GameMoveDTO();
         int[] coordinates = new int[]{1,1};
         gameMoveDTO.setCoordinates(coordinates);
-
-
 
         User dummyUser = new User();
         dummyUser.setToken("token");

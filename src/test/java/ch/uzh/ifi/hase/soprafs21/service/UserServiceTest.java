@@ -48,10 +48,12 @@ class UserServiceTest {
         // then
         Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
 
+        // check if the created user is saved
         assertEquals(testUser.getUserId(), createdUser.getUserId());
         assertEquals(testUser.getPassword(), createdUser.getPassword());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
+        // when creating an account you also log into the created account => online
         assertEquals(UserStatus.ONLINE, createdUser.getStatus());
     }
 
@@ -81,14 +83,16 @@ class UserServiceTest {
 
     @Test
     void userIn_validInputs_success() {
-        // given -> a first user has already been created
+        // given -> a first user has already been created, and its status is offline
         assertEquals(UserStatus.OFFLINE, testUser.getStatus());
 
         // when -> setup additional mocks for UserRepository
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(testUser);
+
+        // login user
         User LoggedUser = userService.userIn(testUser);
 
-        // then -> attempt to create second user with same user -> check that an error is thrown
+        // check if status changed to online
         assertEquals(UserStatus.ONLINE, LoggedUser.getStatus());
     }
 
@@ -188,7 +192,7 @@ class UserServiceTest {
     }
 
     @Test
-    void editProfile_dublicateName_throw() {
+    void editProfile_duplicateName_throw() {
         // given
         assertNull(userRepository.findByUsername("testUsername"));
 
@@ -205,7 +209,6 @@ class UserServiceTest {
 
 
         //then
-        //no user
         assertThrows(ResponseStatusException.class, () ->
                 userService.editProfile(createdUser,null,"password123", null));
 

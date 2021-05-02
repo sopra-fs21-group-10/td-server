@@ -118,8 +118,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         int[] coordinates = new int[]{1,1};
         gameMoveDTO.setCoordinates(coordinates);
 
-
-
         User dummyUser = new User();
         dummyUser.setToken("token");
         Board dummyBoard = new Board();

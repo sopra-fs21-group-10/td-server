@@ -156,7 +156,7 @@ public class UserService {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid location or to many requests");
             }
         }
-        // cant do that after every change or only the 1. will get saved
+        // cant do that after every change or only the 1. will get saved, apparently
         userRepository.save(found);
         userRepository.flush();
     }

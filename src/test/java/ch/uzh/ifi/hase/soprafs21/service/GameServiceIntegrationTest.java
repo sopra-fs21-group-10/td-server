@@ -45,8 +45,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
     private User testUser2;
 
-    private static final String BLOCKED = "blocked";
-
     @BeforeEach
     void setup() {
         // order is important
@@ -58,12 +56,12 @@ import static org.junit.jupiter.api.Assertions.*;
         testUser = new User();
         testUser.setUsername("testUser");
         testUser.setPassword("testUser");
-        testUser = userService.createUser(testUser);// tested
+        testUser = userService.createUser(testUser);
 
         testUser2 = new User();
         testUser2.setUsername("testUser2");
         testUser2.setPassword("testUser2");
-        testUser2 = userService.createUser(testUser2);// tested
+        testUser2 = userService.createUser(testUser2);
     }
 
     @Test
@@ -97,7 +95,7 @@ import static org.junit.jupiter.api.Assertions.*;
         assertNull(boardRepository.findByOwner(testUser));
         assertNull(boardRepository.findByOwner(testUser2));
 
-        gameService.createGame(testUser.getUserId(), null);
+        long gameId = gameService.createGame(testUser.getUserId(), null);
 
         // test if game/boards have been created
         assertFalse(gameRepository.findAll().isEmpty());

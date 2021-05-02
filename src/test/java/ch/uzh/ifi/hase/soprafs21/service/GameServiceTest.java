@@ -88,6 +88,12 @@ class GameServiceTest {
     }
 
     @Test
+    void createGame_invalidInputsSinglePlayer_throws() {
+        //given
+        assertThrows(ResponseStatusException.class, () -> gameService.createGame(testUser2.getUserId(), null));// cannot upgrade anymore
+    }
+
+    @Test
     void returnGameInformation_validInputs_success() {
         //given
         dummyGame.setPlayer1Board(dummyBoard);

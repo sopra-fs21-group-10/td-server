@@ -94,6 +94,18 @@ class GameServiceTest {
     }
 
     @Test
+    void createGame_PlayerAlreadyInGame_throws() {
+        //given
+        gameService.createGame(testUser.getUserId(), null);// create game with user
+
+        // makes checkIfPlayerInGame find a board
+        Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
+
+        // new game with same user throws
+        assertThrows(ResponseStatusException.class, () -> gameService.createGame(testUser.getUserId(), null));// cannot upgrade anymore
+    }
+
+    @Test
     void returnGameInformation_validInputs_success() {
         //given
         dummyGame.setPlayer1Board(dummyBoard);

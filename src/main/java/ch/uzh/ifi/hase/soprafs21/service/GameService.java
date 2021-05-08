@@ -323,6 +323,7 @@ public class GameService {
 
         Map<String, Integer> opponentExtraMinions = opponent.getExtraMinions();
 
+        // add minion to player
         if(opponentExtraMinions.containsKey(minionName)){
             opponentExtraMinions.put(minionName, opponent.getExtraMinions().get(minionName)+1);
         }else {
@@ -449,6 +450,7 @@ public class GameService {
         returnMapping.put("weather",board.getWeather());
         returnMapping.put("boardId",board.getBoardId());
         returnMapping.put("board", board.getGameMap());
+        returnMapping.put("extraMinions", board.getExtraMinions());
         return returnMapping;
     }
 

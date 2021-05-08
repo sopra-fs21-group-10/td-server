@@ -117,7 +117,43 @@ class GameServiceTest {
         assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
+        assertEquals(dummyGame.getGameId(), gameGetDTO.getPlayer1().get("gameId"));
+        assertTrue(gameGetDTO.getPlayer1().containsKey("extraMinions"));
+
+        assertNull(gameGetDTO.getPlayer2());//player2
         // etc
+    }
+
+    @Test
+    void returnGameInformation_validInputsMultiPlayer_success() {
+        //given
+        Board board2 = new Board();
+        board2.setOwner(testUser2);
+        board2.setWeather("Clouds");
+
+        dummyGame.setPlayer1Board(dummyBoard);
+        dummyGame.setPlayer2Board(board2);
+
+        Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
+        GameGetDTO gameGetDTO = gameService.returnGameInformation(dummyGame.getGameId());
+
+        // check if board info is correct
+        assertNotNull(gameGetDTO.getPlayer1());
+        assertEquals(50, gameGetDTO.getPlayer1().get("health"));
+        assertEquals(dummyGame.getGameId(), gameGetDTO.getPlayer1().get("gameId"));
+        assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
+        assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
+        assertNotNull(gameGetDTO.getPlayer1().get("weather"));
+        assertTrue(gameGetDTO.getPlayer1().containsKey("extraMinions"));
+        // etc
+
+        assertNotNull(gameGetDTO.getPlayer2());
+        assertEquals(50, gameGetDTO.getPlayer2().get("health"));
+        assertEquals(dummyGame.getGameId(), gameGetDTO.getPlayer2().get("gameId"));
+        assertEquals(100, gameGetDTO.getPlayer2().get("gold"));
+        assertEquals(gameGetDTO.getPlayer2().get("owner"), testUser2.getUsername());
+        assertNotNull(gameGetDTO.getPlayer2().get("weather"));
+        assertTrue(gameGetDTO.getPlayer2().containsKey("extraMinions"));
     }
 
     //_____________________________tower tests_______________________________________
@@ -155,6 +191,15 @@ class GameServiceTest {
     void placeTower_invalidCoordinates_throwsException() {
         //given
         int[] coordinates = new int[]{0,19};
+        dummyBoard.setGold(200);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
+    }
+
+    @Test
+    void placeTower_invalidCoordinates2_throwsException() {
+        //given
+        int[] coordinates = new int[]{-1,10};
         dummyBoard.setGold(200);
 
         assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore

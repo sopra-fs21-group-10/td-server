@@ -48,7 +48,7 @@ public class Board implements Serializable {
     @MapKeyColumn(name="MinionName")
     @Column(name="Cost")
     @CollectionTable(name="extraMinions", joinColumns=@JoinColumn(name="board_id"))
-    Map<String, Integer> extraMinions = new HashMap<>();
+    private Map<String, Integer> extraMinions = new HashMap<>();
 
     public Map<String, Integer> getExtraMinions() {
         return extraMinions;

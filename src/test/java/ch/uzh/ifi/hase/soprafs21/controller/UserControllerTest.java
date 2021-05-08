@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostInDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserUserIdTokenPatchDTO;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -150,32 +151,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
-    void logout_validInput_returnToken() throws Exception {
-        // given
-        User user = new User();
-        user.setUserId(1L);
-        user.setPassword("TestUser");
-        user.setUsername("testUsername");
-        user.setToken("1");
-        user.setStatus(UserStatus.ONLINE);
-
-        UserPostInDTO userPostInDTO = new UserPostInDTO();
-        userPostInDTO.setPassword("TestUser");
-        userPostInDTO.setUsername("testUsername");
-
-        given(userService.userIn(Mockito.any())).willReturn(user);
-        // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder putRequest = put("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userPostInDTO));
-
-        // then
-        mockMvc.perform(putRequest)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token", is(user.getToken())));
-    }
-
-    @Test
     void login_invalidInput_throw() throws Exception {
         // given
         User user = new User();
@@ -201,6 +176,32 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         mockMvc.perform(putRequest)
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException));
+    }
+
+    @Test
+    void logout_validInput_returnToken() throws Exception {
+        // given
+        User user = new User();
+        user.setUserId(1L);
+        user.setPassword("TestUser");
+        user.setUsername("testUsername");
+        user.setToken("TestToken");
+        user.setStatus(UserStatus.ONLINE);
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setToken("TestToken");
+
+        given(userRepository.findByToken(userPostDTO.getToken())).willReturn(user);
+        Mockito.doNothing().when(userService).userLogout(Mockito.any());
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder patchRequest = patch("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostDTO));
+
+        // then
+        mockMvc.perform(patchRequest)
+                .andExpect(status().isOk());
     }
 
     @Test

@@ -35,26 +35,26 @@ public class GameService {
     private final Logger log = LoggerFactory.getLogger(GameService.class);
 
 
-    private final Map<String, Integer> towerLevel1Map = new HashMap<>();
-    {//tower, cost
+    private static final Map<String, Integer> towerLevel1Map = new HashMap<>();
+     static {//tower, cost
         towerLevel1Map.put("FireTower1", 100);
         towerLevel1Map.put("WaterTower1", 200);
     }
 
-    private final Map<String, Integer> towerLevel2Map = new HashMap<>();
-    {//tower, cost
+    private static final Map<String, Integer> towerLevel2Map = new HashMap<>();
+    static {//tower, cost
         towerLevel2Map.put("FireTower2", 200);
         towerLevel2Map.put("WaterTower2", 400);
     }
 
-    private final Map<String, Integer> towerLevel3Map = new HashMap<>();
-    {//tower, cost
+    private static final Map<String, Integer> towerLevel3Map = new HashMap<>();
+    static {//tower, cost
         towerLevel3Map.put("FireTower3", 300);
         towerLevel3Map.put("WaterTower3", 1000);
     }
 
-    private final Map<String, Integer> minionMap = new HashMap<>();
-    {//tower, cost
+    private static final Map<String, Integer> minionMap = new HashMap<>();
+    static {//tower, cost
         minionMap.put("Goblin", 50);
         minionMap.put("goblinOverlord", 500);
     }

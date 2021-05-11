@@ -18,6 +18,9 @@ public class Game implements Serializable {
     @GeneratedValue
     private Long gameId;
 
+    @Column(nullable = false)
+    private int round = 1;
+
     @OneToOne
     private Board player1Board;
 
@@ -46,5 +49,13 @@ public class Game implements Serializable {
 
     public void setPlayer2Board(Board player2Board) {
         this.player2Board = player2Board;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
     }
 }

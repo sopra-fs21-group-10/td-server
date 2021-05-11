@@ -47,15 +47,15 @@ public class Board implements Serializable {
     @ElementCollection
     @MapKeyColumn(name="MinionName")
     @Column(name="Cost")
-    @CollectionTable(name="extraMinions", joinColumns=@JoinColumn(name="board_id"))
-    private Map<String, Integer> extraMinions = new HashMap<>();
+    @CollectionTable(name="Minions", joinColumns=@JoinColumn(name="board_id"))
+    private Map<String, Integer> minions = new HashMap<>();
 
-    public Map<String, Integer> getExtraMinions() {
-        return extraMinions;
+    public Map<String, Integer> getMinions() {
+        return minions;
     }
 
-    public void setExtraMinions(Map<String, Integer> extraMinions) {
-        this.extraMinions = extraMinions;
+    public void setMinions(Map<String, Integer> minions) {
+        this.minions = minions;
     }
 
     public String[][] getGameMap() {

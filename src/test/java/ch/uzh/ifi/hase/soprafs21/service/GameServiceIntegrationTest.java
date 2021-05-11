@@ -115,7 +115,8 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(50, gameGetDTO.getPlayer1().get("health"));
         assertEquals(testUser.getUsername(), gameGetDTO.getPlayer1().get("owner"));
-        assertEquals(gameId, gameGetDTO.getPlayer1().get("gameId"));
+        assertEquals(gameId, gameGetDTO.getGameId());
+        assertEquals(1, gameGetDTO.getRound());
         assertEquals(boardRepository.findByOwner(testUser).getBoardId(), gameGetDTO.getPlayer1().get("boardId"));
         // do not want to test weather, it has been tested before and the calls are limited, checking for same board is uggly
         assertNotNull(gameGetDTO.getPlayer1().get("board"));

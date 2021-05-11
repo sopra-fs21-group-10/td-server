@@ -49,6 +49,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         assertEquals(board.getHealth(), found.getHealth());
         assertEquals(board.getOwner(), found.getOwner());
         assertEquals(board.getWeather(), found.getWeather());
-        assertEquals(board.getExtraMinions(), found.getExtraMinions());
+        assertEquals(board.getMinions(), found.getMinions());
     }
 }

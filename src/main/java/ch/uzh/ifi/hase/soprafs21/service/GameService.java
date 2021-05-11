@@ -125,6 +125,8 @@ public class GameService {
         }
         GameGetDTO gameGetDTO = new GameGetDTO();
         gameGetDTO.setPlayer1(returnPlayerState(player1Board, game));
+        gameGetDTO.setGameId(gameId);
+        gameGetDTO.setRound(game.getRound());
 
         Board player2Board = game.getPlayer2Board();
         if(player2Board != null){//single player
@@ -321,17 +323,17 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient funds");
         }
 
-        Map<String, Integer> opponentExtraMinions = opponent.getExtraMinions();
+        Map<String, Integer> opponentExtraMinions = opponent.getMinions();
 
         // add minion to player
         if(opponentExtraMinions.containsKey(minionName)){
-            opponentExtraMinions.put(minionName, opponent.getExtraMinions().get(minionName)+1);
+            opponentExtraMinions.put(minionName, opponent.getMinions().get(minionName)+1);
         }else {
             opponentExtraMinions.put(minionName, 1);
         }
 
         board.setGold(board.getGold() - cost);//pay
-        opponent.setExtraMinions(opponentExtraMinions);
+        opponent.setMinions(opponentExtraMinions);
 
         boardRepository.saveAndFlush(opponent);
 
@@ -356,6 +358,28 @@ public class GameService {
         if (coordinates[1]>14 ||  coordinates[1]<0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid coordinates");
         }
+    }
+
+    /**
+     * an algorithm which decides which minions to spawn at which point in the game
+     *
+     * @param game where the minions should spawn
+     */
+    private void designWave(Game game){
+        /*
+        this will get messy, with a lot of calculations,
+        but it seems more simple than for example making a behaviour for every round
+         */
+
+        int round = game.getRound();
+
+        if (round % 10 == 0 ){// all 10 rounds
+
+        }
+
+        // increasing round
+        game.setRound(round + 1);
+        gameRepository.saveAndFlush(game);
     }
 
     /**
@@ -446,11 +470,10 @@ public class GameService {
         returnMapping.put("gold",board.getGold());
         returnMapping.put("health",board.getHealth());
         returnMapping.put("owner",board.getOwner().getUsername());
-        returnMapping.put("gameId",game.getGameId());
         returnMapping.put("weather",board.getWeather());
         returnMapping.put("boardId",board.getBoardId());
         returnMapping.put("board", board.getGameMap());
-        returnMapping.put("extraMinions", board.getExtraMinions());
+        returnMapping.put("extraMinions", board.getMinions());
         return returnMapping;
     }
 
@@ -466,7 +489,6 @@ public class GameService {
         }
 
         try {// location should always exist because it is checked before being entered, but for safety
-
             URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+user.getLocation()+"&appid="+System.getenv("WeatherKey"));//last part is the key
 
             ObjectMapper mapper = new ObjectMapper();

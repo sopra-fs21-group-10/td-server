@@ -117,7 +117,8 @@ class GameServiceTest {
         assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
-        assertEquals(dummyGame.getGameId(), gameGetDTO.getPlayer1().get("gameId"));
+        assertEquals(dummyGame.getGameId(), gameGetDTO.getGameId());
+        assertEquals(1, gameGetDTO.getRound());
         assertTrue(gameGetDTO.getPlayer1().containsKey("extraMinions"));
 
         assertNull(gameGetDTO.getPlayer2());//player2
@@ -140,7 +141,8 @@ class GameServiceTest {
         // check if board info is correct
         assertNotNull(gameGetDTO.getPlayer1());
         assertEquals(50, gameGetDTO.getPlayer1().get("health"));
-        assertEquals(dummyGame.getGameId(), gameGetDTO.getPlayer1().get("gameId"));
+        assertEquals(dummyGame.getGameId(), gameGetDTO.getGameId());
+        assertEquals(1, gameGetDTO.getRound());
         assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
@@ -149,7 +151,6 @@ class GameServiceTest {
 
         assertNotNull(gameGetDTO.getPlayer2());
         assertEquals(50, gameGetDTO.getPlayer2().get("health"));
-        assertEquals(dummyGame.getGameId(), gameGetDTO.getPlayer2().get("gameId"));
         assertEquals(100, gameGetDTO.getPlayer2().get("gold"));
         assertEquals(gameGetDTO.getPlayer2().get("owner"), testUser2.getUsername());
         assertNotNull(gameGetDTO.getPlayer2().get("weather"));
@@ -338,10 +339,10 @@ class GameServiceTest {
 
         int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
 
-        System.out.println(dummyBoard.getExtraMinions());
+        System.out.println(dummyBoard.getMinions());
 
         assertEquals(950, newGold);
-        assertEquals(1, board2.getExtraMinions().get("Goblin"));
+        assertEquals(1, board2.getMinions().get("Goblin"));
     }
 
     @Test
@@ -364,7 +365,7 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(900, newGold);
         assertEquals(900, dummyBoard.getGold());
-        assertEquals(2, board2.getExtraMinions().get("Goblin"));
+        assertEquals(2, board2.getMinions().get("Goblin"));
     }
 
     @Test

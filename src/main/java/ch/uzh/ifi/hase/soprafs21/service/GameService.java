@@ -122,13 +122,13 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, "Game board not found");
         }
         GameGetDTO gameGetDTO = new GameGetDTO();
-        gameGetDTO.setPlayer1(returnPlayerState(player1Board, game));
+        gameGetDTO.setPlayer1(returnPlayerState(player1Board));
         gameGetDTO.setGameId(gameId);
         gameGetDTO.setRound(game.getRound());
 
         Board player2Board = game.getPlayer2Board();
         if(player2Board != null){//single player
-            gameGetDTO.setPlayer2(returnPlayerState(player2Board, game));
+            gameGetDTO.setPlayer2(returnPlayerState(player2Board));
         }
         return gameGetDTO;
     }
@@ -303,7 +303,7 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Single-player game (cannot buy minions)");
         }
 
-        if (!(board==game.getPlayer1Board()) && !(board==game.getPlayer2Board())){
+        if ((board != game.getPlayer1Board()) && (board != game.getPlayer2Board())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not in game");
         }
 
@@ -355,7 +355,7 @@ public class GameService {
      * @param game where the minions should spawn
      * @throws ResponseStatusException HTTP
      */
-    private void designWave(Game game) throws Exception{
+    private void designWave(Game game){
         /*
         this will get messy, with a lot of calculations,
         but it seems more simple than for example making a behaviour for every round
@@ -378,7 +378,6 @@ public class GameService {
         for (Board board : players ){
             addMinions(board, "Goblin", 5+2*round);
         }
-
 
         // increasing round
         game.setRound(round + 1);
@@ -487,11 +486,10 @@ public class GameService {
      * returns a representation of a board-state (health, board-setup)
      *
      * @param board whose info is to be returned
-     * @param game to which the board belongs
      * @return map of game-state == {gold:int, health:int, owner: str, ...}
      * @throws ResponseStatusException HTTP
      */
-    private HashMap<String, Object> returnPlayerState(Board board, Game game){
+    private HashMap<String, Object> returnPlayerState(Board board){
         if(board==null){// no board(should never happen but...)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
         }

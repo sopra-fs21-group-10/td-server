@@ -98,7 +98,7 @@ public class LobbyController {
     @PutMapping ("lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){//asking for the lobbyId in the boddy too makes no sense
+    public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){//asking for the lobbyId in the body too makes no sense
         //Player not found
         User userToBeRemoved = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
         //lobby not found

@@ -46,6 +46,7 @@ public class LobbyService {
         log.debug("Created Lobby for User: {}", owner);
         return newLobby.getLobbyId();
     }
+
     public List<Lobby> getLobbies(){
         return this.lobbyRepository.findAll();
     }
@@ -57,6 +58,7 @@ public class LobbyService {
         }
         return lobbyById;
     }
+
     public Lobby addUserToLobby(Long lobbyId,User userToBeAdded){
         Lobby lobby = findLobbyById(lobbyId);
         if(lobby.getPlayer2()!=null){
@@ -67,6 +69,7 @@ public class LobbyService {
         lobbyRepository.saveAndFlush(lobby);
         return lobby;
     }
+
     public Lobby deleteUserFromLobby(Long lobbyId, User userToBeRemoved){
         Lobby lobby = findLobbyById(lobbyId);
         if(lobby.getPlayer2()!=userToBeRemoved&&lobby.getOwner()!=userToBeRemoved){

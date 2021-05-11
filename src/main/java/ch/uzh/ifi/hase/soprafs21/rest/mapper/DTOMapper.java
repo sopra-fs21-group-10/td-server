@@ -45,9 +45,6 @@ public interface DTOMapper {
     @Mapping(source = "status", target = "status")
     UserGetDTO convertEntityToUserGetDTO(User user);
 
-    @Mapping(source = "id", target = "id")  //translate long to dto with only long seems pointless
-    LobbyPostDTO convertEntityToLobbyPostDTO(Long id);
-
     @Mapping(source = "lobbyId", target = "lobbyId")
     LobbyIdDTO convertEntityToLobbyIdDTO(Long lobbyId);
 

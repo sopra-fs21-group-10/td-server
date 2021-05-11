@@ -193,7 +193,7 @@ public class GameService {
         //can I place / is there space
         if (towerLevel1Map.containsKey(towerName)){// tower lvl 1
             String upgraded = towerName.substring(0, towerName.length()-1)+"2";
-            System.out.println(upgraded);
+
             // can I pay for it?
             if (! towerLevel2Map.containsKey(upgraded)){
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower not upgradeable");// there exists no tower on this level

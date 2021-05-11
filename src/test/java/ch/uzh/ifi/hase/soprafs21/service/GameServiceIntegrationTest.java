@@ -97,7 +97,7 @@ import static org.junit.jupiter.api.Assertions.*;
         assertNull(boardRepository.findByOwner(testUser));
         assertNull(boardRepository.findByOwner(testUser2));
 
-        long gameId = gameService.createGame(testUser.getUserId(), null);
+        gameService.createGame(testUser.getUserId(), null);
 
         // test if game/boards have been created
         assertFalse(gameRepository.findAll().isEmpty());

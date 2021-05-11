@@ -339,8 +339,6 @@ class GameServiceTest {
 
         int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
 
-        System.out.println(dummyBoard.getMinions());
-
         assertEquals(950, newGold);
         assertEquals(1, board2.getMinions().get("Goblin"));
     }
@@ -405,7 +403,6 @@ class GameServiceTest {
     @Test
     void buyMinion_SinglePlayer_throws() {
         //given
-        Board board2 = new Board();
         dummyBoard.setGold(1000);
 
         Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);

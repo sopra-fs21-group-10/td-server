@@ -20,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Game Service
@@ -323,19 +321,9 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Insufficient funds");
         }
 
-        Map<String, Integer> opponentExtraMinions = opponent.getMinions();
-
-        // add minion to player
-        if(opponentExtraMinions.containsKey(minionName)){
-            opponentExtraMinions.put(minionName, opponent.getMinions().get(minionName)+1);
-        }else {
-            opponentExtraMinions.put(minionName, 1);
-        }
+        addMinions(opponent, minionName, 1);
 
         board.setGold(board.getGold() - cost);//pay
-        opponent.setMinions(opponentExtraMinions);
-
-        boardRepository.saveAndFlush(opponent);
 
         board = boardRepository.saveAndFlush(board);
 
@@ -361,25 +349,67 @@ public class GameService {
     }
 
     /**
-     * an algorithm which decides which minions to spawn at which point in the game
+     * an algorithm which decides which minions to spawn at which point in the game,
+     * the minions get added to the minion map in the boards
      *
      * @param game where the minions should spawn
+     * @throws ResponseStatusException HTTP
      */
-    private void designWave(Game game){
+    private void designWave(Game game) throws Exception{
         /*
         this will get messy, with a lot of calculations,
         but it seems more simple than for example making a behaviour for every round
          */
+        if(game == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "game does not exist");
+        }
 
         int round = game.getRound();
+        List<Board> players = new ArrayList<>();// iterate over boards to fill in minions
+        players.add(game.getPlayer1Board());
+        if (game.getPlayer2Board()!=null){
+            players.add(game.getPlayer1Board());
+        }
 
         if (round % 10 == 0 ){// all 10 rounds
 
         }
 
+        for (Board board : players ){
+            addMinions(board, "Goblin", 5+2*round);
+        }
+
+
         // increasing round
         game.setRound(round + 1);
         gameRepository.saveAndFlush(game);
+    }
+
+    /**
+     * adds minions to map in board
+     *
+     * @param board board th which the minions should get added
+     * @param minion minion to be added
+     */
+    private void addMinions(Board board, String minion,int number) {
+        if (number <0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "negative number of minions");
+        }
+        // i am assuming the board... is valid,
+        // adding to many ifs in methods that have been called in methods that already test the conditions is pointless/slows program down
+
+        Map<String, Integer> opponentExtraMinions = board.getMinions();
+
+        // add minion to player
+        if(opponentExtraMinions.containsKey(minion)){
+            opponentExtraMinions.put(minion, board.getMinions().get(minion)+number);
+        }else {
+            opponentExtraMinions.put(minion, number);
+        }
+
+        board.setMinions(opponentExtraMinions);
+
+        boardRepository.saveAndFlush(board);
     }
 
     /**

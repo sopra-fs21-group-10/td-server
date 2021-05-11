@@ -40,7 +40,7 @@ class GameServiceTest {
     private Game dummyGame;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         MockitoAnnotations.openMocks(this);
 
         // given
@@ -84,7 +84,8 @@ class GameServiceTest {
         //given
         Mockito.when(userRepository.getOne(testUser2.getUserId())).thenReturn(testUser2);
 
-        gameService.createGame(testUser.getUserId(), testUser2.getUserId());
+        long gameId = gameService.createGame(testUser.getUserId(), testUser2.getUserId());
+        assertEquals(1L, gameId);
     }
 
     @Test

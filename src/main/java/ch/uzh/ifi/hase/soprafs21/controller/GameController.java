@@ -35,17 +35,25 @@ public class GameController {
     public GameGetDTO createGame(@RequestBody GamePostDTO gamePostDTO) {
 
         // create game
-        Long gameId = gameService.createGame(gamePostDTO.getPlayer1Id(), gamePostDTO.getPlayer2Id());
+        long gameId = gameService.createGame(gamePostDTO.getPlayer1Id(), gamePostDTO.getPlayer2Id());
 
         return gameService.returnGameInformation(gameId);// return game-state == getGame
     }
 
+    // token is not being required because this way, the program could get extended to support a spectate mode
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameGetDTO getGame(@PathVariable("gameId") long gameId) {
-
         // return state of game
+        return gameService.returnGameInformation(gameId);
+    }
+
+    @GetMapping("/games/battles/{gameId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public GameGetDTO startBattlePhase(@PathVariable("gameId") long gameId) {
+        // return minionWave
         return gameService.returnGameInformation(gameId);
     }
 
@@ -91,6 +99,7 @@ public class GameController {
         return gameGoldDTO;
     }
 
+    // when multiplayer was still part of the plan
     @PostMapping("/games/minions/{gameId}/{token}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

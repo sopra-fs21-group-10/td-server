@@ -16,6 +16,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameServiceTest {
@@ -76,6 +78,8 @@ class GameServiceTest {
     void createGame_validInputsSinglePlayer_success() {
         //given
         assertEquals(1L, testUser.getUserId());
+
+        //when
         gameService.createGame(testUser.getUserId(), null);
     }
 
@@ -90,8 +94,8 @@ class GameServiceTest {
 
     @Test
     void createGame_invalidInputsSinglePlayer_throws() {
-        //given
-        assertThrows(ResponseStatusException.class, () -> gameService.createGame(testUser2.getUserId(), null));// cannot upgrade anymore
+        //when
+        assertThrows(ResponseStatusException.class, () -> gameService.createGame(testUser2.getUserId(), null));//user does not exist
     }
 
     @Test
@@ -341,7 +345,7 @@ class GameServiceTest {
         int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
 
         assertEquals(950, newGold);
-        assertEquals(1, board2.getMinions().get("Goblin"));
+        assertEquals(1, Collections.frequency(board2.getMinions(), "Goblin"));
     }
 
     @Test
@@ -364,7 +368,7 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(900, newGold);
         assertEquals(900, dummyBoard.getGold());
-        assertEquals(2, board2.getMinions().get("Goblin"));
+        assertEquals(2, Collections.frequency(board2.getMinions(), "Goblin"));
     }
 
     @Test

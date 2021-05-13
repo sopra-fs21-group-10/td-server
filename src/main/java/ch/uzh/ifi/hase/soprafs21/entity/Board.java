@@ -3,8 +3,8 @@ package ch.uzh.ifi.hase.soprafs21.entity;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "BOARD")
@@ -44,17 +44,16 @@ public class Board implements Serializable {
             {null, null, null ,null, null, null, null,null, null, BLOCKED ,null, null, null, null, null}
     };
 
-    @ElementCollection
-    @MapKeyColumn(name="MinionName")
-    @Column(name="Cost")
-    @CollectionTable(name="Minions", joinColumns=@JoinColumn(name="board_id"))
-    private Map<String, Integer> minions = new HashMap<>();
+    @ElementCollection // 1
+    @CollectionTable(name = "minions", joinColumns = @JoinColumn(name = "id")) // 2
+    @Column(name = "minions")
+    private List<String> minions = new ArrayList<>();
 
-    public Map<String, Integer> getMinions() {
+    public List<String> getMinions() {
         return minions;
     }
 
-    public void setMinions(Map<String, Integer> minions) {
+    public void setMinions(List<String> minions) {
         this.minions = minions;
     }
 

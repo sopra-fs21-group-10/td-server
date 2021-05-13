@@ -82,10 +82,10 @@ public class GameService {
         User player1 = userRepository.getOne(player1Id);
 
         if(Objects.isNull(player1Id)|| player1==null){// no player 1
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
         }
         if(checkIfPlayerInGame(player1)){// player 1 already in game
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Players already in game");
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Player 1 already in game");
         }
 
         if(Objects.isNull(player2Id)){// no player 2 == single player
@@ -390,20 +390,18 @@ public class GameService {
      * @param board board th which the minions should get added
      * @param minion minion to be added
      */
-    private void addMinions(Board board, String minion,int number) {
+    private void addMinions(Board board, String minion, int number) {
         if (number <0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "negative number of minions");
         }
         // i am assuming the board... is valid,
         // adding to many ifs in methods that have been called in methods that already test the conditions is pointless/slows program down
 
-        Map<String, Integer> opponentExtraMinions = board.getMinions();
+        List<String> opponentExtraMinions = board.getMinions();
 
         // add minion to player
-        if(opponentExtraMinions.containsKey(minion)){
-            opponentExtraMinions.put(minion, board.getMinions().get(minion)+number);
-        }else {
-            opponentExtraMinions.put(minion, number);
+        for (int i = 0 ; i < number; i++){
+            opponentExtraMinions.add(minion);
         }
 
         board.setMinions(opponentExtraMinions);
@@ -420,7 +418,7 @@ public class GameService {
      */
     private long createSinglePlayer(User player1){
         if(player1==null){// no player
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
         }
 
         Game game = new Game();

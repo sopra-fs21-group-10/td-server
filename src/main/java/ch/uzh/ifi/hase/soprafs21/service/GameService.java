@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameWaveDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.WeatherDTO;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -352,14 +353,16 @@ public class GameService {
      * an algorithm which decides which minions to spawn at which point in the game,
      * the minions get added to the minion map in the boards
      *
-     * @param game where the minions should spawn
+     * @param gameId of game where minions should spawn
      * @throws ResponseStatusException HTTP
      */
-    private void designWave(Game game){
+    public GameWaveDTO designWave(long gameId){
         /*
         this will get messy, with a lot of calculations,
         but it seems more simple than for example making a behaviour for every round
          */
+        Game game = gameRepository.getOne(gameId);
+
         if(game == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "game does not exist");
         }
@@ -382,6 +385,16 @@ public class GameService {
         // increasing round
         game.setRound(round + 1);
         gameRepository.saveAndFlush(game);
+
+        // return
+        GameWaveDTO gameWaveDTO = new GameWaveDTO();
+        gameWaveDTO.setPlayer1Minions(players.get(0).getMinions());
+
+        if (players.size() == 2){// if multi
+            gameWaveDTO.setPlayer2Minions(players.get(1).getMinions());
+        }
+
+        return gameWaveDTO;
     }
 
     /**

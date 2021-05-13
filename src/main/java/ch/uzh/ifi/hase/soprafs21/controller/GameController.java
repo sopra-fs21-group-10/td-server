@@ -52,9 +52,9 @@ public class GameController {
     @GetMapping("/games/battles/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameGetDTO startBattlePhase(@PathVariable("gameId") long gameId) {
-        // return minionWave
-        return gameService.returnGameInformation(gameId);
+    public GameWaveDTO startBattlePhase(@PathVariable("gameId") long gameId) {
+        // add minions
+        return gameService.designWave(gameId);
     }
 
     @PostMapping("/games/towers/{token}")

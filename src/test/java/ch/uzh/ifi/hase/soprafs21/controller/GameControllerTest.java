@@ -39,7 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @MockBean
     private UserService userService;
 
-
     @MockBean
     private BoardRepository boardRepository;
     @MockBean
@@ -69,18 +68,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @Test
     void givenGame_whenGetGame_thenReturnJsonArray() throws Exception {
         // given
-        GameGetDTO gameGetDTO= new GameGetDTO();
+        GameGetDTO gameGetDTO = new GameGetDTO();
 
         // this mocks the Service
-
         given(gameService.returnGameInformation(1L)).willReturn(gameGetDTO);
 
         // when
-        MockHttpServletRequestBuilder postRequest = get("/games/"+ 1)
+        MockHttpServletRequestBuilder getRequest = get("/games/"+ 1)
                 .contentType(MediaType.APPLICATION_JSON);
 
         // then
-        mockMvc.perform(postRequest).andExpect(status().isOk());
+        mockMvc.perform(getRequest).andExpect(status().isOk());
     }
 
     @Test
@@ -172,7 +170,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         gameMinionsPostDTO.setMinion("Goblin");
 
-
         // this mocks the Service/repo
         given(gameService.buyMinion("token",1,"Goblin")).willReturn(54);
 
@@ -184,6 +181,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         // then
         mockMvc.perform(postRequest).andExpect(status().isOk())
                 .andExpect(jsonPath("$.gold", is(54)));
+    }
+
+    @Test
+    void givenGameId_whenStartBattlePhase_thenReturnJsonArray() throws Exception {
+        // given
+//        GameWaveDTO gameWaveDTO = new GameWaveDTO();
+//        List<String> dummyList = new ArrayList<>();
+//        dummyList.add("Goblin");
+//        gameWaveDTO.setPlayer1Minions(dummyList);
+//        gameWaveDTO.setPlayer2Minions(dummyList);
+
+        // this mocks the Service/repo
+//        given(gameService.designWave(1L)).willReturn(gameWaveDTO); // somehow causes an error but works without
+
+        // when
+        MockHttpServletRequestBuilder getRequest = get("/games/battles/"+1)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk());
     }
 
     /**

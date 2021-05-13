@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.GameWaveDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -72,6 +73,8 @@ class GameServiceTest {
         Mockito.when(userRepository.getOne(testUser.getUserId())).thenReturn(testUser);
         Mockito.when(boardRepository.saveAndFlush(Mockito.any())).thenReturn(dummyBoard);
         Mockito.when(gameRepository.save(Mockito.any())).thenReturn(dummyGame);
+        Mockito.when(gameRepository.saveAndFlush(Mockito.any())).thenReturn(dummyGame);
+
     }
 
     @Test
@@ -418,5 +421,39 @@ class GameServiceTest {
                 () -> gameService.buyMinion(testUser.getToken(),
                         dummyGame.getGameId(),  "goblin"));// cannot upgrade anymore
 
+    }
+
+    @Test
+    void designWave_SinglePlayerWave1_success() {
+        //given
+        assertEquals(1, dummyGame.getRound());
+
+        // mock Repositories
+        Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
+
+        // design wave
+        GameWaveDTO gameWaveDTO = gameService.designWave(dummyGame.getGameId());
+
+        // check if minion count/ gold count is correct
+        assertEquals(2, dummyGame.getRound());
+        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
+        assertNull(gameWaveDTO.getPlayer2Minions());
+    }
+
+    @Test
+    void designWave_SinglePlayerWave5_success() {
+        //given
+        dummyGame.setRound(5);
+
+        // mock Repositories
+        Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
+
+        // design wave
+        GameWaveDTO gameWaveDTO = gameService.designWave(dummyGame.getGameId());
+
+        // check if minion count/ gold count is correct
+        assertEquals(6, dummyGame.getRound());
+        assertEquals(5+2*5, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
+        assertNull(gameWaveDTO.getPlayer2Minions());
     }
 }

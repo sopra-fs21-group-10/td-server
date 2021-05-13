@@ -112,7 +112,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
         GameGetDTO gameGetDTO = gameService.returnGameInformation(gameId);
 
-        assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
+        assertEquals(500, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(50, gameGetDTO.getPlayer1().get("health"));
         assertEquals(testUser.getUsername(), gameGetDTO.getPlayer1().get("owner"));
         assertEquals(gameId, gameGetDTO.getGameId());

@@ -122,7 +122,7 @@ class GameServiceTest {
 
         assertNotNull(gameGetDTO.getPlayer1());
         assertEquals(50, gameGetDTO.getPlayer1().get("health"));
-        assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
+        assertEquals(500, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
         assertEquals(dummyGame.getGameId(), gameGetDTO.getGameId());
@@ -151,7 +151,7 @@ class GameServiceTest {
         assertEquals(50, gameGetDTO.getPlayer1().get("health"));
         assertEquals(dummyGame.getGameId(), gameGetDTO.getGameId());
         assertEquals(1, gameGetDTO.getRound());
-        assertEquals(100, gameGetDTO.getPlayer1().get("gold"));
+        assertEquals(500, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
         assertTrue(gameGetDTO.getPlayer1().containsKey("extraMinions"));
@@ -159,7 +159,7 @@ class GameServiceTest {
 
         assertNotNull(gameGetDTO.getPlayer2());
         assertEquals(50, gameGetDTO.getPlayer2().get("health"));
-        assertEquals(100, gameGetDTO.getPlayer2().get("gold"));
+        assertEquals(500, gameGetDTO.getPlayer2().get("gold"));
         assertEquals(gameGetDTO.getPlayer2().get("owner"), testUser2.getUsername());
         assertNotNull(gameGetDTO.getPlayer2().get("weather"));
         assertTrue(gameGetDTO.getPlayer2().containsKey("extraMinions"));

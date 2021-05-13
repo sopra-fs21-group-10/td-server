@@ -371,7 +371,7 @@ public class GameService {
         List<Board> players = new ArrayList<>();// iterate over boards to fill in minions
         players.add(game.getPlayer1Board());
         if (game.getPlayer2Board()!=null){
-            players.add(game.getPlayer1Board());
+            players.add(game.getPlayer2Board());
         }
 
         if (round % 10 == 0 ){// all 10 rounds

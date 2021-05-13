@@ -441,6 +441,26 @@ class GameServiceTest {
     }
 
     @Test
+    void designWave_MultilayerWave1_success() {
+        //given
+        assertEquals(1, dummyGame.getRound());
+        Board board2 = new Board();
+        dummyGame.setPlayer2Board(board2);
+
+        // mock Repositories
+        Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
+
+        // design wave
+        GameWaveDTO gameWaveDTO = gameService.designWave(dummyGame.getGameId());
+
+        // check if minion count/ gold count is correct
+        assertEquals(2, dummyGame.getRound());
+        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
+        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer2Minions(), "Goblin") );
+
+    }
+
+    @Test
     void designWave_SinglePlayerWave5_success() {
         //given
         dummyGame.setRound(5);
@@ -455,5 +475,13 @@ class GameServiceTest {
         assertEquals(6, dummyGame.getRound());
         assertEquals(5+2*5, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
         assertNull(gameWaveDTO.getPlayer2Minions());
+    }
+
+    @Test
+    void designWave_noGame_throws() {
+        //  this shows that sonarcloud is wrong
+        //  (it indicates that "game == null" is always false, which is not true
+        assertThrows(ResponseStatusException.class,
+                () -> gameService.designWave(69L));// cannot upgrade anymore
     }
 }

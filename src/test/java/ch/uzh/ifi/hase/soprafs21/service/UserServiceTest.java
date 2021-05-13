@@ -183,10 +183,7 @@ class UserServiceTest {
 
         userService.createUser(testUser);//tested above
 
-        //when
-
-        //then
-        //no user
+        //when no user
         assertThrows(ResponseStatusException.class, () ->
                 userService.editProfile(null, null,"password123", null));
     }
@@ -201,16 +198,40 @@ class UserServiceTest {
         testUser.setPassword("testPassword");
 
         User user2 = new User();
-
         User createdUser = userService.createUser(testUser);//tested above
 
         //when
         given(userRepository.findByUsername(Mockito.any())).willReturn(user2);
 
-
         //then
         assertThrows(ResponseStatusException.class, () ->
                 userService.editProfile(createdUser,null,"password123", null));
 
+    }
+
+    @Test
+    void checkIfUserExistByToken_success() {
+        //given
+
+        given(userRepository.findByToken(Mockito.any())).willReturn(testUser);
+        //when
+        User returnedUser = userService.checkIfUserExistByToken( testUser.getToken());
+
+        //then
+        assertEquals(testUser, returnedUser);
+    }
+
+    @Test
+    void checkIfUserExistByToken_noToken_throw() {
+        //then
+        assertThrows(ResponseStatusException.class, () ->
+                userService.checkIfUserExistByToken( null));
+    }
+
+    @Test
+    void checkIfUserExistByToken_notFound_throw() {
+        //then
+        assertThrows(ResponseStatusException.class, () ->
+                userService.checkIfUserExistByToken( "hewrwfqf"));
     }
 }

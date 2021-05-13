@@ -23,7 +23,7 @@ public class Board implements Serializable {
     private int health = 50;
 
     @Column(nullable = false)
-    private int gold = 100;
+    private int gold = 500;
 
     @Column(nullable = false)
     private String weather;

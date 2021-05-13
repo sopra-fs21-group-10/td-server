@@ -457,7 +457,6 @@ class GameServiceTest {
         assertEquals(2, dummyGame.getRound());
         assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
         assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer2Minions(), "Goblin") );
-
     }
 
     @Test

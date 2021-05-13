@@ -49,6 +49,16 @@ public class GameController {
         return gameService.returnGameInformation(gameId);
     }
 
+    @PatchMapping("/games/{token}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void updateGameState(@PathVariable("token") String token, @RequestBody GameUpdateDTO gameUpdateDTO) {
+
+        // method to update
+
+        // throws error if game is lost
+    }
+
     @GetMapping("/games/battles/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

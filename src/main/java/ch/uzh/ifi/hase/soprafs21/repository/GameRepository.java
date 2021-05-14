@@ -10,4 +10,3 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends JpaRepository<Game, Long> {
     Game findGameByPlayer1Board(Board player);
 }
-

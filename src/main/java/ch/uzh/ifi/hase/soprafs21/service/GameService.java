@@ -141,7 +141,7 @@ public class GameService {
      * @param gold new gold of player
      * @param health new health of player
      */
-    public void updateGameState(User player, int gold, int health){
+    public boolean updateGameState(User player, int gold, int health){
         Board board = boardRepository.findByOwner(player);
 
         if(board==null){// no player 1 board
@@ -163,13 +163,14 @@ public class GameService {
             log.debug("deleted board: {}", board);
             // +delete player 2 board if multi
 
-            return;
+            return false;
         }
 
         board.setGold(gold);
         board.setHealth(health);
 
         boardRepository.saveAndFlush(board);
+        return true;
     }
 
     /**

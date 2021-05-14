@@ -116,7 +116,6 @@ class GameServiceTest {
     @Test
     void returnGameInformation_validInputs_success() {
         //given
-        dummyGame.setPlayer1Board(dummyBoard);
         Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
         GameGetDTO gameGetDTO = gameService.returnGameInformation(dummyGame.getGameId());
 
@@ -140,7 +139,6 @@ class GameServiceTest {
         board2.setOwner(testUser2);
         board2.setWeather("Clouds");
 
-        dummyGame.setPlayer1Board(dummyBoard);
         dummyGame.setPlayer2Board(board2);
 
         Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
@@ -165,6 +163,25 @@ class GameServiceTest {
         assertTrue(gameGetDTO.getPlayer2().containsKey("extraMinions"));
     }
 
+    @Test
+    void updateGameState_validInputs_success() {
+        //given
+        Mockito.when( boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
+
+        // when
+        boolean continuing = gameService.updateGameState(testUser, 50, 1);
+
+        // check if board info is correct
+        assertEquals(50,dummyBoard.getGold());
+        assertEquals(1,dummyBoard.getHealth());
+        assertEquals(true, continuing);
+
+    }
+
+    @Test
+    void updateGameState_noBoard_throw() {
+        assertThrows(ResponseStatusException.class, () -> gameService.updateGameState(testUser, 50, 1));// cannot upgrade anymore
+    }
     //_____________________________tower tests_______________________________________
     @Test
     void placeTower_validInputs_success() {

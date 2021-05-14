@@ -133,11 +133,12 @@ import static org.junit.jupiter.api.Assertions.*;
         assertNotNull(boardRepository.findByOwner(testUser));
 
         // when
-        gameService.updateGameState(testUser, 700, -3);
+        boolean continuing = gameService.updateGameState(testUser, 700, -3);
 
         // then
         assertEquals(new ArrayList<>(), boardRepository.findAll());
         assertEquals(new ArrayList<>(), gameRepository.findAll());
+        assertEquals(false, continuing);
     }
 
     @Test

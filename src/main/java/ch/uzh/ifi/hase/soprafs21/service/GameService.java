@@ -151,9 +151,19 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Gold cannot be negative");
         }
 
-        if(health < 1){
-            // game over
-            // delete board/game
+        if(health < 1){// game over
+            // don't need to check if player 2 because only single player
+
+            Game game = gameRepository.findLobbyByPlayer1Board(board);
+
+            // delete unused game to be able to create a new one
+            gameRepository.delete(game);
+            log.debug("deleted Game: {}", game);
+            boardRepository.delete(board);
+            log.debug("deleted board: {}", board);
+            // +delete player 2 board if multi
+
+            return;
         }
 
         board.setGold(gold);

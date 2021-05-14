@@ -154,7 +154,7 @@ public class GameService {
         if(health < 1){// game over
             // don't need to check if player 2 because only single player
 
-            Game game = gameRepository.findLobbyByPlayer1Board(board);
+            Game game = gameRepository.findGameByPlayer1Board(board);
 
             // delete unused game to be able to create a new one
             gameRepository.delete(game);

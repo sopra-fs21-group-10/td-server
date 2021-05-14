@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -122,6 +124,20 @@ import static org.junit.jupiter.api.Assertions.*;
         assertNotNull(gameGetDTO.getPlayer1().get("board"));
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
 
+    }
+
+    @Test
+    void updateGameState_SinglePlayerNoHeathLeft_success() {
+        // given
+        Long gameId = gameService.createGame(testUser.getUserId(), null); //tested
+        assertNotNull(boardRepository.findByOwner(testUser));
+
+        // when
+        gameService.updateGameState(testUser, 700, -3);
+
+        // then
+        assertEquals(new ArrayList<>(), boardRepository.findAll());
+        assertEquals(new ArrayList<>(), gameRepository.findAll());
     }
 
     @Test

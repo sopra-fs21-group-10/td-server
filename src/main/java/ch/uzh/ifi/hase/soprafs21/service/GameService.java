@@ -135,6 +135,34 @@ public class GameService {
     }
 
     /**
+     * Changes health and gold of player according to information given
+     *
+     * @param player player whose board is being changed
+     * @param gold new gold of player
+     * @param health new health of player
+     */
+    public void updateGameState(User player, int gold, int health){
+        Board board = boardRepository.findByOwner(player);
+
+        if(board==null){// no player 1 board
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
+        if (gold<0){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Gold cannot be negative");
+        }
+
+        if(health < 1){
+            // game over
+            // delete board/game
+        }
+
+        board.setGold(gold);
+        board.setHealth(health);
+
+        boardRepository.saveAndFlush(board);
+    }
+
+    /**
      * Places a tower on the board and adjusts the gold of the owner
      *
      * @param board target board to place tower

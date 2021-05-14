@@ -41,6 +41,7 @@ public class GameController {
     }
 
     // token is not being required because this way, the program could get extended to support a spectate mode
+    // this method was more useful(like many),when multiplayer was still on the table
     @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -53,9 +54,10 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void updateGameState(@PathVariable("token") String token, @RequestBody GameUpdateDTO gameUpdateDTO) {
+        User player = userRepository.findByToken(token);
 
         // method to update
-
+        gameService.updateGameState(player, gameUpdateDTO.getGold(), gameUpdateDTO.getHealth());
         // throws error if game is lost
     }
 

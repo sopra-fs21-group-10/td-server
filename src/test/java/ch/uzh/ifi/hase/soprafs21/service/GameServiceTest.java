@@ -186,10 +186,14 @@ class GameServiceTest {
     //_____________________________tower tests_______________________________________
     @Test
     void placeTower_validInputs_success() {
+        // given
         int[] coordinates = new int[]{0,14};
         dummyBoard.setGold(200);
+
+        // when
         int newGold = gameService.placeTower(dummyBoard, coordinates, "FireTower1");
 
+        // then
         assertEquals(100, newGold);
     }
 
@@ -199,6 +203,7 @@ class GameServiceTest {
         int[] coordinates = new int[]{0,1};
         dummyBoard.setGold(200);
 
+        // when
         assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
     }
 
@@ -211,7 +216,7 @@ class GameServiceTest {
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// tested
 
         //place 2. tower at same location
-        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));
     }
 
     @Test
@@ -220,7 +225,7 @@ class GameServiceTest {
         int[] coordinates = new int[]{0,19};
         dummyBoard.setGold(200);
 
-        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));
     }
 
     @Test
@@ -229,7 +234,16 @@ class GameServiceTest {
         int[] coordinates = new int[]{-1,10};
         dummyBoard.setGold(200);
 
-        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));
+    }
+
+    @Test
+    void placeTower_invalidCoordinates3_throwsException() {
+        //given
+        int[] coordinates = new int[]{0,4,3};
+        dummyBoard.setGold(200);
+
+        assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));
     }
 
     @Test

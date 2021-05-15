@@ -123,7 +123,6 @@ import static org.junit.jupiter.api.Assertions.*;
         // do not want to test weather, it has been tested before and the calls are limited, checking for same board is uggly
         assertNotNull(gameGetDTO.getPlayer1().get("board"));
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
-
     }
 
     @Test

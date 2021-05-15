@@ -4,10 +4,7 @@ import ch.uzh.ifi.hase.soprafs21.entity.Board;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.BoardRepository;
 import ch.uzh.ifi.hase.soprafs21.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameMinionsPostDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GameMoveDTO;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.GamePostDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs21.service.GameService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,6 +19,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -184,23 +184,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
-    void givenGameId_whenStartBattlePhase_thenReturnJsonArray() throws Exception {
-        // given
-//        GameWaveDTO gameWaveDTO = new GameWaveDTO();
-//        List<String> dummyList = new ArrayList<>();
-//        dummyList.add("Goblin");
-//        gameWaveDTO.setPlayer1Minions(dummyList);
-//        gameWaveDTO.setPlayer2Minions(dummyList);
+    void givenToken_whenStartBattlePhase_thenReturnJsonArray() throws Exception {
+//         given
+        GameWaveDTO gameWaveDTO = new GameWaveDTO();
+        List<String> dummyList = new ArrayList<>();
+        dummyList.add("Goblin");
+        gameWaveDTO.setPlayer1Minions(dummyList);
+        gameWaveDTO.setPlayer2Minions(dummyList);
 
         // this mocks the Service/repo
-//        given(gameService.designWave(1L)).willReturn(gameWaveDTO); // somehow causes an error but works without
+        given(gameService.designWave(Mockito.any())).willReturn(gameWaveDTO); // somehow causes an error but works without
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/games/battles/"+1)
+        MockHttpServletRequestBuilder getRequest = get("/games/battles/token")
                 .contentType(MediaType.APPLICATION_JSON);
 
         // then
-        mockMvc.perform(getRequest).andExpect(status().isOk());
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+            .andExpect(jsonPath("$.player1Minions", is(dummyList)));
+    }
+
+    @Test
+    void givenToken_whenLeaveGame_thenReturnJsonArray() throws Exception {
+        // given
+        Mockito.doNothing().when(gameService).endGame(Mockito.any());
+
+        // when
+        MockHttpServletRequestBuilder deleteRequest = delete("/games/token")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // then
+        mockMvc.perform(deleteRequest).andExpect(status().isOk());
     }
 
     /**

@@ -174,6 +174,27 @@ public class GameService {
     }
 
     /**
+     * ending the game, if the player leaves
+     *
+     * @param player user whose game is being deleted
+     */
+    public void endGame(User player){
+        // very similar to update game, but making one method out of it would make this one very strange
+        Board board = boardRepository.findByOwner(player);
+
+        if(board==null){// no board found
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
+        }
+        Game game = gameRepository.findGameByPlayer1Board(board);
+
+        // delete unused game to be able to create a new one
+        gameRepository.delete(game);
+        log.debug("deleted Game: {}", game);
+        boardRepository.delete(board);
+        log.debug("deleted board: {}", board);
+    }
+
+    /**
      * Places a tower on the board and adjusts the gold of the owner
      *
      * @param board target board to place tower
@@ -392,15 +413,16 @@ public class GameService {
      * an algorithm which decides which minions to spawn at which point in the game,
      * the minions get added to the minion map in the boards
      *
-     * @param gameId of game where minions should spawn
+     * @param player of game where minions should spawn
      * @throws ResponseStatusException HTTP
      */
-    public GameWaveDTO designWave(long gameId){
+    public GameWaveDTO designWave(User player){
         /*
         this will get messy, with a lot of calculations,
         but it seems more simple than for example making a behaviour for every round
          */
-        Game game = gameRepository.getOne(gameId);
+        Board foundBoard = boardRepository.findByOwner(player);
+        Game game = gameRepository.findGameByPlayer1Board(foundBoard);
 
         if(game == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "game does not exist");

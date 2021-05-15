@@ -443,10 +443,11 @@ class GameServiceTest {
         assertEquals(1, dummyGame.getRound());
 
         // mock Repositories
-        Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
+
+        Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
 
         // design wave
-        GameWaveDTO gameWaveDTO = gameService.designWave(dummyGame.getGameId());
+        GameWaveDTO gameWaveDTO = gameService.designWave(testUser);
 
         // check if minion count/ gold count is correct
         assertEquals(2, dummyGame.getRound());
@@ -462,10 +463,10 @@ class GameServiceTest {
         dummyGame.setPlayer2Board(board2);
 
         // mock Repositories
-        Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
+        Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
 
         // design wave
-        GameWaveDTO gameWaveDTO = gameService.designWave(dummyGame.getGameId());
+        GameWaveDTO gameWaveDTO = gameService.designWave(testUser);
 
         // check if minion count/ gold count is correct
         assertEquals(2, dummyGame.getRound());
@@ -479,10 +480,10 @@ class GameServiceTest {
         dummyGame.setRound(5);
 
         // mock Repositories
-        Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
+        Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
 
         // design wave
-        GameWaveDTO gameWaveDTO = gameService.designWave(dummyGame.getGameId());
+        GameWaveDTO gameWaveDTO = gameService.designWave(testUser);
 
         // check if minion count/ gold count is correct
         assertEquals(6, dummyGame.getRound());
@@ -495,6 +496,6 @@ class GameServiceTest {
         //  this shows that sonarcloud is wrong
         //  (it indicates that "game == null" is always false, which is not true
         assertThrows(ResponseStatusException.class,
-                () -> gameService.designWave(69L));// cannot upgrade anymore
+                () -> gameService.designWave(testUser2));// cannot upgrade anymore
     }
 }

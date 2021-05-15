@@ -56,20 +56,30 @@ public class GameController {
     public GameContinueDTO updateGameState(@PathVariable("token") String token, @RequestBody GameUpdateDTO gameUpdateDTO) {
         User player = userRepository.findByToken(token);
 
-        // method to update
-        GameContinueDTO gameContinueDTO = new GameContinueDTO();
-        // throws error if game is lost
+        GameContinueDTO gameContinueDTO = new GameContinueDTO();// return bool if game should continue
+
         gameContinueDTO.setContinuing(gameService.updateGameState(player, gameUpdateDTO.getGold(), gameUpdateDTO.getHealth()));
 
         return gameContinueDTO;
     }
 
-    @GetMapping("/games/battles/{gameId}")
+    @DeleteMapping("/games/{token}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameWaveDTO startBattlePhase(@PathVariable("gameId") long gameId) {
+    public void leaveGame(@PathVariable("token") String token) {
+        User player = userRepository.findByToken(token);
+
+        // delete game
+        gameService.endGame(player);
+    }
+
+    @GetMapping("/games/battles/{token}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public GameWaveDTO startBattlePhase(@PathVariable("token") String token) {
+        User player = userRepository.findByToken(token);
         // add minions
-        return gameService.designWave(gameId);
+        return gameService.designWave(player);
     }
 
     @PostMapping("/games/towers/{token}")

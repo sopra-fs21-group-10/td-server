@@ -74,7 +74,6 @@ class GameServiceTest {
         Mockito.when(boardRepository.saveAndFlush(Mockito.any())).thenReturn(dummyBoard);
         Mockito.when(gameRepository.save(Mockito.any())).thenReturn(dummyGame);
         Mockito.when(gameRepository.saveAndFlush(Mockito.any())).thenReturn(dummyGame);
-
     }
 
     @Test
@@ -180,7 +179,10 @@ class GameServiceTest {
 
     @Test
     void updateGameState_noBoard_throw() {
-        assertThrows(ResponseStatusException.class, () -> gameService.updateGameState(testUser, 50, 1));// cannot upgrade anymore
+        // given
+        assertNull(boardRepository.findByOwner(testUser));
+        // when
+        assertThrows(ResponseStatusException.class, () -> gameService.updateGameState(testUser, 50, 1));// board does not exist
     }
     //_____________________________tower tests_______________________________________
     @Test
@@ -322,7 +324,6 @@ class GameServiceTest {
 
         int newGold = gameService.sellTower(dummyBoard, coordinates);
 
-
         assertEquals(840, newGold);
     }
 
@@ -360,7 +361,6 @@ class GameServiceTest {
         Mockito.when(userRepository.findByToken(testUser.getToken())).thenReturn(testUser);
         Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
         Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
-
 
         int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
 
@@ -405,7 +405,6 @@ class GameServiceTest {
         assertThrows(ResponseStatusException.class,
                 () -> gameService.buyMinion(testUser.getToken(),
                         dummyGame.getGameId(),  "Goblindqwdqwd"));// cannot upgrade anymore
-
     }
 
     @Test
@@ -422,7 +421,6 @@ class GameServiceTest {
         assertThrows(ResponseStatusException.class,
                 () -> gameService.buyMinion(testUser.getToken(),
                         dummyGame.getGameId(),  "Goblin"));// cannot upgrade anymore
-
     }
 
     @Test
@@ -437,7 +435,6 @@ class GameServiceTest {
         assertThrows(ResponseStatusException.class,
                 () -> gameService.buyMinion(testUser.getToken(),
                         dummyGame.getGameId(),  "goblin"));// cannot upgrade anymore
-
     }
 
     @Test

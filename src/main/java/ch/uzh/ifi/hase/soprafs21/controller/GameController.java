@@ -53,12 +53,15 @@ public class GameController {
     @PatchMapping("/games/{token}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void updateGameState(@PathVariable("token") String token, @RequestBody GameUpdateDTO gameUpdateDTO) {
+    public GameContinueDTO updateGameState(@PathVariable("token") String token, @RequestBody GameUpdateDTO gameUpdateDTO) {
         User player = userRepository.findByToken(token);
 
         // method to update
-        gameService.updateGameState(player, gameUpdateDTO.getGold(), gameUpdateDTO.getHealth());
+        GameContinueDTO gameContinueDTO = new GameContinueDTO();
         // throws error if game is lost
+        gameContinueDTO.setContinuing(gameService.updateGameState(player, gameUpdateDTO.getGold(), gameUpdateDTO.getHealth()));
+
+        return gameContinueDTO;
     }
 
     @GetMapping("/games/battles/{gameId}")

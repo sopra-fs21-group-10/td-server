@@ -208,6 +208,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     void givenToken_whenLeaveGame_thenReturnJsonArray() throws Exception {
         // given
         Mockito.doNothing().when(gameService).endGame(Mockito.any());
+        // i do not need to mock findByToken, because i don't enter designWave
 
         // when
         MockHttpServletRequestBuilder deleteRequest = delete("/games/token")
@@ -215,6 +216,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // then
         mockMvc.perform(deleteRequest).andExpect(status().isOk());
+    }
+
+    @Test
+    void givenTokenAndDTO_whenUpdateGameState_thenReturnJsonArray() throws Exception {
+        // given
+        GameUpdateDTO gameUpdateDTO = new GameUpdateDTO();
+
+        // I do not need to mock findByToken, because i don't enter designWave
+        given(gameService.updateGameState(Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).willReturn(true); // somehow causes an error but works without
+
+        // when
+        MockHttpServletRequestBuilder patchRequest = patch("/games/token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(gameUpdateDTO));
+
+        // then
+        mockMvc.perform(patchRequest).andExpect(status().isOk());
     }
 
     /**

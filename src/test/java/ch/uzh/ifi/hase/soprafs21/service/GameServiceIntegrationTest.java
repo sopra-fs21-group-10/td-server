@@ -129,7 +129,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     void updateGameState_SinglePlayerNoHeathLeft_success() {
         // given
-        Long gameId = gameService.createGame(testUser.getUserId(), null); //tested
+        gameService.createGame(testUser.getUserId(), null); //tested
         assertNotNull(boardRepository.findByOwner(testUser));
 
         // when
@@ -138,12 +138,26 @@ import static org.junit.jupiter.api.Assertions.*;
         // then
         assertEquals(new ArrayList<>(), boardRepository.findAll());
         assertEquals(new ArrayList<>(), gameRepository.findAll());
-        assertEquals(false, continuing);
+        assertFalse(continuing);
     }
 
     @Test
     void createMultiPlayer_SameUser_throwsException() {
         assertThrows(ResponseStatusException.class,
                 () -> gameService.createGame(testUser.getUserId(), testUser.getUserId()));
+    }
+
+    @Test
+    void endGame_SinglePlayer_success() {
+        // given
+        gameService.createGame(testUser.getUserId(), null); //tested
+        assertNotNull(boardRepository.findByOwner(testUser));
+
+        // when
+        gameService.endGame(testUser);
+
+        // then
+        assertEquals(new ArrayList<>(), boardRepository.findAll());
+        assertEquals(new ArrayList<>(), gameRepository.findAll());
     }
 }

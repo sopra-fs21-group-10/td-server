@@ -173,8 +173,7 @@ class GameServiceTest {
         // check if board info is correct
         assertEquals(50,dummyBoard.getGold());
         assertEquals(1,dummyBoard.getHealth());
-        assertEquals(true, continuing);
-
+        assertTrue(continuing);
     }
 
     @Test

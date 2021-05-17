@@ -451,7 +451,7 @@ class GameServiceTest {
     }
 
     @Test
-    void designWave_SinglePlayerWave1_success() {
+    void startBattlePhase_SinglePlayerWave1_success() {
         //given
         assertEquals(1, dummyGame.getRound());
 
@@ -460,7 +460,7 @@ class GameServiceTest {
         Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
 
         // design wave
-        GameWaveDTO gameWaveDTO = gameService.designWave(testUser);
+        GameWaveDTO gameWaveDTO = gameService.startBattlePhase(testUser);
 
         // check if minion count/ gold count is correct
         assertEquals(2, dummyGame.getRound());
@@ -469,9 +469,10 @@ class GameServiceTest {
     }
 
     @Test
-    void designWave_MultilayerWave1_success() {
+    void startBattlePhase_MultilayerWave1_success() {
         //given
         assertEquals(1, dummyGame.getRound());
+        dummyBoard.setGold(1000);
         Board board2 = new Board();
         dummyGame.setPlayer2Board(board2);
 
@@ -479,36 +480,39 @@ class GameServiceTest {
         Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
 
         // design wave
-        GameWaveDTO gameWaveDTO = gameService.designWave(testUser);
+        GameWaveDTO gameWaveDTO = gameService.startBattlePhase(testUser);
 
         // check if minion count/ gold count is correct
         assertEquals(2, dummyGame.getRound());
+        assertEquals(1100, dummyBoard.getGold());
         assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
         assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer2Minions(), "Goblin") );
     }
 
     @Test
-    void designWave_SinglePlayerWave5_success() {
+    void startBattlePhase_SinglePlayerWave5_success() {
         //given
         dummyGame.setRound(5);
+        dummyBoard.setGold(1000);
 
         // mock Repositories
         Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
 
         // design wave
-        GameWaveDTO gameWaveDTO = gameService.designWave(testUser);
+        GameWaveDTO gameWaveDTO = gameService.startBattlePhase(testUser);
 
         // check if minion count/ gold count is correct
         assertEquals(6, dummyGame.getRound());
+        assertEquals(1100, dummyBoard.getGold());
         assertEquals(5+2*5, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
         assertNull(gameWaveDTO.getPlayer2Minions());
     }
 
     @Test
-    void designWave_noGame_throws() {
+    void startBattlePhase_noGame_throws() {
         //  this shows that sonarcloud is wrong
         //  (it indicates that "game == null" is always false, which is not true
         assertThrows(ResponseStatusException.class,
-                () -> gameService.designWave(testUser2));// cannot upgrade anymore
+                () -> gameService.startBattlePhase(testUser2));// cannot upgrade anymore
     }
 }

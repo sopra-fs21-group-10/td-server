@@ -195,6 +195,58 @@ public class GameService {
     }
 
     /**
+     * an algorithm which decides which minions to spawn at which point in the game,
+     * the minions get added to the minion map in the boards
+     *
+     * @param player of game where minions should spawn
+     * @throws ResponseStatusException HTTP
+     */
+    public GameWaveDTO startBattlePhase(User player){
+        /*
+        this will get messy, with a lot of calculations,
+        but it seems more simple than for example making a behaviour for every round
+         */
+        Board foundBoard = boardRepository.findByOwner(player);
+        Game game = gameRepository.findGameByPlayer1Board(foundBoard);
+        double interestRate = 1.1;
+
+        if(game == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "game does not exist");
+        }
+
+        int round = game.getRound();
+        List<Board> players = new ArrayList<>();// iterate over boards to fill in minions
+        players.add(game.getPlayer1Board());
+        if (game.getPlayer2Board()!=null){
+            players.add(game.getPlayer2Board());
+        }
+
+        if (round % 10 == 0 ){// all 10 rounds
+
+        }
+
+        for (Board board : players ){// always happens
+            addMinions(board, "Goblin", 5+2*round);
+
+            board.setGold((int)(board.getGold() * interestRate));// 10% interest gained on start of battle phase
+        }
+
+        // increasing round
+        game.setRound(round + 1);
+        gameRepository.saveAndFlush(game);
+
+        // return
+        GameWaveDTO gameWaveDTO = new GameWaveDTO();
+        gameWaveDTO.setPlayer1Minions(players.get(0).getMinions());
+
+        if (players.size() == 2){// if multi
+            gameWaveDTO.setPlayer2Minions(players.get(1).getMinions());
+        }
+
+        return gameWaveDTO;
+    }
+
+    /**
      * Places a tower on the board and adjusts the gold of the owner
      *
      * @param board target board to place tower
@@ -407,55 +459,6 @@ public class GameService {
         if (coordinates[1]>14 ||  coordinates[1]<0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid coordinates");
         }
-    }
-
-    /**
-     * an algorithm which decides which minions to spawn at which point in the game,
-     * the minions get added to the minion map in the boards
-     *
-     * @param player of game where minions should spawn
-     * @throws ResponseStatusException HTTP
-     */
-    public GameWaveDTO designWave(User player){
-        /*
-        this will get messy, with a lot of calculations,
-        but it seems more simple than for example making a behaviour for every round
-         */
-        Board foundBoard = boardRepository.findByOwner(player);
-        Game game = gameRepository.findGameByPlayer1Board(foundBoard);
-
-        if(game == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "game does not exist");
-        }
-
-        int round = game.getRound();
-        List<Board> players = new ArrayList<>();// iterate over boards to fill in minions
-        players.add(game.getPlayer1Board());
-        if (game.getPlayer2Board()!=null){
-            players.add(game.getPlayer2Board());
-        }
-
-        if (round % 10 == 0 ){// all 10 rounds
-
-        }
-
-        for (Board board : players ){
-            addMinions(board, "Goblin", 5+2*round);
-        }
-
-        // increasing round
-        game.setRound(round + 1);
-        gameRepository.saveAndFlush(game);
-
-        // return
-        GameWaveDTO gameWaveDTO = new GameWaveDTO();
-        gameWaveDTO.setPlayer1Minions(players.get(0).getMinions());
-
-        if (players.size() == 2){// if multi
-            gameWaveDTO.setPlayer2Minions(players.get(1).getMinions());
-        }
-
-        return gameWaveDTO;
     }
 
     /**

@@ -79,7 +79,7 @@ public class GameController {
     public GameWaveDTO startBattlePhase(@PathVariable("token") String token) {
         User player = userRepository.findByToken(token);
         // add minions
-        return gameService.designWave(player);
+        return gameService.startBattlePhase(player);
     }
 
     @PostMapping("/games/towers/{token}")

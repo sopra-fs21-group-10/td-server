@@ -193,7 +193,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         gameWaveDTO.setPlayer2Minions(dummyList);
 
         // this mocks the Service/repo
-        given(gameService.designWave(Mockito.any())).willReturn(gameWaveDTO); // somehow causes an error but works without
+        given(gameService.startBattlePhase(Mockito.any())).willReturn(gameWaveDTO); // somehow causes an error but works without
 
         // when
         MockHttpServletRequestBuilder getRequest = get("/games/battles/token")

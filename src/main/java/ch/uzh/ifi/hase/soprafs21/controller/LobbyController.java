@@ -3,7 +3,10 @@ package ch.uzh.ifi.hase.soprafs21.controller;
 import ch.uzh.ifi.hase.soprafs21.constant.PlayerLobbyStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.*;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbiesGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyByIdGetDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyIdDTO;
+import ch.uzh.ifi.hase.soprafs21.rest.dto.TokenDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -79,7 +82,7 @@ public class LobbyController {
     @PatchMapping("lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public LobbyByIdGetDTO joinALobby(@PathVariable("lobbyId") Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){
+    public LobbyByIdGetDTO joinALobby(@PathVariable("lobbyId") Long lobbyId, @RequestBody TokenDTO lobbyPutAndPatchDTO){
         //check if player exists
         User userToBeAdded = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
 
@@ -98,10 +101,8 @@ public class LobbyController {
     @PutMapping ("lobbies/{lobbyId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody LobbyPutAndPatchDTO lobbyPutAndPatchDTO){//asking for the lobbyId in the body too makes no sense
-        //Player not found
+    public void leaveALobby(@PathVariable("lobbyId")Long lobbyId, @RequestBody TokenDTO lobbyPutAndPatchDTO){
         User userToBeRemoved = userService.checkIfUserExistByToken(lobbyPutAndPatchDTO.getToken());
-        //lobby not found
         //check if is host
         //--> delete lobby if host leaves else delete player2 from lobby
         lobbyService.deleteUserFromLobby(lobbyId, userToBeRemoved);

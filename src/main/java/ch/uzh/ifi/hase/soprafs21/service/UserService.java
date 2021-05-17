@@ -177,6 +177,12 @@ public class UserService {
         }
     }
 
+    /**
+     * check if there is a user corresponding to a token and return the user
+     *
+     * @param inputToken token of user that might exist
+     * @return User if they exist
+     */
     public User checkIfUserExistByToken(String inputToken){
         if (inputToken==null){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "token is not allowed to be null");

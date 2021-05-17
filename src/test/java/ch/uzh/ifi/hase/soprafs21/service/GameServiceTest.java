@@ -137,7 +137,6 @@ class GameServiceTest {
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
         assertEquals(dummyGame.getGameId(), gameGetDTO.getGameId());
         assertEquals(1, gameGetDTO.getRound());
-        assertTrue(gameGetDTO.getPlayer1().containsKey("extraMinions"));
 
         assertNull(gameGetDTO.getPlayer2());//player2
         // etc
@@ -149,9 +148,10 @@ class GameServiceTest {
         Board board2 = new Board();
         board2.setOwner(testUser2);
         board2.setWeather("Clouds");
-
+        board2.setBoardId(2L);
         dummyGame.setPlayer2Board(board2);
 
+        // when
         Mockito.when(gameRepository.getOne(dummyGame.getGameId())).thenReturn(dummyGame);
         GameGetDTO gameGetDTO = gameService.returnGameInformation(dummyGame.getGameId());
 
@@ -163,7 +163,6 @@ class GameServiceTest {
         assertEquals(500, gameGetDTO.getPlayer1().get("gold"));
         assertEquals(gameGetDTO.getPlayer1().get("owner"), testUser.getUsername());
         assertNotNull(gameGetDTO.getPlayer1().get("weather"));
-        assertTrue(gameGetDTO.getPlayer1().containsKey("extraMinions"));
         // etc
 
         assertNotNull(gameGetDTO.getPlayer2());
@@ -171,7 +170,6 @@ class GameServiceTest {
         assertEquals(500, gameGetDTO.getPlayer2().get("gold"));
         assertEquals(gameGetDTO.getPlayer2().get("owner"), testUser2.getUsername());
         assertNotNull(gameGetDTO.getPlayer2().get("weather"));
-        assertTrue(gameGetDTO.getPlayer2().containsKey("extraMinions"));
     }
 
     @Test

@@ -4,7 +4,6 @@ import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs21.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs21.entity.User;
 import ch.uzh.ifi.hase.soprafs21.repository.LobbyRepository;
-import ch.uzh.ifi.hase.soprafs21.rest.dto.LobbyPutAndPatchDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.TokenDTO;
 import ch.uzh.ifi.hase.soprafs21.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
@@ -151,7 +150,7 @@ class LobbyControllerTest {
         Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(testuser2);
         Mockito.when(lobbyService.addUserToLobby(1L,testuser2)).thenReturn(testLobbyFull);
         Mockito.when(lobbyService.findLobbyById(Mockito.any())).thenReturn(testLobbyFull);
-        LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
+        TokenDTO lobbyPutAndPatchDTO = new TokenDTO();
         lobbyPutAndPatchDTO.setToken("sometoken");
         //mock request
         MockHttpServletRequestBuilder postCreateLobbyRequest = patch("/lobbies/1")
@@ -173,7 +172,7 @@ class LobbyControllerTest {
         Mockito.when(userService.checkIfUserExistByToken(Mockito.any())).thenReturn(testuser2);
         Mockito.when(lobbyService.addUserToLobby(1L,testuser2)).thenReturn(testLobbyFull);
         Mockito.when(lobbyService.findLobbyById(Mockito.any())).thenReturn(testLobbyFull);
-        LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
+        TokenDTO lobbyPutAndPatchDTO = new TokenDTO();
         lobbyPutAndPatchDTO.setToken("sometoken");
         //mock request
         MockHttpServletRequestBuilder patchLobbyRequest = patch("/lobbies/1")
@@ -190,7 +189,7 @@ class LobbyControllerTest {
     @Test
     void leaveLobby_validInput()throws Exception {
         // given
-        LobbyPutAndPatchDTO lobbyPutAndPatchDTO = new LobbyPutAndPatchDTO();
+        TokenDTO lobbyPutAndPatchDTO = new TokenDTO();
         lobbyPutAndPatchDTO.setToken(testuser2.getToken());
 
         // mock service

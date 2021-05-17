@@ -89,7 +89,7 @@ public class GameController {
     public GameGoldDTO placeTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
         User player = userRepository.findByToken(token);
 
-        Board payerBoard = boardRepository.findByOwner(player);// not sure if this returns an error or fails if no player was found
+        Board payerBoard = boardRepository.findByOwner(player);
 
         GameGoldDTO gameGoldDTO = new GameGoldDTO();
         gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
@@ -103,7 +103,8 @@ public class GameController {
     public GameGoldDTO upgradeTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
         User player = userRepository.findByToken(token);
 
-        Board payerBoard = boardRepository.findByOwner(player);// not sure if this returns an error or fails if no player was found
+        Board payerBoard = boardRepository.findByOwner(player);
+// not finding a board is not a problem(gets handled in upgradeTower)
 
         GameGoldDTO gameGoldDTO = new GameGoldDTO();
         gameGoldDTO.setGold(gameService.upgradeTower(payerBoard, gameMoveDTO.getCoordinates()));
@@ -117,7 +118,7 @@ public class GameController {
     public GameGoldDTO sellTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {
         User player = userRepository.findByToken(token);
 
-        Board payerBoard = boardRepository.findByOwner(player);// not sure if this returns an error or fails if no player was found
+        Board payerBoard = boardRepository.findByOwner(player);
 
         GameGoldDTO gameGoldDTO = new GameGoldDTO();
         gameGoldDTO.setGold(gameService.sellTower(payerBoard, gameMoveDTO.getCoordinates()));

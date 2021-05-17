@@ -53,7 +53,7 @@ public class GameService {
     }
 
     private static final Map<String, Integer> minionMap = new HashMap<>();
-    static {//tower, cost
+    static {//minion, cost
         minionMap.put("Goblin", 50);
         minionMap.put("goblinOverlord", 500);
     }
@@ -161,6 +161,7 @@ public class GameService {
             log.debug("deleted Game: {}", game);
             boardRepository.delete(board);
             log.debug("deleted board: {}", board);
+
             // +delete player 2 board if multi
 
             return false;
@@ -324,8 +325,8 @@ public class GameService {
         else if (towerLevel2Map.containsKey(towerName)){// tower level 2
             String upgraded = towerName.substring(0, towerName.length()-1)+"3";
             // can I pay for it?
-            if (! towerLevel3Map.containsKey(upgraded)){
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower not upgradeable");// there exists no tower on this level
+            if (! towerLevel3Map.containsKey(upgraded)){// there exists no tower with this level
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower not upgradeable");
             }
             int cost = towerLevel3Map.get(upgraded);
             if (board.getGold() < cost){
@@ -479,8 +480,9 @@ public class GameService {
         if (number <0){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "negative number of minions");
         }
-        // i am assuming the board... is valid,
-        // adding to many ifs in methods that have been called in methods that already test the conditions is pointless/slows program down
+        /*i am assuming the board... is valid,
+        adding to many ifs in methods that have been called in methods that already test the conditions is pointless
+        /slows program down*/
 
         List<String> opponentExtraMinions = board.getMinions();
 
@@ -584,7 +586,8 @@ public class GameService {
         returnMapping.put("weather",board.getWeather());
         returnMapping.put("boardId",board.getBoardId());
         returnMapping.put("board", board.getGameMap());
-        returnMapping.put("extraMinions", board.getMinions());
+        // extra minions not anymore in this mapping as they get sent at the start of the battle phase
+
         return returnMapping;
     }
 
@@ -600,7 +603,8 @@ public class GameService {
         }
 
         try {// location should always exist because it is checked before being entered, but for safety
-            URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="+user.getLocation()+"&appid="+System.getenv("WeatherKey"));//last part is the key
+            URL jsonUrl = new URL("http://api.openweathermap.org/data/2.5/weather?q="
+                    +user.getLocation()+"&appid="+System.getenv("WeatherKey"));//last part is the key
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

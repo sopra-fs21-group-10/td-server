@@ -101,6 +101,18 @@ class GameServiceTest {
     }
 
     @Test
+    void createGame_invalidInputsSinglePlayerNoPlayer_throws() {
+        //when
+        assertThrows(ResponseStatusException.class, () -> gameService.createGame(null, null));//user does not exist
+    }
+
+    @Test
+    void createGame_invalidInputsSinglePlayerOnlyPlayer2_throws() {
+        //when
+        assertThrows(ResponseStatusException.class, () -> gameService.createGame(null, testUser.getUserId()));//user does not exist
+    }
+
+    @Test
     void createGame_PlayerAlreadyInGame_throws() {
         //given
         gameService.createGame(testUser.getUserId(), null);// create game with user
@@ -160,6 +172,12 @@ class GameServiceTest {
         assertEquals(gameGetDTO.getPlayer2().get("owner"), testUser2.getUsername());
         assertNotNull(gameGetDTO.getPlayer2().get("weather"));
         assertTrue(gameGetDTO.getPlayer2().containsKey("extraMinions"));
+    }
+
+    @Test
+    void returnGameInformation_noGame_throws() {
+        // shows Objects.isNull(gameId)|| game==null   is not always false
+        assertThrows(ResponseStatusException.class, () -> gameService.returnGameInformation(dummyGame.getGameId()));// board does not exist
     }
 
     @Test
@@ -505,6 +523,25 @@ class GameServiceTest {
         assertEquals(6, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
         assertEquals(5+2*5, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
+        assertNull(gameWaveDTO.getPlayer2Minions());
+    }
+
+    @Test
+    void startBattlePhase_SinglePlayerWave10_success() {
+        //given
+        dummyGame.setRound(10);
+        dummyBoard.setGold(1000);
+
+        // mock Repositories
+        Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
+
+        // design wave
+        GameWaveDTO gameWaveDTO = gameService.startBattlePhase(testUser);
+
+        // check if minion count/ gold count is correct
+        assertEquals(11, dummyGame.getRound());
+        assertEquals(1100, dummyBoard.getGold());
+        assertEquals(5+2*10, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
         assertNull(gameWaveDTO.getPlayer2Minions());
     }
 

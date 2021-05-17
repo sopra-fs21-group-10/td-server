@@ -50,6 +50,7 @@ public class GameController {
         return gameService.returnGameInformation(gameId);
     }
 
+    // after battle phase, return bool
     @PatchMapping("/games/{token}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

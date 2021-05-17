@@ -221,8 +221,8 @@ public class GameService {
             players.add(game.getPlayer2Board());
         }
 
-        if (round % 10 == 0 ){// all 10 rounds
-
+        if (round % 10 == 0 ){// all 10 rounds = boss
+            // boss minion
         }
 
         for (Board board : players ){// always happens
@@ -295,7 +295,6 @@ public class GameService {
         if (board==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
         }
-
         // check coordinates
         checkCoordinates(coordinates);// throws error if not valid
 
@@ -306,8 +305,8 @@ public class GameService {
             String upgraded = towerName.substring(0, towerName.length()-1)+"2";
 
             // can I pay for it?
-            if (! towerLevel2Map.containsKey(upgraded)){
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower not upgradeable");// there exists no tower on this level
+            if (! towerLevel2Map.containsKey(upgraded)){// there exists no tower on this level
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tower not upgradeable");
             }
             int cost = towerLevel2Map.get(upgraded);
             if (board.getGold() < cost){
@@ -345,8 +344,17 @@ public class GameService {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Upgrading not possible");
     }
 
+    /**
+     * sell a Tower and return the updated gold count
+     *
+     * @param board on which board the tower is
+     * @param coordinates where the tower is
+     * @return new gold count of player
+     */
     public int sellTower(Board board, int[] coordinates){
         // check board
+
+        double sellValue = 0.7;
         if (board==null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Board not found");
         }
@@ -361,7 +369,7 @@ public class GameService {
             // pay / place
             String[][] newBoard = board.getGameMap();
             newBoard[coordinates[0]][coordinates[1]] = null;
-            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGold((int)(board.getGold() + cost*sellValue));//get some money back
             board.setGameMap(newBoard);
 
             board = boardRepository.saveAndFlush(board);
@@ -372,7 +380,7 @@ public class GameService {
             // pay / place
             String[][] newBoard = board.getGameMap();
             newBoard[coordinates[0]][coordinates[1]] = null;
-            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGold((int)(board.getGold() + cost*sellValue));//get some money back
             board.setGameMap(newBoard);
 
             board = boardRepository.saveAndFlush(board);
@@ -383,7 +391,7 @@ public class GameService {
             // pay / place
             String[][] newBoard = board.getGameMap();
             newBoard[coordinates[0]][coordinates[1]] = null;
-            board.setGold((int)(board.getGold() + cost*.7));//get some money back
+            board.setGold((int)(board.getGold() + cost*sellValue));//get some money back
             board.setGameMap(newBoard);
 
             board = boardRepository.saveAndFlush(board);

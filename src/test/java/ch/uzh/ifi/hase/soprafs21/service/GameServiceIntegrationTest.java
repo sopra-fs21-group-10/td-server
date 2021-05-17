@@ -78,6 +78,12 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     @Test
+    void ReturnWeatherTypePlayer_noUser_throws() {
+        // ask Weather API
+        assertThrows(ResponseStatusException.class, () -> gameService.returnWeatherTypePlayer(null));
+    }
+
+    @Test
     void createMultiPlayer_MultiPlayer_success() {
         // check if Repositories empty
         assertTrue(gameRepository.findAll().isEmpty());

@@ -30,7 +30,7 @@ public class Board implements Serializable {
 
     private static final String BLOCKED = "blocked"; // the path where the minions walk through
 
-    @Column(nullable = false, length = 1000)// caused error, maybe increase even more
+    @Column(nullable = false, length = 10000)// caused error, maybe increase even more
     private String[][] gameMap = {//10*15
             {null, BLOCKED, null ,null, null, null, null,null, null, null ,null, null, null, null, null},
             {null, BLOCKED, null ,null, null, null, null,null, null, null ,null, null, null, null, null},

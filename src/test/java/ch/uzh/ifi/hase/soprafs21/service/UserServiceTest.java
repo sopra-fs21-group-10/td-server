@@ -206,7 +206,6 @@ class UserServiceTest {
         //then
         assertThrows(ResponseStatusException.class, () ->
                 userService.editProfile(createdUser,null,"password123", null));
-
     }
 
     @Test

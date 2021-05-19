@@ -87,7 +87,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         GameMoveDTO gameMoveDTO = new GameMoveDTO();
         int[] coordinates = new int[]{1,1};
         gameMoveDTO.setCoordinates(coordinates);
-        gameMoveDTO.setEntity("FireTower1");
+        gameMoveDTO.setPlayable("FireTower1");
 
         User dummyUser = new User();
         dummyUser.setToken("token");

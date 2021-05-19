@@ -92,7 +92,7 @@ public class GameController {
         Board payerBoard = boardRepository.findByOwner(player);
 
         GameGoldDTO gameGoldDTO = new GameGoldDTO();
-        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getEntity()));
+        gameGoldDTO.setGold(gameService.placeTower(payerBoard, gameMoveDTO.getCoordinates(), gameMoveDTO.getPlayable()));
 
         return gameGoldDTO;// return game-state == getGame
     }

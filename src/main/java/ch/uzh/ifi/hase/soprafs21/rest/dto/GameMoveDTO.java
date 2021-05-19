@@ -14,14 +14,6 @@ public class GameMoveDTO {
     private String playable;//eg. fire tower
     // it will be checked if the value is a valid one
 
-    public String getEntity() {
-        return playable;
-    }
-
-    public void setEntity(String playable) {
-        this.playable = playable;
-    }
-
     public int[] getCoordinates() {
         return coordinates;
     }

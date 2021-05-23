@@ -55,7 +55,7 @@ public class GameService {
     private static final Map<String, Integer> minionMap = new HashMap<>();
     static {//minion, cost
         minionMap.put("Goblin", 50);
-        minionMap.put("goblinOverlord", 500);
+        minionMap.put("GoblinOverlord", 500);
     }
 
     private final GameRepository gameRepository;
@@ -229,7 +229,7 @@ public class GameService {
         for (Board board : players ){// always happens
             addMinions(board, "Goblin", 5+2*round);
 
-            board.setGold((int)(board.getGold() * interestRate));// 10% interest gained on start of battle phase
+            getInterest(board, interestRate);
         }
 
         // increasing round
@@ -497,6 +497,19 @@ public class GameService {
     }
 
     /**
+     * adds interest(gold) to map in board
+     *
+     * @param board board th which the gold should get added
+     * @param interestRate eg 1.1
+     */
+    private void getInterest(Board board, double interestRate) {
+        List<String> opponentExtraMinions = board.getMinions();
+
+        board.setGold((int)(board.getGold() * interestRate));// 10% interest gained on start of battle phase
+        boardRepository.saveAndFlush(board);
+    }
+
+    /**
      * creates a game with 1 player
      *
      * @param player1 owner of board 1
@@ -531,7 +544,7 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Players not found");
         }
         if(player1==player2){// no player, should not happen but...
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Players are teh same");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Players are the same");
         }
 
         Game game = new Game();

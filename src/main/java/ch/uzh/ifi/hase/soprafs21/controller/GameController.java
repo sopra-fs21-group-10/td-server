@@ -112,7 +112,7 @@ public class GameController {
         return gameGoldDTO;//
     }
 
-    @DeleteMapping("/games/towers/{token}")
+    @PatchMapping("/games/towers/sales/{token}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameGoldDTO sellTower(@PathVariable("token") String token, @RequestBody GameMoveDTO gameMoveDTO) {

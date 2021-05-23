@@ -154,7 +154,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         given(gameService.sellTower(Mockito.any(), Mockito.any())).willReturn(54);
 
         // when
-        MockHttpServletRequestBuilder postRequest = delete("/games/towers/"+dummyUser.getToken())
+        // changed from delete to patch (seems like delete does not work with body), also changed location
+        MockHttpServletRequestBuilder postRequest = patch("/games/towers/sales/"+dummyUser.getToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(gameMoveDTO));
 

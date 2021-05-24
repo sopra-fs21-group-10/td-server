@@ -46,18 +46,18 @@ public class GameService {
     static {//tower, cost
         towerLevel2Map.put("FireTower2", 600);
         towerLevel2Map.put("WaterTower2", 400);
-        towerLevel1Map.put("PlantTower2",200);
-        towerLevel1Map.put("PsychTower2",1000);
-        towerLevel1Map.put("DragonTower2",2500);
+        towerLevel2Map.put("PlantTower2",200);
+        towerLevel2Map.put("PsychTower2",1000);
+        towerLevel2Map.put("DragonTower2",2500);
     }
 
     private static final Map<String, Integer> towerLevel3Map = new HashMap<>();
     static {//tower, cost
         towerLevel3Map.put("FireTower3", 1200);
         towerLevel3Map.put("WaterTower3", 1000);
-        towerLevel1Map.put("PlantTower3",300);
-        towerLevel1Map.put("PsychTower3",5000);
-        towerLevel1Map.put("DragonTower3",10000);
+        towerLevel3Map.put("PlantTower3",300);
+        towerLevel3Map.put("PsychTower3",5000);
+        towerLevel3Map.put("DragonTower3",10000);
     }
 
     private static final Map<String, Integer> minionMap = new HashMap<>();

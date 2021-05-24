@@ -545,6 +545,69 @@ class GameServiceTest {
     }
 
     @Test
+    void startBattlePhase_SinglePlayerWave15_success() {
+        //given
+        dummyGame.setRound(15);
+        dummyBoard.setGold(1000);
+
+        // mock Repositories
+        Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
+
+        // design wave
+        GameWaveDTO gameWaveDTO = gameService.startBattlePhase(testUser);
+
+        // check if minion count/ gold count is correct
+        assertEquals(16, dummyGame.getRound());
+        assertEquals(1100, dummyBoard.getGold());
+        assertEquals(35, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Nebulak"));
+        assertEquals(3, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
+        assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Zapdos"));
+        assertNull(gameWaveDTO.getPlayer2Minions());
+    }
+
+    @Test
+    void startBattlePhase_SinglePlayerWave20_success() {
+        //given
+        dummyGame.setRound(20);
+        dummyBoard.setGold(1000);
+
+        // mock Repositories
+        Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
+
+        // design wave
+        GameWaveDTO gameWaveDTO = gameService.startBattlePhase(testUser);
+
+        // check if minion count/ gold count is correct
+        assertEquals(21, dummyGame.getRound());
+        assertEquals(1100, dummyBoard.getGold());
+        assertEquals(35, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Gengar"));
+        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
+        assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Arktos"));
+        assertNull(gameWaveDTO.getPlayer2Minions());
+    }
+
+    @Test
+    void startBattlePhase_SinglePlayerWave25_success() {
+        //given
+        dummyGame.setRound(25);
+        dummyBoard.setGold(1000);
+
+        // mock Repositories
+        Mockito.when(gameRepository.findGameByPlayer1Board(Mockito.any())).thenReturn(dummyGame);
+
+        // design wave
+        GameWaveDTO gameWaveDTO = gameService.startBattlePhase(testUser);
+
+        // check if minion count/ gold count is correct
+        assertEquals(26, dummyGame.getRound());
+        assertEquals(1100, dummyBoard.getGold());
+        assertEquals(35, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Gengar"));
+        assertEquals(10, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
+        assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Lavados"));
+        assertNull(gameWaveDTO.getPlayer2Minions());
+    }
+
+    @Test
     void startBattlePhase_noGame_throws() {
         //  this shows that sonarcloud is wrong
         //  (it indicates that "game == null" is always false, which is not true

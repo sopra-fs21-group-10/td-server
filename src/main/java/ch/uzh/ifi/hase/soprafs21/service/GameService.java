@@ -39,8 +39,7 @@ public class GameService {
         towerLevel1Map.put("WaterTower1", 200);
         towerLevel1Map.put("PlantTower1",100);
         towerLevel1Map.put("PsychTower1",400);
-        towerLevel1Map.put("DragonTower1",500);
-
+        towerLevel1Map.put("DragonTower1",1000);
     }
 
     private static final Map<String, Integer> towerLevel2Map = new HashMap<>();
@@ -58,13 +57,18 @@ public class GameService {
         towerLevel3Map.put("WaterTower3", 1000);
         towerLevel1Map.put("PlantTower3",300);
         towerLevel1Map.put("PsychTower3",5000);
-        towerLevel1Map.put("DragonTower3",1000);
+        towerLevel1Map.put("DragonTower3",10000);
     }
 
     private static final Map<String, Integer> minionMap = new HashMap<>();
     static {//minion, cost
         minionMap.put("Karpador", 50);
+        minionMap.put("Nebulak", 200);
         minionMap.put("Garados", 500);
+        minionMap.put("Zapdos",5000);
+        minionMap.put("Arktos",10000);
+        minionMap.put("Lavados",15000);
+        minionMap.put("Gengar",500);
     }
 
     private final GameRepository gameRepository;
@@ -231,14 +235,34 @@ public class GameService {
             players.add(game.getPlayer2Board());
         }
 
-        if (round == 10 ){// all 10 rounds = boss
+        if (round == 10){// all 10 rounds = boss
             for (Board board : players ){// always happens
                 addMinions(board, "Garados", 1);
             }
         }
+        if (round == 15){// all 10 rounds = boss
+            for (Board board : players ){// always happens
+                addMinions(board, "Zapdos", 1);
+                addMinions(board, "Garados", 2);
+            }
+        }
+
+        if (round == 20){// all 10 rounds = boss
+            for (Board board : players ){// always happens
+                addMinions(board, "Arktos", 1);
+                addMinions(board, "Garados", 3);
+            }
+        }
+        if (round == 25){// all 10 rounds = boss
+            for (Board board : players ){// always happens
+                addMinions(board, "Lavados", 1);
+                addMinions(board, "Garados", 4);
+            }
+        }
 
         for (Board board : players ){// always happens
-            addMinions(board, "Karpador", 5+2*round);
+            addMinions(board, round <11?"Karpador": round <18?"Nebulak":"Gengar", Math.min(5+2*round, 35));
+            addMinions(board, "Garados", Math.max((int)((round-12)/2),0));
 
             getInterest(board, interestRate);
         }

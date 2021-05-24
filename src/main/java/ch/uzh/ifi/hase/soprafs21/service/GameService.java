@@ -33,7 +33,6 @@ import java.util.*;
 public class GameService {
     private final Logger log = LoggerFactory.getLogger(GameService.class);
 
-
     private static final Map<String, Integer> towerLevel1Map = new HashMap<>();
      static {//tower, cost
         towerLevel1Map.put("FireTower1", 300);
@@ -46,20 +45,26 @@ public class GameService {
 
     private static final Map<String, Integer> towerLevel2Map = new HashMap<>();
     static {//tower, cost
-        towerLevel2Map.put("FireTower2", 200);
+        towerLevel2Map.put("FireTower2", 600);
         towerLevel2Map.put("WaterTower2", 400);
+        towerLevel1Map.put("PlantTower2",200);
+        towerLevel1Map.put("PsychTower2",1000);
+        towerLevel1Map.put("DragonTower2",2500);
     }
 
     private static final Map<String, Integer> towerLevel3Map = new HashMap<>();
     static {//tower, cost
-        towerLevel3Map.put("FireTower3", 300);
+        towerLevel3Map.put("FireTower3", 1200);
         towerLevel3Map.put("WaterTower3", 1000);
+        towerLevel1Map.put("PlantTower3",300);
+        towerLevel1Map.put("PsychTower3",5000);
+        towerLevel1Map.put("DragonTower3",1000);
     }
 
     private static final Map<String, Integer> minionMap = new HashMap<>();
     static {//minion, cost
-        minionMap.put("Goblin", 50);
-        minionMap.put("GoblinOverlord", 500);
+        minionMap.put("Karpador", 50);
+        minionMap.put("Garados", 500);
     }
 
     private final GameRepository gameRepository;
@@ -226,12 +231,14 @@ public class GameService {
             players.add(game.getPlayer2Board());
         }
 
-        if (round % 10 == 0 ){// all 10 rounds = boss
-            // boss minion
+        if (round == 10 ){// all 10 rounds = boss
+            for (Board board : players ){// always happens
+                addMinions(board, "Garados", 1);
+            }
         }
 
         for (Board board : players ){// always happens
-            addMinions(board, "Goblin", 5+2*round);
+            addMinions(board, "Karpador", 5+2*round);
 
             getInterest(board, interestRate);
         }

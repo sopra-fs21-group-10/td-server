@@ -204,7 +204,7 @@ class GameServiceTest {
     void placeTower_validInputs_success() {
         // given
         int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(200);
+        dummyBoard.setGold(400);
 
         // when
         int newGold = gameService.placeTower(dummyBoard, coordinates, "FireTower1");
@@ -217,7 +217,7 @@ class GameServiceTest {
     void placeTower_onPath_throwsException() {
         //given
         int[] coordinates = new int[]{0,1};
-        dummyBoard.setGold(200);
+        dummyBoard.setGold(2000);
 
         // when
         assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));// cannot upgrade anymore
@@ -227,7 +227,7 @@ class GameServiceTest {
     void placeTower_onTower_throwsException() {
         //given
         int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(200);
+        dummyBoard.setGold(2000);
         // place 1. tower
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// tested
 
@@ -239,7 +239,7 @@ class GameServiceTest {
     void placeTower_invalidCoordinates_throwsException() {
         //given
         int[] coordinates = new int[]{0,19};
-        dummyBoard.setGold(200);
+        dummyBoard.setGold(2000);
 
         assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));
     }
@@ -248,7 +248,7 @@ class GameServiceTest {
     void placeTower_invalidCoordinates2_throwsException() {
         //given
         int[] coordinates = new int[]{-1,10};
-        dummyBoard.setGold(200);
+        dummyBoard.setGold(2000);
 
         assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));
     }
@@ -257,7 +257,7 @@ class GameServiceTest {
     void placeTower_invalidCoordinates3_throwsException() {
         //given
         int[] coordinates = new int[]{0,4,3};
-        dummyBoard.setGold(200);
+        dummyBoard.setGold(2000);
 
         assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "FireTower1"));
     }
@@ -266,7 +266,7 @@ class GameServiceTest {
     void placeTower_invalidTower_throwsException() {
         //given
         int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(200);
+        dummyBoard.setGold(2000);
 
         assertThrows(ResponseStatusException.class, () -> gameService.placeTower(dummyBoard, coordinates, "SuperGigaTower123"));// cannot upgrade anymore
     }
@@ -284,21 +284,21 @@ class GameServiceTest {
     void upgradeTowerTwice_validInputs_success() {
         //given
         int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
+        dummyBoard.setGold(2500);
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
 
         gameService.upgradeTower(dummyBoard, coordinates);
 
         int newGold = gameService.upgradeTower(dummyBoard, coordinates);
 
-        assertEquals(400, newGold); // 1000-100-200-300=400
+        assertEquals(400, newGold); // 1000-300-200-300=200
     }
 
     @Test
     void upgradeTower_invalidTower_throwsException() {
         //given
         int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
+        dummyBoard.setGold(3000);
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
 
         gameService.upgradeTower(dummyBoard, coordinates);
@@ -314,7 +314,7 @@ class GameServiceTest {
         int[] coordinates = new int[]{0,14};
         int[] coordinates2 = new int[]{0,13};
 
-        dummyBoard.setGold(1000);
+        dummyBoard.setGold(10000);
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
 
         assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates2));// cannot upgrade anymore
@@ -325,10 +325,10 @@ class GameServiceTest {
         //given
         int[] coordinates = new int[]{0,14};
 
-        dummyBoard.setGold(100);
+        dummyBoard.setGold(400);
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
 
-        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates));// cannot upgrade anymore
+        assertThrows(ResponseStatusException.class, () -> gameService.upgradeTower(dummyBoard, coordinates));
     }
 
     @Test
@@ -340,7 +340,7 @@ class GameServiceTest {
 
         int newGold = gameService.sellTower(dummyBoard, coordinates);
 
-        assertEquals(970, newGold); // 1000-100+.7*100
+        assertEquals(910, newGold); // 1000-300+.7*300
     }
 
     @Test
@@ -353,21 +353,21 @@ class GameServiceTest {
 
         int newGold = gameService.sellTower(dummyBoard, coordinates);
 
-        assertEquals(840, newGold);
+        assertEquals(520, newGold);// 1000-300-600=100, +.7*600
     }
 
     @Test
     void sellTower3_validInputs_success() {
         //given
         int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(1000);
+        dummyBoard.setGold(2100);
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
         gameService.upgradeTower(dummyBoard, coordinates);
         gameService.upgradeTower(dummyBoard, coordinates);
 
         int newGold = gameService.sellTower(dummyBoard, coordinates);
 
-        assertEquals(610, newGold);
+        assertEquals(840, newGold);//2000-300-600-1200=0  +1200*.7
     }
 
     @Test
@@ -391,10 +391,10 @@ class GameServiceTest {
         Mockito.when(boardRepository.findByOwner(testUser)).thenReturn(dummyBoard);
         Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
 
-        int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
+        int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Karpador");
 
         assertEquals(950, newGold);
-        assertEquals(1, Collections.frequency(board2.getMinions(), "Goblin"));
+        assertEquals(1, Collections.frequency(board2.getMinions(), "Karpador"));
     }
 
     @Test
@@ -410,14 +410,14 @@ class GameServiceTest {
         Mockito.when(gameRepository.getOne(1L)).thenReturn(dummyGame);
 
         // buy minions
-        gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
+        gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Karpador");
 
-        int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Goblin");
+        int newGold = gameService.buyMinion(testUser.getToken(),dummyGame.getGameId(),  "Karpador");
 
         // check if minion count/ gold count is correct
         assertEquals(900, newGold);
         assertEquals(900, dummyBoard.getGold());
-        assertEquals(2, Collections.frequency(board2.getMinions(), "Goblin"));
+        assertEquals(2, Collections.frequency(board2.getMinions(), "Karpador"));
     }
 
     @Test
@@ -449,7 +449,7 @@ class GameServiceTest {
 
         assertThrows(ResponseStatusException.class,
                 () -> gameService.buyMinion(testUser.getToken(),
-                        dummyGame.getGameId(),  "Goblin"));// cannot upgrade anymore
+                        dummyGame.getGameId(),  "Karpador"));// cannot upgrade anymore
     }
 
     @Test
@@ -463,7 +463,7 @@ class GameServiceTest {
 
         assertThrows(ResponseStatusException.class,
                 () -> gameService.buyMinion(testUser.getToken(),
-                        dummyGame.getGameId(),  "goblin"));// cannot upgrade anymore
+                        dummyGame.getGameId(),  "Karpador"));// cannot upgrade anymore
     }
 
     @Test
@@ -480,7 +480,7 @@ class GameServiceTest {
 
         // check if minion count/ gold count is correct
         assertEquals(2, dummyGame.getRound());
-        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
+        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Karpador") );
         assertNull(gameWaveDTO.getPlayer2Minions());
     }
 
@@ -501,8 +501,8 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(2, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
-        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
-        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer2Minions(), "Goblin") );
+        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Karpador") );
+        assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer2Minions(), "Karpador") );
     }
 
     @Test
@@ -520,7 +520,7 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(6, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
-        assertEquals(5+2*5, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
+        assertEquals(5+2*5, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Karpador") );
         assertNull(gameWaveDTO.getPlayer2Minions());
     }
 
@@ -539,7 +539,8 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(11, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
-        assertEquals(5+2*10, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Goblin") );
+        assertEquals(5+2*10, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Karpador"));
+        assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
         assertNull(gameWaveDTO.getPlayer2Minions());
     }
 

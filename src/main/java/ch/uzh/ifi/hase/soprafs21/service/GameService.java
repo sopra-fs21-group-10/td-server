@@ -262,7 +262,7 @@ public class GameService {
 
         for (Board board : players ){// always happens
             addMinions(board, round <11?"Karpador": round <18?"Nebulak":"Gengar", Math.min(5+2*round, 35));
-            addMinions(board, "Garados", Math.max((int)((round-12)/2),0));
+            addMinions(board, "Garados", Math.max(((round-12)/2),0));
 
             getInterest(board, interestRate);
         }

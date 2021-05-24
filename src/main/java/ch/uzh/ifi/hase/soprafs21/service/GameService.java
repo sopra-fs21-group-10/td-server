@@ -182,6 +182,7 @@ public class GameService {
 
         board.setGold(gold);
         board.setHealth(health);
+        board.setMinions(new ArrayList<>());
 
         boardRepository.saveAndFlush(board);
         return true;

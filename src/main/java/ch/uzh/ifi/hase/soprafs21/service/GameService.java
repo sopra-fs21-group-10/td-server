@@ -266,6 +266,7 @@ public class GameService {
             addMinions(board, "Garados", Math.max(((round-12)/2),0));
 
             getInterest(board, interestRate);
+            shuffleMinionOrder(board);
         }
 
         // increasing round
@@ -529,6 +530,17 @@ public class GameService {
 
         board.setMinions(opponentExtraMinions);
 
+        boardRepository.saveAndFlush(board);
+    }
+
+    /**
+     * randomizes the order of the minions
+     * @param board where minions should get randomized
+     */
+    private void shuffleMinionOrder(Board board){
+        List<String> toShuffle = board.getMinions();
+        Collections.shuffle(toShuffle);
+        board.setMinions(toShuffle);
         boardRepository.saveAndFlush(board);
     }
 

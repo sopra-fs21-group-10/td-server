@@ -261,6 +261,12 @@ public class GameService {
             }
         }
 
+        if (round == 30){// all 10 rounds = boss
+            for (Board board : players ){// always happens
+                addMinions(board, "Lavados", 50);// game over
+            }
+        }
+
         for (Board board : players ){// always happens
             addMinions(board, round <11?"Karpador": round <18?"Nebulak":"Gengar", Math.min(5+2*round, 35));
             addMinions(board, "Garados", Math.max(((round-12)/2),0));

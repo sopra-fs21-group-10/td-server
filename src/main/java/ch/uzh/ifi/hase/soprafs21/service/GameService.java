@@ -36,7 +36,7 @@ public class GameService {
     private static final Map<String, Integer> towerLevel1Map = new HashMap<>();
      static {//tower, cost
         towerLevel1Map.put("FireTower1", 300);
-        towerLevel1Map.put("WaterTower1", 200);
+        towerLevel1Map.put("WaterTower1", 300);
         towerLevel1Map.put("PlantTower1",100);
         towerLevel1Map.put("PsychTower1",400);
         towerLevel1Map.put("DragonTower1",1000);
@@ -53,9 +53,9 @@ public class GameService {
 
     private static final Map<String, Integer> towerLevel3Map = new HashMap<>();
     static {//tower, cost
-        towerLevel3Map.put("FireTower3", 1200);
+        towerLevel3Map.put("FireTower3", 1500);
         towerLevel3Map.put("WaterTower3", 1000);
-        towerLevel3Map.put("PlantTower3",300);
+        towerLevel3Map.put("PlantTower3",500);
         towerLevel3Map.put("PsychTower3",5000);
         towerLevel3Map.put("DragonTower3",10000);
     }
@@ -236,33 +236,33 @@ public class GameService {
             players.add(game.getPlayer2Board());
         }
 
-        if (round == 10){// all 10 rounds = boss
-            for (Board board : players ){// always happens
+        if (round == 10){// boss
+            for (Board board : players ){
                 addMinions(board, "Garados", 1);
             }
         }
-        if (round == 15){// all 10 rounds = boss
-            for (Board board : players ){// always happens
+        if (round == 15){// boss
+            for (Board board : players ){
                 addMinions(board, "Zapdos", 1);
                 addMinions(board, "Garados", 2);
             }
         }
 
-        if (round == 20){// all 10 rounds = boss
-            for (Board board : players ){// always happens
+        if (round == 20){// boss
+            for (Board board : players ){
                 addMinions(board, "Arktos", 1);
                 addMinions(board, "Garados", 3);
             }
         }
-        if (round == 25){// all 10 rounds = boss
-            for (Board board : players ){// always happens
+        if (round == 25){//boss
+            for (Board board : players ){
                 addMinions(board, "Lavados", 1);
                 addMinions(board, "Garados", 4);
             }
         }
 
-        if (round == 30){// all 10 rounds = boss
-            for (Board board : players ){// always happens
+        if (round == 30){// boss
+            for (Board board : players ){
                 addMinions(board, "Lavados", 50);// game over
             }
         }

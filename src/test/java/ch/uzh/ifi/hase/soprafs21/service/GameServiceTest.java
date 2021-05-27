@@ -291,7 +291,7 @@ class GameServiceTest {
 
         int newGold = gameService.upgradeTower(dummyBoard, coordinates);
 
-        assertEquals(400, newGold); // 1000-300-200-300=200
+        assertEquals(100, newGold); // 1000-300-200-300=200
     }
 
     @Test
@@ -360,14 +360,14 @@ class GameServiceTest {
     void sellTower3_validInputs_success() {
         //given
         int[] coordinates = new int[]{0,14};
-        dummyBoard.setGold(2100);
+        dummyBoard.setGold(2500);
         gameService.placeTower(dummyBoard, coordinates, "FireTower1");// already tested
         gameService.upgradeTower(dummyBoard, coordinates);
         gameService.upgradeTower(dummyBoard, coordinates);
 
         int newGold = gameService.sellTower(dummyBoard, coordinates);
 
-        assertEquals(840, newGold);//2000-300-600-1200=0  +1200*.7
+        assertEquals(1150, newGold);//2000-300-600-1200=0  +1200*.7
     }
 
     @Test

@@ -36,7 +36,7 @@ public class GameService {
     private static final Map<String, Integer> towerLevel1Map = new HashMap<>();
      static {//tower, cost
         towerLevel1Map.put("FireTower1", 300);
-        towerLevel1Map.put("WaterTower1", 300);
+        towerLevel1Map.put("WaterTower1", 200);
         towerLevel1Map.put("PlantTower1",100);
         towerLevel1Map.put("PsychTower1",400);
         towerLevel1Map.put("DragonTower1",1000);

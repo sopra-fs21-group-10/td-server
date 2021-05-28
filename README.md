@@ -9,7 +9,7 @@
 
 ## Launch & Deployment:
 ### WeatherAPI
-For running the application on your machine set the environment variable WeatherKey to your OpenWeather key.
+For running the application on your machine, set the environment variable WeatherKey to your OpenWeather key.
 
 ### Building with Gradle
 
@@ -61,17 +61,11 @@ If you want to avoid running all tests with every change, use the following comm
 
 `./gradlew build --continuous -xtest`
 
-
-
-### Testing
-
-Have a look here: https://www.baeldung.com/spring-boot-testing
-
-
 ## Roadmap
 The multiplayer part of our project unfortunately had to be abandoned. So the next big thing that can be done is to finish the multiplayer aspects of the game and make the weather have a bigger impact on the game. Beyond that, a leaderboard and spectator mode would be some of the next steps. Of course, adding more towers, minions and game modes, as well as balancing the existing ones, are things that could be worked on forever.
 
 ## Authors and acknowledgment
+The main team consists of [@HuberNicolas](https://github.com/HuberNicolas) , [@Seouless29](https://github.com/Seouless29) and [@Thahit](https://github.com/Thahit). Some earlier contributer who left the team are [@maurohirt](https://github.com/maurohirt) and [@bzns](https://github.com/bzns). Special thanks go to [@demaerl](https://github.com/demaerl) and [@royru](https://github.com/royru) who were responsible for our group and of course also Professor Thomas Fritz. Also a shoutout to everyone who contributed to the template.
 
 ## License
 

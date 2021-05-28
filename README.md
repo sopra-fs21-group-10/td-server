@@ -1,13 +1,10 @@
 # SoPra RESTful Service Template FS21
 
+## Roadmap
+The multiplayer part of our project unfortunately had to be abandoned. So the next big thing that can be done is to finish the multiplayer aspects of the game and make the weather have a bigger impact on the game. Beyond that, a leaderboard and spectator mode would be some of the next steps. Of course, adding more towers, minions and game modes, as well as balancing the existing ones, are things that could be worked on forever.
 
 ## WeatherAPI
 For running the application on your machine set the environment variable WeatherKey to your OpenWeather key.
-
-## Roadmap
-The multiplayer part of our project unfortunately had to be abandoned. So the next big thing that can be done is to finish the multiplayer aspects of the game. Beyond that, a leaderboard and spectator mode would be some of the next steps. Of course, adding more towers, minions and game modes, as well as balancing the existing ones, are things that could be worked on forever.
-
-
 
 ## Building with Gradle
 

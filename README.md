@@ -1,12 +1,17 @@
 # SoPra RESTful Service Template FS21
 
-## Roadmap
-The multiplayer part of our project unfortunately had to be abandoned. So the next big thing that can be done is to finish the multiplayer aspects of the game and make the weather have a bigger impact on the game. Beyond that, a leaderboard and spectator mode would be some of the next steps. Of course, adding more towers, minions and game modes, as well as balancing the existing ones, are things that could be worked on forever.
 
-## WeatherAPI
+## Introduction
+
+##  Technologies used 
+
+##  High-level components: 
+
+## Launch & Deployment:
+### WeatherAPI
 For running the application on your machine set the environment variable WeatherKey to your OpenWeather key.
 
-## Building with Gradle
+### Building with Gradle
 
 **Note:** You'll need to build the project first with Gradle, just click on the `build` command in the _Gradle Tasks_ extension. Then check the _Spring Boot Dashboard_ extension if it already shows `soprafs21` and hit the play button to start the server. If it doesn't show up, restart VS Code and check again.
 
@@ -21,13 +26,13 @@ Plattform-Prefix:
 
 More Information about [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) and [Gradle](https://gradle.org/docs/).
 
-### Build
+#### Build
 
 ```bash
 ./gradlew build
 ```
 
-### Run
+#### Run
 
 ```bash
 ./gradlew bootRun
@@ -39,7 +44,7 @@ More Information about [Gradle Wrapper](https://docs.gradle.org/current/userguid
 ./gradlew test
 ```
 
-### Development Mode
+#### Development Mode
 
 You can start the backend in development mode, this will automatically trigger a new build and reload the application
 once the content of a file has been changed and you save the file.
@@ -58,6 +63,15 @@ If you want to avoid running all tests with every change, use the following comm
 
 
 
-## Testing
+### Testing
 
 Have a look here: https://www.baeldung.com/spring-boot-testing
+
+
+## Roadmap
+The multiplayer part of our project unfortunately had to be abandoned. So the next big thing that can be done is to finish the multiplayer aspects of the game and make the weather have a bigger impact on the game. Beyond that, a leaderboard and spectator mode would be some of the next steps. Of course, adding more towers, minions and game modes, as well as balancing the existing ones, are things that could be worked on forever.
+
+## Authors and acknowledgment
+
+## License
+

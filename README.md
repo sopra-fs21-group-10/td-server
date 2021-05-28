@@ -2,12 +2,15 @@
 
 
 ## Introduction
+The aim of our project was to build a 2D-Towerdefense game. In case you don't know the genre yet, [here is a nice video](https://datasaurus-rex.com/inspiration/storytelling/tower-defense-games-explained), that explains the most important aspects. Furthermore, the application has to consist of a front-end and back-end, which are usign the REST-protocol. In addtion to this, an external API has to be used, too.
 
 ##  Technologies used 
+The language used for the backend is java. The database is managed with jpa. Other important libararies/API's were spring boot, the openweathermap APi, Mockito for the tests etc.
 
-##  High-level components: 
+##  High-level components
+The main compontens are the controllers, which are responsible for interacting with the frontend, the services, which are responsible for executing what the client asked for, and the database.
 
-## Launch & Deployment:
+## Launch & Deployment
 ### WeatherAPI
 For running the application on your machine, set the environment variable WeatherKey to your OpenWeather key.
 
@@ -62,10 +65,26 @@ If you want to avoid running all tests with every change, use the following comm
 `./gradlew build --continuous -xtest`
 
 ## Roadmap
-The multiplayer part of our project unfortunately had to be abandoned. So the next big thing that can be done is to finish the multiplayer aspects of the game and make the weather have a bigger impact on the game. Beyond that, a leaderboard and spectator mode would be some of the next steps. Of course, adding more towers, minions and game modes, as well as balancing the existing ones, are things that could be worked on forever.
+Here is a list with ideas to improve/extend the project further:
+- Adding a Multiplayer (and/or design an AI such that you can play vs. the computer)
+- Implement the originally idea, where 2 (or even more?) players are in a game. Besides that you can buy and place towers, each player also can spend money for buying minions. These minions will be sent to the opponents board. This would add a new layer of tactical decisions.
+- making the weather have a bigger impact on the game, as planned
+- Adding more maps (and/or write a mapgenerator)
+- Adding more towers/minions (this would also need a lot of balancing)
 
-## Authors and acknowledgment
-The main team consists of [@HuberNicolas](https://github.com/HuberNicolas) , [@Seouless29](https://github.com/Seouless29) and [@Thahit](https://github.com/Thahit). Some earlier contributer who left the team are [@maurohirt](https://github.com/maurohirt) and [@bzns](https://github.com/bzns). Special thanks go to [@demaerl](https://github.com/demaerl) and [@royru](https://github.com/royru) who were responsible for our group and of course also Professor Thomas Fritz. Also a shoutout to everyone who contributed to the template.
+
+
+### Authors and acknowledment
+This project was created during the "Softwarepraktikum" Sopra at the University of Zürich (UZH) in the Spring Semester 21. The core of the team was:
+- [Nicolas Blumer](https://github.com/Thahit), [Nicolas Huber](https://github.com/HuberNicolas) and [Michael Vuong](https://github.com/Seouless29)
+
+We would also like to mention that the project started initially among Louis Huber and Omar Abo Hamida. Due to their high workload, they decided to leave the group after the inital assessment. Nevertheless, thank you Louis and Omar for your initial support!
+
+After this assessment, Matej Gurica and Mauro Dörig joined our team. Unfortunately, Matej and Mauro also decided to leave the project after a couple of weeks (between M3 and M4). Anyway, thank you 2 for your effort.
+
+Special thanks go to [Marion Dübendorfer](https://github.com/demaerl) and [Roy Rutishauser](https://github.com/royru) who were responsible for our group and of course also Professor Thomas Fritz. Also a shoutout to everyone who contributed to the template.
+
+
 
 ## License
-
+GNU General Public License v3.0

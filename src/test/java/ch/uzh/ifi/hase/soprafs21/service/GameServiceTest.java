@@ -559,7 +559,7 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(16, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
-        assertEquals(35, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Nebulak"));
+        assertEquals(33, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Nebulak"));
         assertEquals(3, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
         assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Zapdos"));
         assertNull(gameWaveDTO.getPlayer2Minions());
@@ -580,7 +580,7 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(21, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
-        assertEquals(35, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Gengar"));
+        assertEquals(33, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Gengar"));
         assertEquals(7, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
         assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Arktos"));
         assertNull(gameWaveDTO.getPlayer2Minions());
@@ -601,7 +601,7 @@ class GameServiceTest {
         // check if minion count/ gold count is correct
         assertEquals(26, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
-        assertEquals(35, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Gengar"));
+        assertEquals(33, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Gengar"));
         assertEquals(10, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
         assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Lavados"));
         assertNull(gameWaveDTO.getPlayer2Minions());

@@ -8,7 +8,7 @@ The aim of our project was to build a 2D-Towerdefense game. In case you don't kn
 The language used for the backend is java. The database is managed with jpa. Other important libararies/API's were spring boot, the openweathermap APi, Mockito for the tests etc.
 
 ##  High-level components
-The main compontens are the controllers, which are responsible for interacting with the frontend, the services, which are responsible for executing what the client asked for, and the database.
+The main compontens are the [controllers](https://github.com/sopra-fs21-group-10/td-server/tree/master/src/main/java/ch/uzh/ifi/hase/soprafs21/controller), which are responsible for interacting with the frontend, the [services](https://github.com/sopra-fs21-group-10/td-server/tree/master/src/main/java/ch/uzh/ifi/hase/soprafs21/service), which are responsible for executing what the client asked for, and the [database](https://github.com/sopra-fs21-group-10/td-server/tree/master/src/main/java/ch/uzh/ifi/hase/soprafs21/entity).
 
 ## Launch & Deployment
 ### WeatherAPI

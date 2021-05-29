@@ -2,7 +2,7 @@
 
 
 ## Introduction
-The aim of our project was to build a 2D-Towerdefense game. In case you don't know the genre yet, [here is a nice video](https://datasaurus-rex.com/inspiration/storytelling/tower-defense-games-explained), that explains the most important aspects. Furthermore, the application has to consist of a front-end and back-end, which are usign the REST-protocol. In addtion to this, an external API has to be used, too.
+The aim of our project was to build a 2D-Towerdefense game. In case you don't know the genre yet, [here is a nice video](https://datasaurus-rex.com/inspiration/storytelling/tower-defense-games-explained), that explains the most important aspects. Furthermore, the application has to consist of a front-end and back-end, which are usign the REST-protocol. In addtion to this, an external API has to be used, too. In the beginning, the game we had in mind had a multiplayer mode, where you could buy extra minions for your opponent and the goal was to survive longer than the other player, but this had to be abandoned. In the end, we setteled for a pretty simple tower defense game.
 
 ##  Technologies used 
 The language used for the backend is java. The database is managed with jpa. Other important libararies/API's were spring boot, the openweathermap APi, Mockito for the tests etc.

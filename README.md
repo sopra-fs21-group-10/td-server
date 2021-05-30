@@ -87,4 +87,4 @@ Special thanks go to [Marion Dübendorfer](https://github.com/demaerl) and [Roy 
 
 
 ## License
-GNU General Public License v3.0
+This project is under the [MIT License](https://choosealicense.com/licenses/mit/#).

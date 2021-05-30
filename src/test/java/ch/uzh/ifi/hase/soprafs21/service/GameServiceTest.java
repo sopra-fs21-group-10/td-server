@@ -540,6 +540,7 @@ class GameServiceTest {
         assertEquals(11, dummyGame.getRound());
         assertEquals(1100, dummyBoard.getGold());
         assertEquals(5+2*10, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Karpador"));
+        assertEquals(5, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Nebulak"));
         assertEquals(1, Collections.frequency(gameWaveDTO.getPlayer1Minions(), "Garados"));
         assertNull(gameWaveDTO.getPlayer2Minions());
     }
